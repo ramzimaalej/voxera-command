@@ -1,0 +1,13 @@
+# intellij
+.idea/
+
+# babysitter
+.a5c/cache
+.a5c/logs
+.a5c/node_modules
+.a5c/runs
+
+# voxera project
+voxera-crm
+voxera-infra
+voxera-website

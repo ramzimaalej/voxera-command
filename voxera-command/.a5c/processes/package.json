@@ -1,0 +1,10 @@
+{
+  "name": "voxera-command-a5c",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Babysitter process definitions for voxera-command. Run `npm install` here before invoking processes that import @a5c-ai/babysitter-sdk.",
+  "dependencies": {
+    "@a5c-ai/babysitter-sdk": "latest"
+  }
+}

@@ -1,0 +1,6 @@
+# Babysitter run journals are local execution history (can be large).
+# Keep process definitions + config in git; ignore the runs.
+.a5c/runs/
+.a5c/logs/
+.a5c/locks/
+node_modules/
