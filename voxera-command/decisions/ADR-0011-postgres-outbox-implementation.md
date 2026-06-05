@@ -7,6 +7,7 @@ supersedes: []
 superseded_by: null
 affects:
   - docs/architecture/outbox-implementation.md
+  - docs/implementation/transactional-outbox-pattern.md
   - docs/architecture/cross-cutting-patterns.md
   - docs/architecture/execution-architecture.md
   - docs/architecture/automations-and-events.md
