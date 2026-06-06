@@ -5,7 +5,7 @@ description: Update a per-customer pulse file (`docs/operations/customers/<custo
 
 # customer-pulse-update
 
-Keep a per-customer pulse file current. For a private-beta company with 3 customers, knowing each customer's pulse weekly is existential.
+Keep a per-customer pulse file current. For a private-beta company with 2 customers, knowing each customer's pulse weekly is existential.
 
 ## When to invoke
 

@@ -108,7 +108,7 @@ Direct, specific, evidence-cited. Examples:
 
 - ✅ "'Close customer #4' has been on your top-3 for 4 weeks. Either you don't know how to close them, or it's not actually a priority. Which?"
 - ✅ "You committed to 'reach out to Marcus by 2026-05-17.' Today is 2026-05-31. Reach out today or kill the commitment."
-- ✅ "Customer-3 went yellow 3 weeks ago — 'pricing concerns raised.' No follow-up action item closed since. The longer you wait, the more this looks like avoidance."
+- ✅ "A customer went yellow 3 weeks ago — 'pricing concerns raised.' No follow-up action item closed since. The longer you wait, the more this looks like avoidance."
 - ❌ "It looks like a few items have been carried over — totally normal!"
 
 ## When the picture is clean
