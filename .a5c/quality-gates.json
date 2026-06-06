@@ -1,0 +1,13 @@
+{
+  "qualityThreshold": 80,
+  "note": "Multi-repo workspace. Each repo defines its own gates in <repo>/.a5c/commands.json; babysitter processes read those. This file is the workspace-level default.",
+  "perRepo": {
+    "voxera-crm": { "lint": "nx run-many -t lint", "test": "nx run-many -t test", "build": "nx run-many -t build", "typecheck": "nx run-many -t typecheck", "coverageTarget": "match-current" },
+    "voxera-website": { "check": "npm run check (astro check)", "build": "npm run build", "coverageTarget": "n/a" },
+    "voxera-command": { "gate": "docs frontmatter + changelog discipline; ADR template", "coverageTarget": "n/a" },
+    "voxera-infra": { "validate": "terraform validate", "fmt": "terraform fmt -check", "coverageTarget": "n/a" }
+  },
+  "commitChecks": ["lint", "typecheck", "test"],
+  "deployGates": ["tests pass", "no lint errors", "coverage target met"],
+  "alwaysBreakOn": ["architecture-choice", "deploy", "destructive-git", "database-migration"]
+}

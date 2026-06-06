@@ -1,0 +1,806 @@
+{
+  "projectName": "voxera-workspace",
+  "description": "Voxera is a poly-repo 'workspace of repos' for an AI voice/telephony CRM aimed primarily at the German (DACH) care-insurance market. A single workspace root contains four sibling git repositories plus a shared babysitter orchestration layer in root .a5c/: voxera-command (the source-of-truth brain holding vision, brand, roadmap, FEAT/BUG specs, ADRs, and all canonical babysitter process definitions), voxera-crm (the CRM product — an Nx monorepo with a NestJS 10 + GraphQL/Pothos + Prisma 6 backend and a React 18 + Vite + Mantine frontend, integrating Twilio/Telnyx/Ultravox voice), voxera-website (an Astro 6 static-first marketing site on Cloudflare Pages with EN/DE i18n and Pages Functions), and voxera-infra (Terraform 1.9.8 IaC targeting GCP via Cloud Foundation Fabric modules). Code repos reference voxera-command by relative path and never fork its content; specs drive all work and real decisions are captured as ADRs.",
+  "goals": [
+    {
+      "id": "goal-velocity-1",
+      "description": "Ship features faster across the CRM and website by leaning on spec-driven babysitter implementation runs (FEAT-xxx/BUG-xxx) and removing review/merge friction.",
+      "category": "velocity",
+      "priority": "high",
+      "status": "active"
+    },
+    {
+      "id": "goal-quality-1",
+      "description": "Raise code quality, especially in high-churn CRM areas (Prospects/Pipelines/Leads frontend), by decomposing god components and extracting shared abstractions.",
+      "category": "quality",
+      "priority": "high",
+      "status": "active"
+    },
+    {
+      "id": "goal-data-layer-1",
+      "description": "Tame data-layer friction by making the recurring ZModel->Prisma migration workflow reliable and reproducible so schema changes stop breaking and needing re-fixes.",
+      "category": "data-layer",
+      "priority": "high",
+      "status": "active"
+    },
+    {
+      "id": "goal-docs-1",
+      "description": "Keep strategy and docs in sync: maintain vision/brand/roadmap plus ADRs in voxera-command as the single source of truth, referenced (never forked) by code repos.",
+      "category": "documentation",
+      "priority": "medium",
+      "status": "active"
+    }
+  ],
+  "techStack": {
+    "languages": [
+      {
+        "name": "TypeScript",
+        "role": "Primary: CRM backend (NestJS), frontend (React), website Astro/Functions, shared libs"
+      },
+      {
+        "name": "JavaScript (ESM)",
+        "role": "Build/config + babysitter process definitions (.js)"
+      },
+      {
+        "name": "HCL (Terraform)",
+        "role": "IaC in voxera-infra"
+      },
+      {
+        "name": "GraphQL (SDL)",
+        "role": "CRM API contract (schema.graphql), generated from Pothos"
+      },
+      {
+        "name": "Markdown",
+        "role": "Canonical docs, specs, ADRs, rules"
+      },
+      {
+        "name": "CSS",
+        "role": "Hand-written site.css (website); Mantine + PostCSS (CRM)"
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "NestJS 10",
+        "category": "Backend framework (CRM)"
+      },
+      {
+        "name": "Apollo Server 4 + Pothos (code-first, custom nestjs-pothos drivers)",
+        "category": "GraphQL server (CRM)"
+      },
+      {
+        "name": "Prisma 6",
+        "category": "ORM / data-model source of truth (CRM)"
+      },
+      {
+        "name": "ZenStack + CASL",
+        "category": "Authorization (CRM)"
+      },
+      {
+        "name": "React 18",
+        "category": "Frontend UI (CRM)"
+      },
+      {
+        "name": "Mantine 7/8",
+        "category": "Design system (CRM)"
+      },
+      {
+        "name": "Redux Toolkit",
+        "category": "State management (CRM)"
+      },
+      {
+        "name": "urql + GraphQL Code Generator",
+        "category": "GraphQL client + typed codegen (CRM)"
+      },
+      {
+        "name": "BullMQ + @nestjs/schedule",
+        "category": "Jobs/queues/scheduling (CRM)"
+      },
+      {
+        "name": "Passport (JWT, Google OIDC, LinkedIn)",
+        "category": "Auth (CRM)"
+      },
+      {
+        "name": "OpenTelemetry",
+        "category": "Observability/tracing (CRM)"
+      },
+      {
+        "name": "Twilio + Telnyx + Ultravox",
+        "category": "Voice/telephony (CRM)"
+      },
+      {
+        "name": "Astro 6",
+        "category": "Static site generator (website)"
+      },
+      {
+        "name": "Cloudflare Pages Functions",
+        "category": "Serverless endpoints (website)"
+      },
+      {
+        "name": "Terraform Cloud Foundation Fabric v34.1.0",
+        "category": "IaC module library (infra)"
+      },
+      {
+        "name": "@a5c-ai/babysitter-sdk",
+        "category": "AI workflow orchestration (workspace)"
+      }
+    ],
+    "databases": [
+      {
+        "name": "PostgreSQL (+ pgvector)",
+        "type": "Primary relational DB (CRM via Prisma; docker-compose test; GCP Cloud SQL). PGlite for in-memory test."
+      },
+      {
+        "name": "Redis",
+        "type": "Queue backend / cache (BullMQ, CRM)"
+      },
+      {
+        "name": "Cloudflare KV (BETA_KV)",
+        "type": "Edge KV for beta-signup dedup / rate limiting (website)"
+      },
+      {
+        "name": "Google Cloud Storage",
+        "type": "Object storage: Terraform remote state + app file storage"
+      }
+    ],
+    "infrastructure": [
+      {
+        "name": "Google Cloud Platform",
+        "category": "Primary cloud (Cloud Run, Cloud SQL, Secret Manager, Artifact Registry, GCS); region europe-west3 (Frankfurt, DACH residency)"
+      },
+      {
+        "name": "Terraform + Cloud Foundation Fabric v34.1.0",
+        "category": "IaC; bootstrap + per-env; GCS remote state"
+      },
+      {
+        "name": "Cloudflare Pages + Functions",
+        "category": "Website hosting + edge serverless"
+      },
+      {
+        "name": "Docker / docker-compose",
+        "category": "CRM local + test runtime; Testcontainers"
+      },
+      {
+        "name": "SendGrid",
+        "category": "Transactional email (website + CRM)"
+      },
+      {
+        "name": "Cloudflare Turnstile + KV",
+        "category": "Spam protection + rate limiting (website)"
+      },
+      {
+        "name": "Nx Cloud",
+        "category": "Remote build cache (CRM)"
+      },
+      {
+        "name": "GitHub",
+        "category": "Source hosting + CI (voxera-crm)"
+      }
+    ],
+    "buildTools": [
+      "Nx 19 (CRM task runner + Nx Cloud)",
+      "Rspack/Webpack (CRM backend), Vite 5 (CRM frontend)",
+      "Astro CLI (website), Wrangler 4 (Cloudflare Pages)",
+      "Terraform 1.9.8 (infra)",
+      "GraphQL Code Generator, Prisma CLI",
+      "Jest + ts-jest (backend), Vitest (frontend), Cypress (e2e), Storybook 7"
+    ],
+    "packageManagers": [
+      "npm (all JS/TS repos; CRM uses Nx)",
+      "Terraform module registry (infra)"
+    ]
+  },
+  "architecture": {
+    "pattern": "Poly-repo 'workspace of repos'. A single workspace root contains four sibling repositories (each its own git repo) plus a shared babysitter orchestration layer in root .a5c/. voxera-command is the source-of-truth brain (docs, ADRs, canonical babysitter process definitions); code repos reference it by relative path and never fork its content.",
+    "modules": [
+      {
+        "name": "voxera-command",
+        "path": "voxera-command",
+        "description": "Source of truth: vision, brand, roadmap, FEAT-xxx/BUG-xxx specs, architecture docs, ADRs (decisions/), operations, and all canonical babysitter process definitions (.a5c/processes/). Markdown-heavy; no application code."
+      },
+      {
+        "name": "voxera-crm",
+        "path": "voxera-crm",
+        "description": "CRM product. Nx monorepo: apps/backend (NestJS 10 + GraphQL via Pothos/Apollo + Prisma 6/PostgreSQL) and apps/frontend (React 18 + Vite + Mantine + Redux Toolkit + urql). Shared libs/. Voice: Twilio, Telnyx, Ultravox. Depends on voxera-command."
+      },
+      {
+        "name": "voxera-website",
+        "path": "voxera-website",
+        "description": "Marketing site. Astro 6 static-first on Cloudflare Pages; dynamic JSON endpoints as Pages Functions (contact, beta-signup, SendGrid, Turnstile). EN/DE i18n via public/i18n.json. Depends on voxera-command."
+      },
+      {
+        "name": "voxera-infra",
+        "path": "voxera-infra",
+        "description": "IaC. Terraform 1.9.8 targeting GCP via Cloud Foundation Fabric modules (v34.1.0). bootstrap/ creates project + GCS remote-state bucket; environments/dev/ composes project, APIs, service accounts."
+      },
+      {
+        "name": ".a5c",
+        "path": ".a5c",
+        "description": "Shared babysitter runtime at workspace root (@a5c-ai/babysitter-sdk ^0.0.187). Holds runs/, cache/, logs/. Process definitions are canonical in voxera-command/.a5c/processes/."
+      }
+    ],
+    "entryPoints": [
+      "voxera-crm/apps/backend/src/main.ts (NestJS bootstrap; tracing.ts loads OpenTelemetry)",
+      "voxera-crm/apps/backend/src/app/app.module.ts (NestJS root module)",
+      "voxera-crm/apps/frontend/src/main.tsx (React root; App.tsx + Router.tsx)",
+      "voxera-website/src/pages/ (Astro routing) + functions/api/*.ts (Pages Functions)",
+      "voxera-infra/environments/dev/main.tf (+ bootstrap/main.tf)",
+      "voxera-command/.a5c/processes/{implement-feature,fix-bug,iterate-doc,iterate-vision,weekly-business-review}.js"
+    ],
+    "dataFlow": "Specs originate in voxera-command/docs (FEAT/BUG/ADR). A babysitter run is invoked from a code repo pointing at a spec path + a process in voxera-command/.a5c/processes; journals land in the invoking repo's .a5c while process defs stay canonical. In the CRM, Prisma schema is the data-model source of truth -> Prisma client + Pothos types -> NestJS resolvers/services expose GraphQL -> frontend consumes via codegen + urql. PostgreSQL is the DB; Redis/BullMQ handle jobs; a transactional outbox drives async events. Website is static Astro on Cloudflare Pages; forms hit Pages Functions calling SendGrid (Turnstile + KV rate-limit). Terraform/GCP provisions runtime (Cloud Run, Cloud SQL, Secret Manager) with state in GCS."
+  },
+  "team": [
+    {
+      "name": "Ramzi Maalej",
+      "role": "Owner / founder-engineer",
+      "responsibilities": [
+        "voxera-crm telephony (Twilio/Telnyx, dialer, SMS, transcription)",
+        "voxera-website",
+        "voxera-command docs (vision/brand/roadmap/ADRs)",
+        "voxera-infra (Terraform/GCP)",
+        "PR merges/integration, lint/type/test fixes"
+      ]
+    },
+    {
+      "name": "Youssef Kammoun",
+      "role": "CRM core engineer",
+      "responsibilities": [
+        "voxera-crm leads/pipelines/contracts",
+        "Prisma/ZModel schema + migrations (datasphera removal)",
+        "auth",
+        "GraphQL/schema",
+        "frontend + backend tests"
+      ]
+    },
+    {
+      "name": "Aymen Gondech",
+      "role": "CRM dialer engineer",
+      "responsibilities": [
+        "voxera-crm power dialer / run-pause",
+        "cross-cutting callbacks",
+        "assignee/account fixes"
+      ]
+    }
+  ],
+  "workflows": [
+    {
+      "name": "Babysitter vision/brand/roadmap iteration",
+      "description": "Strategy docs in voxera-command/docs iterated via babysitter processes. Canonical, never forked.",
+      "steps": [
+        "cd voxera-command",
+        "/babysitter:call iterate the vision doc: <change>",
+        "capture ADRs in decisions/"
+      ],
+      "triggers": [
+        "manual"
+      ]
+    },
+    {
+      "name": "Babysitter feature implementation",
+      "description": "FEAT-xxx specs drive implementation in product repos.",
+      "steps": [
+        "cd voxera-crm",
+        "/babysitter:call implement ../voxera-command/docs/product/features/FEAT-xxx.md"
+      ],
+      "triggers": [
+        "manual, spec path as input"
+      ]
+    },
+    {
+      "name": "Babysitter bug fix",
+      "description": "BUG-xxx specs drive fixes.",
+      "steps": [
+        "cd voxera-website",
+        "/babysitter:call fix ../voxera-command/docs/product/bugs/BUG-xxx.md"
+      ],
+      "triggers": [
+        "manual, spec path as input"
+      ]
+    },
+    {
+      "name": "Git branch + PR workflow",
+      "description": "Default branch master/main. PRs run PR Checks; pushes to master run Master Checks. No CODEOWNERS/branch-protection file found. Branch off default before committing; commit/push only when asked.",
+      "steps": [
+        "branch",
+        "PR (pr.yml gates)",
+        "merge to master (master.yml)"
+      ],
+      "triggers": [
+        "pull_request",
+        "push"
+      ]
+    },
+    {
+      "name": "Website deploy (Cloudflare Pages)",
+      "description": "Astro build then wrangler pages deploy; no GitHub Actions in website repo (Cloudflare Pages git integration or manual wrangler). Auto-deploys on push to main.",
+      "steps": [
+        "npm run deploy",
+        "astro build && wrangler pages deploy dist"
+      ],
+      "triggers": [
+        "manual / Cloudflare Pages git connection"
+      ]
+    },
+    {
+      "name": "Terraform infra workflow",
+      "description": "Bootstrap creates ops project + GCS state bucket + Terraform SA; per-env (dev) uses GCS remote state. No infra CI pipeline present.",
+      "steps": [
+        "gcloud ADC",
+        "terraform init/plan/apply bootstrap",
+        "migrate state to GCS",
+        "per-env apply"
+      ],
+      "triggers": [
+        "manual"
+      ]
+    }
+  ],
+  "conventions": {
+    "naming": {
+      "specs": "FEAT-xxx-<slug>.md / BUG-xxx-<slug>.md (3-digit, permanent numbers) with templates",
+      "decisions": "ADR-NNNN-<slug>.md in voxera-command/decisions/ (4-digit, never renumbered)",
+      "crmFeatures": "voxera-crm/features/<feature-id>/ with fixed artifact set",
+      "nxProjects": "'backend' and 'frontend' under apps/; reusable code in libs/",
+      "terraform": "main.tf/variables.tf/outputs.tf/providers.tf/versions.tf/backend.tf; environments/<env>/ + bootstrap/",
+      "websiteRoutes": "Astro file-based src/pages; Pages Functions functions/api/<name>.ts; private helpers underscore-prefixed",
+      "branches": "voxera-crm uses two coexisting schemes: developer-prefixed 'rm/<topic>' and issue-number-prefixed '<issue#>-<kebab-description>'; voxera-website uses 'site/<topic>'"
+    },
+    "git": {
+      "model": "Versioning = git. One canonical file per doc; freeze milestones with annotated tags (e.g. vision-v2), never *-final.md copies.",
+      "frontmatter": "Canonical docs carry frontmatter (version, status, updated) + a changelog block",
+      "commitFooter": "Commits end with Co-Authored-By trailer; PR bodies end with Generated-with-Claude-Code line; branch off default before committing; commit/push only when asked",
+      "deployGates": "babysitter alwaysBreakOn includes 'deploy'; website auto-deploys on push to main via Cloudflare Pages",
+      "observedPractice": "PR-merge-driven in voxera-crm (~73/300 subjects carry (#NNN)); issue number encoded in branch + subject; mostly free-form imperative subjects (Conventional Commits rare); no Co-Authored-By trailers observed historically; no release tags in any repo (main treated as continuously deployed)"
+    },
+    "codeStyle": {
+      "crm": "Prettier (singleQuote) + ESLint (airbnb-typescript + mantine); Nx enforce-module-boundaries as error; stylelint-config-standard-scss; Node v22 (.nvmrc)",
+      "backendArchitecture": "GraphQL-first, code-first Pothos; repository/service/resolver layering; business logic out of resolvers; respect NestJS module boundaries (docs/patterns/)",
+      "frontendArchitecture": "Reuse Mantine primitives/tokens/hooks first; every screen handles loading/empty/error/permission states; no new state pattern without plan approval",
+      "website": "ESLint 9 flat (typescript-eslint + eslint-plugin-astro + jsx-a11y); single hand-written site.css with CSS custom properties (no Tailwind/CSS-in-JS); Node >=22.12",
+      "dryPolicy": "Website pragmatic DRY: inline up to 2 similar blocks, extract at 3+ uses; shared copy in public/i18n.json"
+    },
+    "importOrder": [
+      "Governed by eslint-plugin-import (airbnb-typescript) in CRM; default builtin/external then internal grouping",
+      "Nx module-boundary constraints restrict cross-project imports (apps not imported by libs)",
+      "Website: do not import from public/ in components; use astro:assets + content collections"
+    ],
+    "errorHandling": "CRM: @pothos/plugin-errors for typed GraphQL errors, true-myth (Result/Maybe), class-validator/zod for input validation. Website Functions: validate request shape (400 on bad input), verify Turnstile, KV rate-limit, return 500 with stable error code (never raw stack), structured console.error (no PII/secrets).",
+    "testingConventions": "CRM: test-cases.md is the validation contract; every acceptance criterion maps to >=1 test. Jest+ts-jest (backend), Vitest+testing-library (frontend), Cypress (e2e), Testcontainers/PGlite (DB). Cover happy path, edge cases, authz boundaries, regressions. Tests ship with the feature in the same PR ('with tests'). A feature is not complete with failing tests. Website gate: astro check + npm run build.",
+    "additionalRules": [
+      "Golden rule: Canonical strategy lives in voxera-command/docs/ — reference it, never fork it; if the website or CRM needs a product fact, read it from there. If spec and code disagree, spec wins.",
+      "Golden rule: Process definitions live once in voxera-command/.a5c/processes/; code repos invoke them by relative path, never copy.",
+      "Golden rule: Specs drive work — a feature is a FEAT-xxx.md, a bug is a BUG-xxx.md; implementation runs take a spec path as input. Do not implement from chat alone.",
+      "Golden rule: Real decisions get an ADR in voxera-command/decisions/; babysitter's run journal is execution history, ADRs are the strategic why.",
+      "Golden rule: Versioning = git — one canonical file per doc with frontmatter (version, status, updated) + changelog; freeze milestones with annotated tags, not *-final-final.md copies.",
+      "CRM SDLC gating: no production code until features/<feature-id>/status.json === PLAN_APPROVED; never skip approval checkpoints.",
+      "Prisma schema is the source of truth: change schema first, then generate migrations + GraphQL.",
+      "Website: static-first (no SSR adapter without an ADR); dynamic data via Pages Functions; islands use most restrictive client directive; never edit/commit dist/.",
+      "Website perf budget: LCP <2.0s, INP <200ms, CLS <0.05, Lighthouse >=90, <50KB JS/route; a11y WCAG 2.2 AA; brand verbs stay English in EN/DE.",
+      "Infra: pin Fabric modules (v34.1.0) and Terraform (.terraform-version 1.9.8); remote state in GCS with per-env prefixes.",
+      "German (DE) is a first-class locale; UI strings + domain forms expected translated (Pflegebox, Hausnotruf, Pflegegrade)."
+    ]
+  },
+  "tools": {
+    "formatting": [
+      {
+        "name": "Prettier (singleQuote)",
+        "configPath": "voxera-crm/.prettierrc"
+      },
+      {
+        "name": "EditorConfig",
+        "configPath": "voxera-crm/.editorconfig"
+      },
+      {
+        "name": "ESLint --fix (website; no Prettier)",
+        "configPath": "voxera-website/package.json"
+      }
+    ],
+    "linting": [
+      {
+        "name": "ESLint (Nx flat overrides, airbnb-typescript, @nx plugins)",
+        "configPath": "voxera-crm/.eslintrc.json"
+      },
+      {
+        "name": "Stylelint (stylelint-config-standard-scss, postcss-preset-mantine)",
+        "configPath": "voxera-crm/apps/frontend/.stylelintrc.json"
+      },
+      {
+        "name": "ESLint 9 flat (typescript-eslint, eslint-plugin-astro, jsx-a11y, no-restricted-imports)",
+        "configPath": "voxera-website/eslint.config.js"
+      }
+    ],
+    "testing": [
+      {
+        "name": "Jest (Nx getJestProjects, backend/Nest)",
+        "configPath": "voxera-crm/jest.config.ts"
+      },
+      {
+        "name": "Vitest (frontend, jsdom, coverage-v8)",
+        "configPath": "voxera-crm/vitest.config.ts"
+      },
+      {
+        "name": "Vitest workspace",
+        "configPath": "voxera-crm/vitest.workspace.mjs"
+      },
+      {
+        "name": "Cypress (devDependency)",
+        "configPath": "voxera-crm/package.json"
+      },
+      {
+        "name": "Testcontainers + supertest (integration, Postgres)",
+        "configPath": "voxera-crm/package.json"
+      },
+      {
+        "name": "astro check (typecheck; no dedicated test runner)",
+        "configPath": "voxera-website/package.json"
+      }
+    ],
+    "containerization": {
+      "tooling": "Docker + Docker Compose",
+      "dockerfiles": [
+        "voxera-crm/apps/backend/Dockerfile (node:18-alpine, nx build, exposes 5175)",
+        "voxera-crm/voxera-docker-services/Dockerfile.pgvector (Postgres + pgvector)",
+        "voxera-crm/voxera-docker-services/nginx/Dockerfile"
+      ],
+      "composeFiles": [
+        "voxera-crm/docker-compose-test.yaml (postgres + backend, healthchecks)",
+        "voxera-crm/voxera-docker-services/docker-compose.yaml (redis, nginx, postgres+pgvector, jaeger)",
+        "voxera-crm/voxera-docker-services/docker-compose-linux.yaml"
+      ],
+      "notes": "Website (Astro) and infra (Terraform) have no Dockerfiles. CRM backend targets Cloud Run. Node version mismatch: Dockerfile node:18, CI node 20, .nvmrc v22 — worth reconciling."
+    }
+  },
+  "services": [
+    {
+      "name": "PostgreSQL (+ pgvector)",
+      "type": "database",
+      "url": "postgresql (dev compose / testcontainers; GCP Cloud SQL in infra)"
+    },
+    {
+      "name": "Redis",
+      "type": "queue/cache (BullMQ, nestjs cache-manager)",
+      "url": "redis://localhost:6379"
+    },
+    {
+      "name": "Jaeger / OpenTelemetry",
+      "type": "tracing/observability",
+      "url": "OTLP 4317/4318"
+    },
+    {
+      "name": "Honeycomb",
+      "type": "observability (secret slot + MCP/skills present; planned)",
+      "url": "https://api.honeycomb.io"
+    },
+    {
+      "name": "Google Cloud Platform",
+      "type": "cloud (Cloud Run, Cloud SQL, GCS, Secret Manager, Artifact Registry; europe-west3)",
+      "url": "https://console.cloud.google.com"
+    },
+    {
+      "name": "GCS Terraform state bucket",
+      "type": "remote state backend",
+      "url": "gs://voxera-tf-state-<suffix>"
+    },
+    {
+      "name": "Cloudflare Pages + Functions + KV (BETA_KV)",
+      "type": "hosting/edge/serverless (website)",
+      "url": "https://usevoxera.com"
+    },
+    {
+      "name": "Twilio",
+      "type": "voice/SMS",
+      "url": "https://api.twilio.com"
+    },
+    {
+      "name": "Telnyx",
+      "type": "voice/SMS",
+      "url": "https://api.telnyx.com"
+    },
+    {
+      "name": "Ultravox",
+      "type": "AI voice agent",
+      "url": "n/a"
+    },
+    {
+      "name": "SendGrid",
+      "type": "email (website + CRM)",
+      "url": "https://api.sendgrid.com"
+    },
+    {
+      "name": "Cloudflare Turnstile",
+      "type": "CAPTCHA/bot protection",
+      "url": "https://challenges.cloudflare.com"
+    },
+    {
+      "name": "Google OAuth / OIDC",
+      "type": "auth",
+      "url": "n/a"
+    },
+    {
+      "name": "LinkedIn OAuth2",
+      "type": "auth",
+      "url": "n/a"
+    },
+    {
+      "name": "AWS S3 / Google Cloud Storage",
+      "type": "object storage (uploads)",
+      "url": "n/a"
+    },
+    {
+      "name": "Google Analytics 4",
+      "type": "web analytics",
+      "url": "https://www.google-analytics.com"
+    },
+    {
+      "name": "Nx Cloud",
+      "type": "CI build cache",
+      "url": "https://cloud.nx.app"
+    }
+  ],
+  "externalIntegrations": [
+    {
+      "service": "Twilio",
+      "category": "voice/SMS",
+      "enabled": true
+    },
+    {
+      "service": "Telnyx",
+      "category": "voice/SMS",
+      "enabled": true
+    },
+    {
+      "service": "Ultravox",
+      "category": "AI voice agent",
+      "enabled": true
+    },
+    {
+      "service": "SendGrid",
+      "category": "email",
+      "enabled": true
+    },
+    {
+      "service": "Cloudflare (Pages, Functions, KV, Turnstile)",
+      "category": "hosting/edge/security",
+      "enabled": true
+    },
+    {
+      "service": "Google Cloud Platform",
+      "category": "cloud infra",
+      "enabled": true
+    },
+    {
+      "service": "Honeycomb",
+      "category": "observability",
+      "enabled": false
+    },
+    {
+      "service": "Jaeger / OpenTelemetry",
+      "category": "tracing",
+      "enabled": true
+    },
+    {
+      "service": "Nx Cloud",
+      "category": "CI cache",
+      "enabled": true
+    },
+    {
+      "service": "Google OAuth/OIDC",
+      "category": "auth",
+      "enabled": true
+    },
+    {
+      "service": "LinkedIn OAuth2",
+      "category": "auth",
+      "enabled": true
+    },
+    {
+      "service": "AWS S3",
+      "category": "object storage",
+      "enabled": true
+    },
+    {
+      "service": "Google Analytics 4",
+      "category": "analytics",
+      "enabled": true
+    },
+    {
+      "service": "Sentry / Datadog / Slack",
+      "category": "monitoring/comms",
+      "enabled": false
+    }
+  ],
+  "cicd": {
+    "babysitterIntegration": {
+      "enabled": false
+    },
+    "skipped": true,
+    "skipReason": "User chose to skip CI/CD babysitter integration during onboarding; detected provider recorded for reference only.",
+    "provider": "GitHub Actions",
+    "configPaths": [
+      "voxera-crm/.github/workflows/master.yml",
+      "voxera-crm/.github/workflows/pr.yml"
+    ],
+    "pipelines": [
+      {
+        "name": "Master Checks (master.yml)",
+        "stages": [
+          "install (npm ci --force, node 20, cache)",
+          "backend-lint",
+          "frontend-lint",
+          "backend-test",
+          "frontend-test",
+          "backend-build",
+          "frontend-build"
+        ],
+        "triggers": [
+          "push to master/main"
+        ]
+      },
+      {
+        "name": "PR Checks (pr.yml)",
+        "stages": [
+          "install",
+          "backend-lint",
+          "frontend-lint",
+          "frontend-typecheck",
+          "generate-schema-client (prisma generate + GraphQL codegen)",
+          "backend-test (vitest coverage report)",
+          "frontend-test (coverage report)"
+        ],
+        "triggers": [
+          "pull_request"
+        ]
+      }
+    ],
+    "notes": "Only voxera-crm has GitHub Actions pipelines. Website deploys via Cloudflare Pages git integration; infra has no CI."
+  },
+  "infrastructure": {
+    "cloud": "Google Cloud Platform",
+    "iac": "Terraform >=1.9.0 (.terraform-version 1.9.8)",
+    "layout": {
+      "bootstrap": "ops project, EU GCS tf-state bucket, Terraform SA (org projectCreator + billing.user), billing budget alerts. State local until bucket id filled.",
+      "environments/dev": "voxera-dev project, europe-west3 (Frankfurt, DACH residency), backend_sa (logWriter/metricWriter/cloudtrace.agent/secretAccessor). GCS remote state (bucket placeholder). Workload blocks (uploads bucket, Artifact Registry, Cloud SQL Postgres 16, Secret Manager, Cloud Run v2) scaffolded but commented out pending ADRs."
+    },
+    "modules": "Cloud Foundation Fabric pinned v34.1.0 (project, gcs, iam-service-account, cloudsql-instance, secret-manager, cloud-run-v2, artifact-registry); modules/ dir currently empty (README only)",
+    "providers": "hashicorp/google ~>6.10, google-beta ~>6.10, random ~>3.6; credentials via gcloud ADC (no creds in repo)",
+    "secretsHandling": "Secret Manager slots provisioned by Terraform, values set out-of-band via gcloud; no secrets committed. CI uses dummy env values for codegen/tests."
+  },
+  "painPoints": [
+    {
+      "id": "PP-001",
+      "description": "ZModel<->Prisma migration workflow is fragile; repeated 'fixed zmodel and migrations issue' commits.",
+      "severity": "high",
+      "category": "data-layer / build",
+      "discoveredVia": "git log subject mining + churn on libs/prisma-schema-backend/*",
+      "suggestedRemediation": "Make the ZModel->Prisma migration path deterministic and CI-verified: add a single canonical generate+migrate script, gate PRs on a clean 'migrate diff' (fail if schema and migrations drift), regenerate from schema.zmodel as the only source of truth, and document the workflow in voxera-crm/docs/patterns/. Targets goal-data-layer-1.",
+      "remediate": true
+    },
+    {
+      "id": "PP-002",
+      "description": "Committed generated GraphQL client and lockfiles dominate diffs, undermining review.",
+      "severity": "medium",
+      "category": "tooling / review-quality",
+      "discoveredVia": "high-churn file analysis",
+      "suggestedRemediation": "Stop committing generated GraphQL client artifacts (apps/frontend/src/graphql/gql/graphql.ts, gql.ts) — gitignore them and regenerate in CI/build (the PR pipeline already runs prisma generate + GraphQL codegen). Keep schema.graphql as the only checked-in contract. Keep package-lock.json but isolate dependency bumps into their own PRs to reduce review noise. Targets goal-velocity-1.",
+      "remediate": true
+    },
+    {
+      "id": "PP-003",
+      "description": "Per-product duplicated form components (JsonSchemaFormPflegebox / JsonSchemaFormHausnotrufsystem, TaskDataForm twins) edited in lockstep, signaling missing abstraction.",
+      "severity": "medium",
+      "category": "frontend architecture / DRY",
+      "discoveredVia": "twin files with near-identical churn",
+      "suggestedRemediation": "Extract a single config/schema-driven JsonSchemaForm component parameterized per insurance product (Pflegebox, Hausnotrufsystem) so domain differences live in data/config, not duplicated TSX. Targets goal-quality-1.",
+      "remediate": true
+    },
+    {
+      "id": "PP-004",
+      "description": "ProspectsDetails.page.tsx is a high-churn god component (~42 touches).",
+      "severity": "medium",
+      "category": "frontend architecture",
+      "discoveredVia": "top of name-only churn ranking",
+      "suggestedRemediation": "Decompose ProspectsDetails.page.tsx into focused child components/hooks (header, activity, forms, pipeline) with isolated data fetching, reducing coupling and regression surface. Targets goal-quality-1.",
+      "remediate": true
+    },
+    {
+      "id": "PP-005",
+      "description": "Dual test frameworks (Jest + Vitest) configured simultaneously in the CRM.",
+      "severity": "low",
+      "category": "testing infra",
+      "discoveredVia": "presence of jest.config.ts and vitest.config.ts"
+    },
+    {
+      "id": "PP-006",
+      "description": "No release tags / versioning anywhere, contradicting the workspace golden rule to freeze milestones with annotated tags.",
+      "severity": "low",
+      "category": "release process",
+      "discoveredVia": "git tag empty in all repos vs CLAUDE.md guidance"
+    },
+    {
+      "id": "PP-007",
+      "description": "Inconsistent author identities for the same people fragment contribution stats.",
+      "severity": "low",
+      "category": "repo hygiene",
+      "discoveredVia": "git shortlog -sne shows multiple identities per person"
+    }
+  ],
+  "bottlenecks": [
+    {
+      "id": "BN-001",
+      "description": "Generated GraphQL client files committed to repo and re-touched constantly",
+      "frequency": "very high",
+      "impact": "Bloats diffs, hides real changes, creates merge conflicts; inflates avg commit size",
+      "location": "voxera-crm: apps/frontend/src/graphql/gql/graphql.ts, gql.ts, schema.graphql"
+    },
+    {
+      "id": "BN-002",
+      "description": "Lockfile/manifest churn committed alongside features",
+      "frequency": "high",
+      "impact": "Frequent conflict surface and review noise",
+      "location": "voxera-crm: package-lock.json, package.json"
+    },
+    {
+      "id": "BN-003",
+      "description": "Prospects detail page is a change magnet (god component)",
+      "frequency": "very high",
+      "impact": "Repeatedly edited single large component — coupling/regression hotspot",
+      "location": "voxera-crm: apps/frontend/src/pages/Prospects/ProspectsDetails.page.tsx (~42 touches)"
+    },
+    {
+      "id": "BN-004",
+      "description": "ZModel/Prisma schema and migrations repeatedly broken and re-fixed",
+      "frequency": "medium-high",
+      "impact": "Fragile schema/migration workflow",
+      "location": "voxera-crm: libs/prisma-schema-backend/schema.zmodel, prisma/schema.prisma"
+    },
+    {
+      "id": "BN-005",
+      "description": "Domain JSON-schema forms duplicated per insurance product",
+      "frequency": "medium-high",
+      "impact": "Parallel near-identical files edited in lockstep — copy-paste burden",
+      "location": "voxera-crm: JsonSchemaFormPflegebox.tsx & JsonSchemaFormHausnotrufsystem.tsx, TaskDataForm twins"
+    },
+    {
+      "id": "BN-006",
+      "description": "Site-wide layout/style/i18n files concentrate website changes",
+      "frequency": "medium",
+      "impact": "Any copy/layout tweak reopens the same few files",
+      "location": "voxera-website: src/styles/site.css, public/i18n.json, layouts/SiteLayout.astro, wrangler.toml"
+    }
+  ],
+  "repositories": [
+    {
+      "name": "voxera-workspace",
+      "path": ".",
+      "role": "Workspace root: shared babysitter orchestration layer (.a5c/ with @a5c-ai/babysitter-sdk, runs/, cache/, logs/), CLAUDE.md golden rules, README."
+    },
+    {
+      "name": "voxera-command",
+      "path": "voxera-command",
+      "role": "Source of truth: vision, brand, roadmap, FEAT/BUG specs, architecture docs, ADRs (decisions/), and all canonical babysitter process definitions (.a5c/processes/)."
+    },
+    {
+      "name": "voxera-crm",
+      "path": "voxera-crm",
+      "role": "CRM product code (Nx monorepo: NestJS+GraphQL/Pothos+Prisma backend, React+Vite+Mantine frontend, Twilio/Telnyx/Ultravox voice)."
+    },
+    {
+      "name": "voxera-website",
+      "path": "voxera-website",
+      "role": "Marketing site code (Astro 6 static-first on Cloudflare Pages, EN/DE i18n, Pages Functions)."
+    },
+    {
+      "name": "voxera-infra",
+      "path": "voxera-infra",
+      "role": "Infrastructure-as-code (Terraform 1.9.8 + Cloud Foundation Fabric v34.1.0 targeting GCP, GCS remote state)."
+    }
+  ],
+  "preferences": {
+    "autonomy": "semi-autonomous",
+    "autonomyNote": "This project runs in semi-autonomous mode: babysitter may proceed on routine implementation/fix steps but should break on deploys and key approval checkpoints (CRM PLAN_APPROVED gate, alwaysBreakOn includes 'deploy').",
+    "claudeMdUpdatePolicy": "append-only",
+    "claudeMdUpdateNote": "Updates to CLAUDE.md are append-only: add to a dedicated '## Babysitter' section; never rewrite or delete existing golden rules."
+  },
+  "createdAt": "2026-06-05T23:15:32.000Z",
+  "updatedAt": "2026-06-05T23:30:00.000Z",
+  "version": 1
+}

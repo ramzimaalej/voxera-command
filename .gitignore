@@ -11,3 +11,12 @@
 voxera-crm
 voxera-infra
 voxera-website
+
+# --- babysitter managed ---
+# Credentials (always excluded for security)
+.a5c/creds.env
+.a5c/creds.env.tmp.*
+# Run logs + journals (.a5c/logs and .a5c/runs already ignored above; kept here for completeness)
+.a5c/logs/
+.a5c/runs/
+# --- end babysitter managed ---
