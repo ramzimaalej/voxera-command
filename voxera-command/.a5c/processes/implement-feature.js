@@ -1,7 +1,7 @@
 /**
  * @process voxera/implement-feature
  * @description Implement a FEAT-xxx spec end-to-end in a code repo: design-review gate → plan → human approval → implement → quality-gated verify loop → human approval → update tracking → optional ADR.
- * @inputs { spec: string, qualityGate?: object, skipDesignReview?: boolean, designLenses?: string[] }
+ * @inputs { spec: string, qualityGate?: object, skipDesignReview?: boolean, designLenses?: string[], dossierPath?: string }
  * @outputs { success, spec, attemptsToConverge, dossierPath?: string, adrCreated?: string }
  * @skill code-review .claude/skills/code-review/SKILL.md
  * @skill verify .claude/skills/verify/SKILL.md
@@ -35,16 +35,20 @@ import { designReview } from './design-review.js';
  *   7. adr-check  — optional, gated by user
  */
 export async function process(inputs, ctx) {
-  const { spec, qualityGate = null, skipDesignReview = false, designLenses = null } = inputs;
+  const { spec, qualityGate = null, skipDesignReview = false, designLenses = null, dossierPath: providedDossier = null } = inputs;
 
   if (!spec) {
     throw new Error('implement-feature requires { spec }');
   }
 
-  // PHASE 0 — design-review gate (DDD → ERD → Prisma). Auto-skips when the spec has no
-  // data/domain impact (no lenses detected) or when skipDesignReview is set.
-  let dossierPath = null;
-  if (!skipDesignReview) {
+  // PHASE 0 — design-review gate. Three modes:
+  //   1. `dossierPath` provided  → a design was already produced + approved upstream (e.g. the
+  //      voxera-crm feature SDLC's run-design-review step). Reuse it; do not re-run the gate.
+  //   2. `skipDesignReview`      → skip entirely (trivial/no-design features).
+  //   3. otherwise               → run the lenses now, then a human gate to approve the dossier.
+  // Auto-skips the gate when the spec has no data/domain/API/behavior impact (no lenses detected).
+  let dossierPath = providedDossier;
+  if (!providedDossier && !skipDesignReview) {
     const design = await designReview(spec, ctx, { lenses: designLenses });
     dossierPath = design.dossierPath;
 
