@@ -1,6 +1,6 @@
 /**
  * @process voxera/design-review
- * @description Run discipline-specific design → adversarial-review → converge loops for a spec (DDD → ERD → Prisma → GraphQL → Webhook → AI-agent → Analytics → OO → TDD), producing a design dossier that gates implementation.
+ * @description Run discipline-specific design → adversarial-review → converge loops for a spec (DDD → ERD → Prisma → GraphQL → Webhook → AI-agent → Analytics → OO → React → TDD), producing a design dossier that gates implementation.
  * @inputs { spec: string, lenses?: string[], maxRevisions?: number }
  * @outputs { success, dossierPath, lenses: [{ id, verdict, score, revisions, findings }] }
  * @agent ddd-designer ../../../voxera-crm/.claude/subagents/ddd-designer.md
@@ -19,6 +19,8 @@
  * @agent analytics-reviewer ../../../voxera-crm/.claude/subagents/analytics-reviewer.md
  * @agent oo-designer ../../../voxera-crm/.claude/subagents/oo-designer.md
  * @agent oo-reviewer ../../../voxera-crm/.claude/subagents/oo-reviewer.md
+ * @agent react-designer ../../../voxera-crm/.claude/subagents/react-designer.md
+ * @agent react-reviewer ../../../voxera-crm/.claude/subagents/react-reviewer.md
  * @agent tdd-designer ../../../voxera-crm/.claude/subagents/tdd-designer.md
  * @agent tdd-reviewer ../../../voxera-crm/.claude/subagents/tdd-reviewer.md
  * @agent general-purpose
@@ -43,10 +45,11 @@ import { defineTask } from '@a5c-ai/babysitter-sdk';
  * until the reviewer approves or `maxRevisions` is hit. Each later lens reads the approved
  * outputs of the earlier ones, so the domain shapes the data model shapes the schema.
  *
- * LENS_REGISTRY is the extension point and now covers all nine disciplines from the
- * engineering-OS brief: ddd/erd/prisma/graphql/webhook/ai-agent/analytics/oo/tdd. Add a
- * future lens by appending an entry (plus its *-designer / *-reviewer subagents) — the
- * orchestration below never changes.
+ * LENS_REGISTRY is the extension point. It covers the nine disciplines from the original
+ * engineering-OS brief plus react:
+ * ddd/erd/prisma/graphql/webhook/ai-agent/analytics/oo/react/tdd. Add a future lens by
+ * appending an entry (plus its *-designer / *-reviewer subagents) — the orchestration below
+ * never changes.
  */
 const LENS_REGISTRY = [
   {
@@ -128,6 +131,16 @@ const LENS_REGISTRY = [
       'the feature adds or substantially changes code structure — new services/classes/modules or non-trivial frontend components. Especially when touching the PP-003 (duplicated forms) or PP-004 (ProspectsDetails god component) hotspots.',
     designGoal:
       'a SOLID code structure: single-responsibility units with DI-injected interfaces, composition over inheritance, shared abstractions over duplication (retiring/avoiding PP-003/PP-004), OCP extension points, sound Nx boundaries, and testable seams — without premature abstraction or over-engineering.',
+  },
+  {
+    id: 'react',
+    title: 'React / UI design',
+    designerAgent: 'react-designer',
+    reviewerAgent: 'react-reviewer',
+    appliesWhen:
+      'the feature adds or changes the frontend — React components, pages, hooks, forms, or screens. Skip for backend-only features.',
+    designGoal:
+      'a high-quality React/UI design: single-responsibility component tree with typed props, correct state/data-flow (urql for server state, no prop-drilling), sound hooks, Mantine/design-system reuse (avoiding PP-003/PP-004), all four UX states (loading/empty/error/permission), accessibility, justified rendering performance, and react-i18next for all user-facing text.',
   },
   {
     id: 'tdd',
@@ -230,7 +243,7 @@ export async function designReview(spec, ctx, opts = {}) {
       findings: review.findings || [],
       // Lens-specific risk flag: prisma → migrationRisk, graphql → breakingChange,
       // webhook → deliveryRisk, ai-agent → autonomyRisk, analytics → metricRisk,
-      // oo → structureRisk, tdd → acCoverage.
+      // oo → structureRisk, react → uiRisk, tdd → acCoverage.
       riskNote: review.migrationRisk
         ? `migration: ${review.migrationRisk}`
         : review.breakingChange
@@ -243,9 +256,11 @@ export async function designReview(spec, ctx, opts = {}) {
                 ? `metrics: ${review.metricRisk}`
                 : review.structureRisk
                   ? `structure: ${review.structureRisk}`
-                  : review.acCoverage
-                    ? `coverage: ${review.acCoverage}`
-                    : null,
+                  : review.uiRisk
+                    ? `ui: ${review.uiRisk}`
+                    : review.acCoverage
+                      ? `coverage: ${review.acCoverage}`
+                      : null,
     });
     priorDesigns.push({ id: lens.id, title: lens.title, path: designPath });
   }
@@ -410,7 +425,7 @@ export const reviewLensTask = defineTask('review-lens', (args, taskCtx) => ({
         'Any unresolved critical or high finding means verdict "revise".',
       ],
       outputFormat:
-        'JSON with verdict ("approved"|"revise"), score (0-100), findings (array of {severity, issue, recommendation}), summary (string). Lens-specific optional risk flag: migrationRisk ("additive"|"destructive"|"unclear") for the prisma lens, breakingChange ("additive"|"breaking"|"unclear") for the graphql lens, deliveryRisk ("idempotent"|"at-risk"|"unclear") for the webhook lens, autonomyRisk ("bounded"|"unbounded"|"unclear") for the ai-agent lens, metricRisk ("trustworthy"|"questionable"|"unclear") for the analytics lens, structureRisk ("sound"|"smelly"|"unclear") for the oo lens, acCoverage ("complete"|"gaps"|"unclear") for the tdd lens.',
+        'JSON with verdict ("approved"|"revise"), score (0-100), findings (array of {severity, issue, recommendation}), summary (string). Lens-specific optional risk flag: migrationRisk ("additive"|"destructive"|"unclear") for the prisma lens, breakingChange ("additive"|"breaking"|"unclear") for the graphql lens, deliveryRisk ("idempotent"|"at-risk"|"unclear") for the webhook lens, autonomyRisk ("bounded"|"unbounded"|"unclear") for the ai-agent lens, metricRisk ("trustworthy"|"questionable"|"unclear") for the analytics lens, structureRisk ("sound"|"smelly"|"unclear") for the oo lens, uiRisk ("solid"|"rough"|"unclear") for the react lens, acCoverage ("complete"|"gaps"|"unclear") for the tdd lens.',
     },
     outputSchema: {
       type: 'object',
@@ -436,6 +451,7 @@ export const reviewLensTask = defineTask('review-lens', (args, taskCtx) => ({
         autonomyRisk: { type: 'string', enum: ['bounded', 'unbounded', 'unclear'] },
         metricRisk: { type: 'string', enum: ['trustworthy', 'questionable', 'unclear'] },
         structureRisk: { type: 'string', enum: ['sound', 'smelly', 'unclear'] },
+        uiRisk: { type: 'string', enum: ['solid', 'rough', 'unclear'] },
         acCoverage: { type: 'string', enum: ['complete', 'gaps', 'unclear'] },
         summary: { type: 'string' },
       },
