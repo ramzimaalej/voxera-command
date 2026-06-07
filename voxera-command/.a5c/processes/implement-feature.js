@@ -1,8 +1,8 @@
 /**
  * @process voxera/implement-feature
- * @description Implement a FEAT-xxx spec end-to-end in a code repo: plan → human approval → implement → quality-gated verify loop → human approval → update tracking → optional ADR.
- * @inputs { spec: string, qualityGate?: object }
- * @outputs { success, spec, attemptsToConverge, adrCreated?: string }
+ * @description Implement a FEAT-xxx spec end-to-end in a code repo: design-review gate → plan → human approval → implement → quality-gated verify loop → human approval → update tracking → optional ADR.
+ * @inputs { spec: string, qualityGate?: object, skipDesignReview?: boolean, designLenses?: string[] }
+ * @outputs { success, spec, attemptsToConverge, dossierPath?: string, adrCreated?: string }
  * @skill code-review .claude/skills/code-review/SKILL.md
  * @skill verify .claude/skills/verify/SKILL.md
  * @agent code-reviewer
@@ -10,6 +10,7 @@
  */
 
 import { defineTask } from '@a5c-ai/babysitter-sdk';
+import { designReview } from './design-review.js';
 
 /**
  * Implement a feature spec in a code repo (voxera-crm or voxera-website).
@@ -23,7 +24,9 @@ import { defineTask } from '@a5c-ai/babysitter-sdk';
  * Pass `qualityGate` in inputs to override.
  *
  * Phases:
- *   1. plan       — agent reads spec + strategy + roadmap, produces implementation plan
+ *   0. design     — design-review gate: DDD → ERD → Prisma design + adversarial review (skippable / auto-skips when no data/domain impact)
+ *   0b. human gate — user approves the design dossier
+ *   1. plan       — agent reads spec + strategy + roadmap + design dossier, produces implementation plan
  *   2. human gate — user approves plan
  *   3. implement  — agent writes the code
  *   4. verify     — quality-gate loop (up to 3 attempts; lint+typecheck+test+build+spec-conformance)
@@ -32,14 +35,49 @@ import { defineTask } from '@a5c-ai/babysitter-sdk';
  *   7. adr-check  — optional, gated by user
  */
 export async function process(inputs, ctx) {
-  const { spec, qualityGate = null } = inputs;
+  const { spec, qualityGate = null, skipDesignReview = false, designLenses = null } = inputs;
 
   if (!spec) {
     throw new Error('implement-feature requires { spec }');
   }
 
+  // PHASE 0 — design-review gate (DDD → ERD → Prisma). Auto-skips when the spec has no
+  // data/domain impact (no lenses detected) or when skipDesignReview is set.
+  let dossierPath = null;
+  if (!skipDesignReview) {
+    const design = await designReview(spec, ctx, { lenses: designLenses });
+    dossierPath = design.dossierPath;
+
+    if (design.lenses.length) {
+      const unresolved = design.lenses.filter((l) => l.verdict !== 'approved');
+      await ctx.breakpoint({
+        title: 'Approve design before planning',
+        question: [
+          `**Spec**: ${spec}`,
+          ``,
+          `Design lenses (domain → data → schema):`,
+          ...design.lenses.map(
+            (l) =>
+              `- **${l.title}**: ${l.verdict} (score ${l.score}, ${l.revisions} revision${l.revisions === 1 ? '' : 's'})` +
+              (l.riskNote ? ` — ${l.riskNote}` : ''),
+          ),
+          ``,
+          unresolved.length
+            ? `⚠️ ${unresolved.length} lens(es) did not reach "approved" — read their findings in the dossier before approving.`
+            : `All lenses approved by their adversarial reviewer.`,
+          ``,
+          'Approve to lock the design and plan against it, reject to iterate further.',
+        ].join('\n'),
+        context: {
+          runId: ctx.runId,
+          files: [{ path: dossierPath, format: 'markdown', label: 'Design dossier' }],
+        },
+      });
+    }
+  }
+
   // PHASE 1 — plan
-  const plan = await ctx.task(planFeatureTask, { spec });
+  const plan = await ctx.task(planFeatureTask, { spec, dossierPath });
 
   // PHASE 2 — approve plan
   await ctx.breakpoint({
@@ -61,7 +99,7 @@ export async function process(inputs, ctx) {
   });
 
   // PHASE 3 — implement
-  await ctx.task(implementFeatureTask, { spec, planPath: plan.planPath });
+  await ctx.task(implementFeatureTask, { spec, planPath: plan.planPath, dossierPath });
 
   // PHASE 4 — quality-gated verify loop
   const gate = qualityGate || (await ctx.task(loadGateTask, {}));
@@ -130,6 +168,7 @@ export async function process(inputs, ctx) {
   return {
     success: true,
     spec,
+    dossierPath,
     attemptsToConverge: attempts,
     finalScore: verify.score,
     adrCreated,
@@ -148,6 +187,9 @@ export const planFeatureTask = defineTask('plan-feature', (args, taskCtx) => ({
       context: args,
       instructions: [
         `Read the spec at ${args.spec} in full.`,
+        args.dossierPath
+          ? `Read the approved design dossier at ${args.dossierPath} — it holds the locked domain model, ERD, and Prisma/migration design. The plan MUST implement that design; do not re-decide the data model or schema here.`
+          : 'No design dossier was produced (spec has no data/domain impact). Plan directly from the spec.',
         'Read ../voxera-command/docs/vision/vision.md and ../voxera-command/docs/product/roadmap.md for strategic context.',
         'Read the current repo\'s CLAUDE.md + .claude/rules/**/*.md + any docs/patterns/** to ground the plan in repo conventions.',
         'For voxera-crm: respect the feature SDLC discipline — features live under features/<id>/ with spec.md, test-cases.md, implementation-plan.md, status.json, handoff.md. Do not write production code until status === "PLAN_APPROVED".',
@@ -190,6 +232,9 @@ export const implementFeatureTask = defineTask('implement-feature', (args, taskC
       context: args,
       instructions: [
         `Read the approved plan at ${args.planPath}.`,
+        args.dossierPath
+          ? `For data-model / schema / migration work, follow the locked design in ${args.dossierPath} exactly — especially the Prisma/ZModel design and the migration plan (additive vs expand-contract). Do not deviate from the approved schema or migration strategy.`
+          : 'No design dossier — implement directly from the plan.',
         'Work through the plan slice-by-slice if slices are defined; otherwise file-by-file.',
         'For voxera-crm: backend changes touch Prisma schema first (if needed), then run npm run backend:prisma:gen:types, then services/resolvers. Frontend changes follow Mantine + repo patterns.',
         'For voxera-website: respect brand guidelines on user-visible copy; reuse Astro component patterns.',
