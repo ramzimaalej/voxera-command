@@ -3,26 +3,26 @@
  * @description Run discipline-specific design → adversarial-review → converge loops for a spec (DDD → ERD → Prisma → GraphQL → Webhook → AI-agent → Analytics → OO → React → TDD), producing a design dossier that gates implementation.
  * @inputs { spec: string, lenses?: string[], maxRevisions?: number }
  * @outputs { success, dossierPath, lenses: [{ id, verdict, score, revisions, findings }] }
- * @agent ddd-designer ../../../voxera-crm/.claude/subagents/ddd-designer.md
- * @agent ddd-reviewer ../../../voxera-crm/.claude/subagents/ddd-reviewer.md
- * @agent erd-designer ../../../voxera-crm/.claude/subagents/erd-designer.md
- * @agent erd-reviewer ../../../voxera-crm/.claude/subagents/erd-reviewer.md
- * @agent prisma-designer ../../../voxera-crm/.claude/subagents/prisma-designer.md
- * @agent prisma-reviewer ../../../voxera-crm/.claude/subagents/prisma-reviewer.md
- * @agent graphql-designer ../../../voxera-crm/.claude/subagents/graphql-designer.md
- * @agent graphql-reviewer ../../../voxera-crm/.claude/subagents/graphql-reviewer.md
- * @agent webhook-designer ../../../voxera-crm/.claude/subagents/webhook-designer.md
- * @agent webhook-reviewer ../../../voxera-crm/.claude/subagents/webhook-reviewer.md
- * @agent ai-agent-designer ../../../voxera-crm/.claude/subagents/ai-agent-designer.md
- * @agent ai-agent-reviewer ../../../voxera-crm/.claude/subagents/ai-agent-reviewer.md
- * @agent analytics-designer ../../../voxera-crm/.claude/subagents/analytics-designer.md
- * @agent analytics-reviewer ../../../voxera-crm/.claude/subagents/analytics-reviewer.md
- * @agent oo-designer ../../../voxera-crm/.claude/subagents/oo-designer.md
- * @agent oo-reviewer ../../../voxera-crm/.claude/subagents/oo-reviewer.md
- * @agent react-designer ../../../voxera-crm/.claude/subagents/react-designer.md
- * @agent react-reviewer ../../../voxera-crm/.claude/subagents/react-reviewer.md
- * @agent tdd-designer ../../../voxera-crm/.claude/subagents/tdd-designer.md
- * @agent tdd-reviewer ../../../voxera-crm/.claude/subagents/tdd-reviewer.md
+ * @agent ddd-designer ../../../voxera-crm/.claude/agents/ddd-designer.md
+ * @agent ddd-reviewer ../../../voxera-crm/.claude/agents/ddd-reviewer.md
+ * @agent erd-designer ../../../voxera-crm/.claude/agents/erd-designer.md
+ * @agent erd-reviewer ../../../voxera-crm/.claude/agents/erd-reviewer.md
+ * @agent prisma-designer ../../../voxera-crm/.claude/agents/prisma-designer.md
+ * @agent prisma-reviewer ../../../voxera-crm/.claude/agents/prisma-reviewer.md
+ * @agent graphql-designer ../../../voxera-crm/.claude/agents/graphql-designer.md
+ * @agent graphql-reviewer ../../../voxera-crm/.claude/agents/graphql-reviewer.md
+ * @agent webhook-designer ../../../voxera-crm/.claude/agents/webhook-designer.md
+ * @agent webhook-reviewer ../../../voxera-crm/.claude/agents/webhook-reviewer.md
+ * @agent ai-agent-designer ../../../voxera-crm/.claude/agents/ai-agent-designer.md
+ * @agent ai-agent-reviewer ../../../voxera-crm/.claude/agents/ai-agent-reviewer.md
+ * @agent analytics-designer ../../../voxera-crm/.claude/agents/analytics-designer.md
+ * @agent analytics-reviewer ../../../voxera-crm/.claude/agents/analytics-reviewer.md
+ * @agent oo-designer ../../../voxera-crm/.claude/agents/oo-designer.md
+ * @agent oo-reviewer ../../../voxera-crm/.claude/agents/oo-reviewer.md
+ * @agent react-designer ../../../voxera-crm/.claude/agents/react-designer.md
+ * @agent react-reviewer ../../../voxera-crm/.claude/agents/react-reviewer.md
+ * @agent tdd-designer ../../../voxera-crm/.claude/agents/tdd-designer.md
+ * @agent tdd-reviewer ../../../voxera-crm/.claude/agents/tdd-reviewer.md
  * @agent general-purpose
  */
 
