@@ -20,6 +20,9 @@ voxera-website
 # credentials (security — at any depth)
 **/.a5c/creds.env
 **/.a5c/creds.env.tmp.*
+# babysitter run artifacts (draft/scratch outputs; canonical docs live in docs/)
+/artifacts/
+voxera-command/artifacts/
 
 # --- babysitter managed ---
 # Credentials (always excluded for security)
