@@ -1,8 +1,8 @@
 ---
 title: Weekly business reviews
-version: 1
+version: 3
 status: active
-updated: 2026-05-31
+updated: 2026-06-07
 owner: you
 ---
 
@@ -23,7 +23,9 @@ Skipping a week is the leading indicator of operational drift.
 
 (Newest first. The `weekly-business-review` process auto-prepends.)
 
-- _(no reviews yet — first run will add an entry here)_
+- [2026-06-05](./2026-06-05.md) — First weekly review — Kurapacket/lifeo churned, replaced by Customer XY; first revenue model; revenue gated by sales throughput. ([coach pushback](./2026-06-05-coach-pushback.md))
 
 ## Changelog
+- 2026-06-07 v3: linked the preserved coach-pushback analysis under the 2026-06-05 review.
+- 2026-06-06 v2: indexed the first weekly review (2026-06-05).
 - 2026-05-31 v1: index initialized; awaiting the first weekly review run.

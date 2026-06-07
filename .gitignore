@@ -1,22 +1,35 @@
 # intellij
 .idea/
 
-# babysitter
-.a5c/cache
-.a5c/logs
-.a5c/node_modules
-.a5c/runs
-
-# voxera project
+# voxera sibling repos (each is its own git repo)
 voxera-crm
 voxera-infra
 voxera-website
+
+# babysitter — ignore generated/transient folders under ANY .a5c dir, at any depth.
+# Kept tracked on purpose: .a5c/processes/ (process defs) and config files
+# (project-profile.json/.md, quality-gates.json, commands.json, package.json).
+**/.a5c/runs/
+**/.a5c/logs/
+**/.a5c/cache/
+**/.a5c/locks/
+**/.a5c/tmp/
+**/.a5c/**/node_modules/
+# transient run inputs / scratch
+**/.a5c/*-inputs.json
+# credentials (security — at any depth)
+**/.a5c/creds.env
+**/.a5c/creds.env.tmp.*
+# babysitter run artifacts (draft/scratch outputs; canonical docs live in docs/)
+/artifacts/
+voxera-command/artifacts/
 
 # --- babysitter managed ---
 # Credentials (always excluded for security)
 .a5c/creds.env
 .a5c/creds.env.tmp.*
-# Run logs + journals (.a5c/logs and .a5c/runs already ignored above; kept here for completeness)
+# Run logs + journals (.a5c/logs and .a5c/runs already ignored above; kept for completeness)
 .a5c/logs/
 .a5c/runs/
+.a5c/cache/
 # --- end babysitter managed ---

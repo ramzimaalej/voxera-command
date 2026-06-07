@@ -1,8 +1,8 @@
 /**
  * @process voxera/implement-feature
- * @description Implement a FEAT-xxx spec end-to-end in a code repo: plan → human approval → implement → quality-gated verify loop → human approval → update tracking → optional ADR.
- * @inputs { spec: string, qualityGate?: object }
- * @outputs { success, spec, attemptsToConverge, adrCreated?: string }
+ * @description Implement a FEAT-xxx spec end-to-end in a code repo: design-review gate → plan → human approval → implement → quality-gated verify loop → human approval → update tracking → optional ADR.
+ * @inputs { spec: string, qualityGate?: object, skipDesignReview?: boolean, designLenses?: string[], dossierPath?: string }
+ * @outputs { success, spec, attemptsToConverge, dossierPath?: string, adrCreated?: string }
  * @skill code-review .claude/skills/code-review/SKILL.md
  * @skill verify .claude/skills/verify/SKILL.md
  * @agent code-reviewer
@@ -10,6 +10,7 @@
  */
 
 import { defineTask } from '@a5c-ai/babysitter-sdk';
+import { designReview } from './design-review.js';
 
 /**
  * Implement a feature spec in a code repo (voxera-crm or voxera-website).
@@ -23,7 +24,9 @@ import { defineTask } from '@a5c-ai/babysitter-sdk';
  * Pass `qualityGate` in inputs to override.
  *
  * Phases:
- *   1. plan       — agent reads spec + strategy + roadmap, produces implementation plan
+ *   0. design     — design-review gate: DDD → ERD → Prisma design + adversarial review (skippable / auto-skips when no data/domain impact)
+ *   0b. human gate — user approves the design dossier
+ *   1. plan       — agent reads spec + strategy + roadmap + design dossier, produces implementation plan
  *   2. human gate — user approves plan
  *   3. implement  — agent writes the code
  *   4. verify     — quality-gate loop (up to 3 attempts; lint+typecheck+test+build+spec-conformance)
@@ -32,14 +35,53 @@ import { defineTask } from '@a5c-ai/babysitter-sdk';
  *   7. adr-check  — optional, gated by user
  */
 export async function process(inputs, ctx) {
-  const { spec, qualityGate = null } = inputs;
+  const { spec, qualityGate = null, skipDesignReview = false, designLenses = null, dossierPath: providedDossier = null } = inputs;
 
   if (!spec) {
     throw new Error('implement-feature requires { spec }');
   }
 
+  // PHASE 0 — design-review gate. Three modes:
+  //   1. `dossierPath` provided  → a design was already produced + approved upstream (e.g. the
+  //      voxera-crm feature SDLC's run-design-review step). Reuse it; do not re-run the gate.
+  //   2. `skipDesignReview`      → skip entirely (trivial/no-design features).
+  //   3. otherwise               → run the lenses now, then a human gate to approve the dossier.
+  // Auto-skips the gate when the spec has no data/domain/API/behavior impact (no lenses detected).
+  let dossierPath = providedDossier;
+  if (!providedDossier && !skipDesignReview) {
+    const design = await designReview(spec, ctx, { lenses: designLenses });
+    dossierPath = design.dossierPath;
+
+    if (design.lenses.length) {
+      const unresolved = design.lenses.filter((l) => l.verdict !== 'approved');
+      await ctx.breakpoint({
+        title: 'Approve design before planning',
+        question: [
+          `**Spec**: ${spec}`,
+          ``,
+          `Design lenses (domain → data → schema):`,
+          ...design.lenses.map(
+            (l) =>
+              `- **${l.title}**: ${l.verdict} (score ${l.score}, ${l.revisions} revision${l.revisions === 1 ? '' : 's'})` +
+              (l.riskNote ? ` — ${l.riskNote}` : ''),
+          ),
+          ``,
+          unresolved.length
+            ? `⚠️ ${unresolved.length} lens(es) did not reach "approved" — read their findings in the dossier before approving.`
+            : `All lenses approved by their adversarial reviewer.`,
+          ``,
+          'Approve to lock the design and plan against it, reject to iterate further.',
+        ].join('\n'),
+        context: {
+          runId: ctx.runId,
+          files: [{ path: dossierPath, format: 'markdown', label: 'Design dossier' }],
+        },
+      });
+    }
+  }
+
   // PHASE 1 — plan
-  const plan = await ctx.task(planFeatureTask, { spec });
+  const plan = await ctx.task(planFeatureTask, { spec, dossierPath });
 
   // PHASE 2 — approve plan
   await ctx.breakpoint({
@@ -61,7 +103,7 @@ export async function process(inputs, ctx) {
   });
 
   // PHASE 3 — implement
-  await ctx.task(implementFeatureTask, { spec, planPath: plan.planPath });
+  await ctx.task(implementFeatureTask, { spec, planPath: plan.planPath, dossierPath });
 
   // PHASE 4 — quality-gated verify loop
   const gate = qualityGate || (await ctx.task(loadGateTask, {}));
@@ -130,6 +172,7 @@ export async function process(inputs, ctx) {
   return {
     success: true,
     spec,
+    dossierPath,
     attemptsToConverge: attempts,
     finalScore: verify.score,
     adrCreated,
@@ -148,6 +191,9 @@ export const planFeatureTask = defineTask('plan-feature', (args, taskCtx) => ({
       context: args,
       instructions: [
         `Read the spec at ${args.spec} in full.`,
+        args.dossierPath
+          ? `Read the approved design dossier at ${args.dossierPath} — it holds the locked domain model, ERD, and Prisma/migration design. The plan MUST implement that design; do not re-decide the data model or schema here.`
+          : 'No design dossier was produced (spec has no data/domain impact). Plan directly from the spec.',
         'Read ../voxera-command/docs/vision/vision.md and ../voxera-command/docs/product/roadmap.md for strategic context.',
         'Read the current repo\'s CLAUDE.md + .claude/rules/**/*.md + any docs/patterns/** to ground the plan in repo conventions.',
         'For voxera-crm: respect the feature SDLC discipline — features live under features/<id>/ with spec.md, test-cases.md, implementation-plan.md, status.json, handoff.md. Do not write production code until status === "PLAN_APPROVED".',
@@ -185,19 +231,23 @@ export const implementFeatureTask = defineTask('implement-feature', (args, taskC
   agent: {
     name: 'general-purpose',
     prompt: {
-      role: 'senior engineer executing an approved plan with scope discipline',
-      task: 'Implement exactly what the approved plan describes. Do not refactor unrelated code.',
+      role: 'senior engineer executing an approved plan test-first (TDD), with scope discipline',
+      task: 'Implement exactly what the approved plan describes, following strict TDD: a failing test precedes every change to production behavior. Do not refactor unrelated code.',
       context: args,
       instructions: [
         `Read the approved plan at ${args.planPath}.`,
+        args.dossierPath
+          ? `For data-model / schema / migration work, follow the locked design in ${args.dossierPath} exactly — especially the Prisma/ZModel design and the migration plan (additive vs expand-contract). Do not deviate from the approved schema or migration strategy.`
+          : 'No design dossier — implement directly from the plan.',
         'Work through the plan slice-by-slice if slices are defined; otherwise file-by-file.',
-        'For voxera-crm: backend changes touch Prisma schema first (if needed), then run npm run backend:prisma:gen:types, then services/resolvers. Frontend changes follow Mantine + repo patterns.',
+        'TDD is mandatory — for each slice follow red → green → refactor: (1) RED: write the test(s) for the slice first, derived from the test cases, run them, and confirm they FAIL for the right reason; (2) GREEN: write the minimum production code to make them pass; (3) REFACTOR with tests green. Never write production code before its failing test. Capture, per slice, the command you ran to see the test fail (red) and then pass (green).',
+        'For voxera-crm: a data-model change still goes Prisma schema first → npm run backend:prisma:gen:types → then the test for the service/resolver behavior (red) → then the implementation (green). Frontend changes follow Mantine + repo patterns, component test first.',
         'For voxera-website: respect brand guidelines on user-visible copy; reuse Astro component patterns.',
-        'Add the tests planned in test strategy. They must actually exercise the changed code paths.',
+        'Do not weaken, skip, or delete a test to make a slice pass. If a planned test is wrong, fix it deliberately and note why.',
         'Do NOT touch files outside the plan unless the plan explicitly says so.',
-        'Do not run quality gates here — the next phase does that.',
+        'Do not run the full quality gate here — the next phase does that; but you MUST run each slice\'s own tests to observe red then green.',
       ],
-      outputFormat: 'JSON with filesChanged (array), filesCreated (array), testsAdded (array), notes (string).',
+      outputFormat: 'JSON with filesChanged (array), filesCreated (array), testsAdded (array), tddEvidence (array of { slice, redCommand, greenCommand } showing the failing-then-passing transition per slice), notes (string).',
     },
     outputSchema: {
       type: 'object',
@@ -206,6 +256,7 @@ export const implementFeatureTask = defineTask('implement-feature', (args, taskC
         filesChanged: { type: 'array', items: { type: 'string' } },
         filesCreated: { type: 'array', items: { type: 'string' } },
         testsAdded: { type: 'array', items: { type: 'string' } },
+        tddEvidence: { type: 'array' },
         notes: { type: 'string' },
       },
     },
@@ -262,8 +313,9 @@ export const verifyFeatureTask = defineTask('verify-feature', (args, taskCtx) =>
         `Run these commands in order from CWD: ${(args.commands || []).map(c => `\`${c}\``).join(', ')}`,
         'Capture exit codes and last 50 lines of output for any non-zero exit.',
         `Read the spec at ${args.spec} and verify each acceptance criterion is satisfied by the implementation (read the changed files if needed).`,
-        'Score 0-100. Heuristic: 100 = all commands pass + every AC satisfied. 95 = minor non-blocking warnings. 90 = one criterion partially met. <90 = real failures.',
-        'List concrete failures (command name + output excerpt, or AC identifier + what\'s missing). No vague descriptions.',
+        'Verify TDD was followed: every acceptance criterion / changed behavior has a test that actually exercises it, and the implement step reported tddEvidence (a failing-then-passing transition per slice). Treat new or changed production behavior with no covering test — or no red-phase evidence — as a failure, not a pass.',
+        'Score 0-100. Heuristic: 100 = all commands pass + every AC satisfied + TDD evidence present. 95 = minor non-blocking warnings. 90 = one criterion partially met or weak test coverage. <90 = real failures (including untested behavior).',
+        'List concrete failures (command name + output excerpt, or AC identifier + what\'s missing, or behavior shipped without a covering test). No vague descriptions.',
       ],
       outputFormat: 'JSON with score (0-100), failures (array of strings), commandResults (array of {command, exitCode, lastLines}).',
     },
