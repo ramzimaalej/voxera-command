@@ -1,11 +1,12 @@
 ---
 title: lifeo
 slug: lifeo
-version: 2
-status: active
-health: green
-since: "2026-01-01"   # unconfirmed — verify actual start date with Ahmed Abida
-updated: 2026-06-05
+version: 3
+status: churned
+health: unknown
+since: "2026-01-01"   # unconfirmed start date
+churned_on: "2026-06-06"   # contract closed; Hausnotruf operation moved to Customer XY (customer-xy.md)
+updated: 2026-06-06
 owner: you
 motion: dach
 plan: "Performance / commission — €80 per confirmed new customer (Hausnotruf line)"
@@ -36,6 +37,11 @@ lifeo sells **Hausnotruf** — home emergency-call systems, a Pflegehilfsmittel 
 - **Ahmed Abida** — primary contact, champions day-to-day communication with the account (same champion as Kurapacket). _(Confirm whether internal Voxera-side account owner or payer-side contact.)_
 
 ## Pulse log (newest first)
+
+### 2026-06-06 — churned
+- **Contract closed.** Voxera ended its commission contract with lifeo. The Hausnotruf calling operation transitions to a new customer, **Customer XY** (see `customer-xy.md`), at a higher rate — **€95 per confirmed Hausnotruf customer** (vs €80 here) — starting **2026-06-08**.
+- Not a service failure: replaced by a better-paying customer for the same product line. The ~3,500 calls/day Hausnotruf operation continues under XY.
+- The open baseline action items below are now moot (no longer an active account).
 
 ### 2026-06-05 — green
 - **Baseline established.** Captured the real account identity and commercial model: lifeo pays Voxera **€80 per confirmed new customer** on the **Hausnotruf** line.
@@ -70,5 +76,6 @@ _(none yet)_
 - Potential to add a Pflegebox line (mirroring Kurapacket) if Hausnotruf proves out — same champion, same calling operation.
 
 ## Changelog
+- 2026-06-06 v3: contract closed — status → churned, health → unknown. Hausnotruf operation moves to Customer XY at €95/confirmed from 2026-06-08.
 - 2026-06-05 v2: filled in scaffold with real account (lifeo, **Hausnotruf** line — corrected from the "Pflegebox Payer #2" placeholder); recorded €80/confirmed-customer commission model, ~3,500 calls/day → ~25 qualified/day, Ahmed Abida as primary contact; set health green; renamed from `pflegebox-payer-2.md`.
 - 2026-05-31 v1: scaffold file created. Awaiting rename + fill-in.

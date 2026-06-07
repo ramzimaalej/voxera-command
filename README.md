@@ -209,7 +209,7 @@ You wear multiple hats. The tooling supports that without forcing context-switch
 ## The 0 → $1M arc
 
 Where you are now (per [BRAND.md](./voxera-website/docs/marketing/BRAND.md) + [strategy.md](./voxera-command/docs/strategy/strategy.md)):
-- 5 people. 2 customers in production (private beta). Bootstrapped.
+- 5 people. 1 customer in production (private beta) — Customer XY, a single commission account covering both DACH product lines. Bootstrapped.
 - Year-1 target: ~$1.7M combined ARR run-rate ($80K + $40K + $25K MRR English markets + DACH).
 
 ### Stage 1 — Foundation set (now, done)

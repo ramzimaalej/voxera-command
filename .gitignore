@@ -19,4 +19,16 @@ voxera-website
 # Run logs + journals (.a5c/logs and .a5c/runs already ignored above; kept here for completeness)
 .a5c/logs/
 .a5c/runs/
+.a5c/cache/
 # --- end babysitter managed ---
+
+voxera-command/.a5c/runs
+voxera-command/.a5c/logs
+voxera-command/.a5c/cache
+voxera-command/.a5c/node_modules
+
+
+voxera-command/docs/operations/weekly-reviews/.a5c/runs
+voxera-command/docs/operations/weekly-reviews/.a5c/logs
+voxera-command/docs/operations/weekly-reviews/.a5c/cache
+voxera-command/docs/operations/weekly-reviews/.a5c/node_modules

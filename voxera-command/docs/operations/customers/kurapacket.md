@@ -1,11 +1,12 @@
 ---
 title: Kurapacket
 slug: kurapacket
-version: 2
-status: active
-health: green
-since: "2026-01-01"   # unconfirmed — verify actual start date with Ahmed Abida
-updated: 2026-06-05
+version: 3
+status: churned
+health: unknown
+since: "2026-01-01"   # unconfirmed start date
+churned_on: "2026-06-06"   # contract closed; Pflegebox operation moved to Customer XY (customer-xy.md)
+updated: 2026-06-06
 owner: you
 motion: dach
 plan: "Performance / commission — €80 per confirmed new customer (Pflegebox line)"
@@ -37,6 +38,11 @@ Kurapacket is a Pflegebox supplier — they sell the free monthly care-supply bo
 
 ## Pulse log (newest first)
 
+### 2026-06-06 — churned
+- **Contract closed.** Voxera ended its commission contract with Kurapacket. The Pflegebox calling operation transitions to a new customer, **Customer XY** (see `customer-xy.md`), at a higher rate — **€90 per confirmed Pflegebox customer** (vs €80 here) — starting **2026-06-08**.
+- Not a service failure: replaced by a better-paying customer for the same product line. The ~3,500 calls/day Pflegebox operation continues under XY.
+- The open baseline action items below are now moot (no longer an active account).
+
 ### 2026-06-05 — green
 - **Baseline established.** Captured the real account identity and commercial model: Kurapacket pays Voxera **€80 per confirmed new customer** on the **Pflegebox** line.
 - **Operations**: ~3,500 outbound calls/day producing ~25 qualified potential customers/day. That's roughly a 0.7% call→qualified rate.
@@ -67,5 +73,6 @@ _(none yet)_
 - Potential to add a second product line (e.g., Hausnotruf, mirroring the lifeo account) if the Pflegebox line proves out.
 
 ## Changelog
+- 2026-06-06 v3: contract closed — status → churned, health → unknown. Pflegebox operation moves to Customer XY at €90/confirmed from 2026-06-08.
 - 2026-06-05 v2: filled in scaffold with real account (Kurapacket, Pflegebox line); recorded €80/confirmed-customer commission model, ~3,500 calls/day → ~25 qualified/day, Ahmed Abida as primary contact; set health green; renamed from `pflegebox-payer-1.md`.
 - 2026-05-31 v1: scaffold file created. Awaiting rename + fill-in.
