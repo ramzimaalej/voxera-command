@@ -3,6 +3,7 @@
 
 # voxera sibling repos (each is its own git repo)
 voxera-crm
+voxera-sales
 voxera-infra
 voxera-website
 
