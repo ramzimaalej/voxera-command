@@ -72,8 +72,8 @@ Voxera is a poly-repo 'workspace of repos' for an AI voice/telephony CRM aimed p
 
 | Module | Path | Description |
 |--------|------|-------------|
-| voxera-command | `voxera-command` | Source of truth: vision, brand, roadmap, FEAT-xxx/BUG-xxx specs, architecture docs, ADRs (decisions/), operations, and all canonical babysitter process definitions (.a5c/processes/). Markdown-heavy; no application code. |
-| voxera-crm | `voxera-crm` | CRM product. Nx monorepo: apps/backend (NestJS 10 + GraphQL via Pothos/Apollo + Prisma 6/PostgreSQL) and apps/frontend (React 18 + Vite + Mantine + Redux Toolkit + urql). Shared libs/. Voice: Twilio, Telnyx, Ultravox. Depends on voxera-command. |
+| voxera-command | `voxera-command` | Source of truth: vision, brand, roadmap, FEAT-xxx/BUG-xxx specs, company-level ADRs (decisions/ — the federated workspace ADR registry), operations, and all canonical babysitter process definitions (.a5c/processes/). Markdown-heavy; no application code. |
+| voxera-crm | `voxera-crm` | CRM product. Nx monorepo: apps/backend (NestJS 10 + GraphQL via Pothos/Apollo + Prisma 6/PostgreSQL) and apps/frontend (React 18 + Vite + Mantine + Redux Toolkit + urql). Shared libs/. Voice: Twilio, Telnyx, Ultravox. Owns its platform architecture (docs/architecture/, docs/implementation/) + product/technical ADRs (decisions/). Depends on voxera-command. |
 | voxera-website | `voxera-website` | Marketing site. Astro 6 static-first on Cloudflare Pages; dynamic JSON endpoints as Pages Functions (contact, beta-signup, SendGrid, Turnstile). EN/DE i18n via public/i18n.json. Depends on voxera-command. |
 | voxera-infra | `voxera-infra` | IaC. Terraform 1.9.8 targeting GCP via Cloud Foundation Fabric modules (v34.1.0). bootstrap/ creates project + GCS remote-state bucket; environments/dev/ composes project, APIs, service accounts. |
 | .a5c | `.a5c` | Shared babysitter runtime at workspace root (@a5c-ai/babysitter-sdk ^0.0.187). Holds runs/, cache/, logs/. Process definitions are canonical in voxera-command/.a5c/processes/. |
@@ -229,7 +229,7 @@ Bootstrap creates ops project + GCS state bucket + Terraform SA; per-env (dev) u
 ### Naming
 
 - **specs:** FEAT-xxx-<slug>.md / BUG-xxx-<slug>.md (3-digit, permanent numbers) with templates
-- **decisions:** ADR-NNNN-<slug>.md in voxera-command/decisions/ (4-digit, never renumbered)
+- **decisions:** ADR-NNNN-<slug>.md, federated by domain — company ADRs in voxera-command/decisions/, product/technical in the owning code repo's decisions/ (voxera-crm, voxera-infra). Numbers are 4-digit, global + permanent across all repos; voxera-command/decisions/README.md is the registry + allocator
 - **crmFeatures:** voxera-crm/features/<feature-id>/ with fixed artifact set
 - **nxProjects:** 'backend' and 'frontend' under apps/; reusable code in libs/
 - **terraform:** main.tf/variables.tf/outputs.tf/providers.tf/versions.tf/backend.tf; environments/<env>/ + bootstrap/
@@ -255,7 +255,7 @@ Bootstrap creates ops project + GCS state bucket + Terraform SA; per-env (dev) u
 - Golden rule: Canonical strategy lives in voxera-command/docs/ — reference it, never fork it; if the website or CRM needs a product fact, read it from there. If spec and code disagree, spec wins.
 - Golden rule: Process definitions live once in voxera-command/.a5c/processes/; code repos invoke them by relative path, never copy.
 - Golden rule: Specs drive work — a feature is a FEAT-xxx.md, a bug is a BUG-xxx.md; implementation runs take a spec path as input. Do not implement from chat alone.
-- Golden rule: Real decisions get an ADR in voxera-command/decisions/; babysitter's run journal is execution history, ADRs are the strategic why.
+- Golden rule: Real decisions get an ADR, federated by domain — strategy/brand/vision/governance ADRs in voxera-command/decisions/, product/technical ADRs in the owning code repo's decisions/ (voxera-crm, voxera-infra). Numbers are global + permanent; voxera-command/decisions/README.md is the registry. Babysitter's run journal is execution history, ADRs are the strategic why.
 - Golden rule: Versioning = git — one canonical file per doc with frontmatter (version, status, updated) + changelog; freeze milestones with annotated tags, not *-final-final.md copies.
 - CRM SDLC gating: no production code until features/<feature-id>/status.json === PLAN_APPROVED; never skip approval checkpoints.
 - Prisma schema is the source of truth: change schema first, then generate migrations + GraphQL.

@@ -1,14 +1,14 @@
 ---
 title: Operations docs
-version: 1
+version: 2
 status: active
-updated: 2026-05-31
+updated: 2026-06-09
 owner: you
 ---
 
 # Operations docs
 
-Day-to-day running of the Voxera business. Strategy and architecture live in `../strategy/`, `../architecture/`, and `../../decisions/`. This folder is for **operational rhythm** — weekly reviews, customer pulse, meeting notes, OKRs (when added).
+Day-to-day running of the Voxera business. Strategy lives in `../strategy/` and the company-level decision log in `../../decisions/`. Product/platform architecture lives with the code that owns it (CRM in `../../../voxera-crm/docs/architecture/`, infra in `../../../voxera-infra/`). This folder is for **operational rhythm** — weekly reviews, customer pulse, meeting notes, OKRs (when added).
 
 For a 5-person bootstrapped startup, this is intentionally lightweight. Add structure when you feel its absence; don't pre-build for headcount you don't have.
 
@@ -36,15 +36,15 @@ The **weekly business review** (Friday or end-of-week) is the spine:
 2. The process gathers state, loops over customers (invoking the `customer-pulse-update` skill per customer), drafts a weekly note, asks you to approve + set next-week priorities, and archives to `weekly-reviews/<date>.md`.
 
 In between, **decisions, meetings, and customer signals** flow into the right place:
-- A decision → `capture-decision` skill → drafted ADR in `../../decisions/`.
+- A decision → `capture-decision` skill → drafted ADR. Strategy/brand/company-wide decisions land in `../../decisions/`; product/technical decisions are routed to the owning code repo's `decisions/` (see `../../.claude/rules/adrs.md`).
 - A meeting → `meeting-notes` skill → structured notes, optionally saved to `meetings/`.
 - A customer signal → `customer-pulse-update` skill → appended to the customer's pulse file.
 
 ## What does NOT live here
 
 - Strategy (lives in `../strategy/`).
-- Architecture (lives in `../architecture/`).
-- Decisions (live in `../../decisions/` as ADRs).
+- Architecture (CRM platform architecture lives in `../../../voxera-crm/docs/architecture/`; infra in `../../../voxera-infra/`).
+- Decisions (company-wide ADRs live in `../../decisions/`; product/technical ADRs live in the owning code repo's `decisions/`).
 - Features / bugs (live in `../product/features/` and `../product/bugs/`).
 - Brand (lives in `../brand/`).
 - Code repos (`voxera-crm`, `voxera-website`, `voxera-infra`).
@@ -71,4 +71,5 @@ Don't pre-create empty folders. The skill / process catalog above is what's wort
 - `../strategy/strategy.md` — the canonical strategic frame this is operationalizing.
 
 ## Changelog
+- 2026-06-09 v2: updated cross-references after the domain-cohesion reorg — CRM platform architecture moved to `voxera-crm/docs/architecture/`, infra to `voxera-infra/`; ADR capture now routes product/technical decisions to the owning code repo's `decisions/` (federated decision log).
 - 2026-05-31 v1: initial. Set up alongside the weekly-business-review process + capture-decision / meeting-notes / customer-pulse-update skills.

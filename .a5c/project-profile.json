@@ -195,7 +195,7 @@
       {
         "name": "voxera-command",
         "path": "voxera-command",
-        "description": "Source of truth: vision, brand, roadmap, FEAT-xxx/BUG-xxx specs, architecture docs, ADRs (decisions/), operations, and all canonical babysitter process definitions (.a5c/processes/). Markdown-heavy; no application code."
+        "description": "Source of truth: vision, brand, roadmap, FEAT-xxx/BUG-xxx specs, company-level ADRs (decisions/ — the federated workspace ADR registry), operations, and all canonical babysitter process definitions (.a5c/processes/). Markdown-heavy; no application code."
       },
       {
         "name": "voxera-crm",
@@ -337,7 +337,7 @@
   "conventions": {
     "naming": {
       "specs": "FEAT-xxx-<slug>.md / BUG-xxx-<slug>.md (3-digit, permanent numbers) with templates",
-      "decisions": "ADR-NNNN-<slug>.md in voxera-command/decisions/ (4-digit, never renumbered)",
+      "decisions": "ADR-NNNN-<slug>.md, federated by domain: company ADRs in voxera-command/decisions/, product/technical ADRs in the owning code repo's decisions/ (voxera-crm, voxera-infra). 4-digit, global + permanent across repos; voxera-command/decisions/README.md is the registry/allocator",
       "crmFeatures": "voxera-crm/features/<feature-id>/ with fixed artifact set",
       "nxProjects": "'backend' and 'frontend' under apps/; reusable code in libs/",
       "terraform": "main.tf/variables.tf/outputs.tf/providers.tf/versions.tf/backend.tf; environments/<env>/ + bootstrap/",
@@ -369,7 +369,7 @@
       "Golden rule: Canonical strategy lives in voxera-command/docs/ — reference it, never fork it; if the website or CRM needs a product fact, read it from there. If spec and code disagree, spec wins.",
       "Golden rule: Process definitions live once in voxera-command/.a5c/processes/; code repos invoke them by relative path, never copy.",
       "Golden rule: Specs drive work — a feature is a FEAT-xxx.md, a bug is a BUG-xxx.md; implementation runs take a spec path as input. Do not implement from chat alone.",
-      "Golden rule: Real decisions get an ADR in voxera-command/decisions/; babysitter's run journal is execution history, ADRs are the strategic why.",
+      "Golden rule: Real decisions get an ADR, federated by domain — strategy/brand/vision/governance ADRs in voxera-command/decisions/, product/technical ADRs in the owning code repo's decisions/ (voxera-crm, voxera-infra); numbers are global + permanent, voxera-command/decisions/README.md is the registry. Babysitter's run journal is execution history, ADRs are the strategic why.",
       "Golden rule: Versioning = git — one canonical file per doc with frontmatter (version, status, updated) + changelog; freeze milestones with annotated tags, not *-final-final.md copies.",
       "CRM SDLC gating: no production code until features/<feature-id>/status.json === PLAN_APPROVED; never skip approval checkpoints.",
       "Prisma schema is the source of truth: change schema first, then generate migrations + GraphQL.",
@@ -776,7 +776,7 @@
     {
       "name": "voxera-command",
       "path": "voxera-command",
-      "role": "Source of truth: vision, brand, roadmap, FEAT/BUG specs, architecture docs, ADRs (decisions/), and all canonical babysitter process definitions (.a5c/processes/)."
+      "role": "Source of truth: vision, brand, roadmap, FEAT/BUG specs, company-level ADRs (decisions/ — federated workspace ADR registry), and all canonical babysitter process definitions (.a5c/processes/). Product/technical architecture + ADRs live in the owning code repo (voxera-crm, voxera-infra)."
     },
     {
       "name": "voxera-crm",

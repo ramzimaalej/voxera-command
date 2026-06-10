@@ -4,6 +4,19 @@ ADRs are the strategic "why". Babysitter's run journal (`.a5c/runs/`) is the exe
 
 The deep workflow is in `.claude/skills/extract-adr/SKILL.md`. This file is the invariants.
 
+## Where an ADR lives — federated by domain
+
+The decision log is **federated**: each ADR lives in the repo that owns the thing it decides, but **numbers are global and permanent across the whole workspace**. `decisions/README.md` is the cross-repo registry and number allocator.
+
+| Decision is about… | Owning repo · folder |
+|---|---|
+| Strategy, GTM, brand, vision, workspace governance | `voxera-command` · `decisions/` (here) |
+| CRM product/platform — data model, schema, API, agents, voice, execution | `voxera-crm` · `voxera-crm/decisions/` |
+| Cloud, infrastructure, networking, IaC | `voxera-infra` · `voxera-infra/decisions/` |
+| Marketing-/sales-site engineering | `voxera-website` / `voxera-sales` · that repo's `decisions/` |
+
+**This repo's `decisions/` holds only company-level ADRs** (strategy, brand, vision, GTM, workspace governance). A product or technical decision belongs in the code repo that owns it — capture it there (each code repo has its own `decisions/`, `_template.md`, ADR rule, and `capture-decision`/`extract-adr` skills). When in doubt: the ADR lives next to the code or docs it constrains, so the contributor who needs it reads it without crossing repos.
+
 ## When to write an ADR
 
 Write an ADR when the change has all three:
@@ -20,11 +33,16 @@ Don't write an ADR for:
 
 When unsure: don't. ADR-bloat dilutes the signal. The next reader skims fewer ADRs more carefully than many.
 
-## Numbering
+## Numbering — global across the workspace
 
 - ADR-0001, ADR-0002, ... — zero-padded to 4 digits.
-- Numbers are **permanent**. Never renumber. Numbers are not revocable even if the ADR is superseded.
-- Next number: `ls decisions/ADR-*.md | sort -V | tail -1` + 1.
+- Numbers are **permanent and globally unique across every repo**. Never renumber, never reuse — not revocable even if the ADR is superseded or moves repos.
+- Next number = highest across **all** repos' `decisions/` + 1 (not just this repo's). From the workspace root:
+  ```sh
+  ls voxera-command/decisions/ADR-*.md voxera-*/decisions/ADR-*.md 2>/dev/null \
+    | grep -oE 'ADR-[0-9]{4}' | sort -V | tail -1
+  ```
+- After claiming a number, add the ADR's row to the registry in `decisions/README.md`.
 
 ## File naming
 

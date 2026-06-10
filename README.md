@@ -12,32 +12,38 @@ This README is the leverage guide: *how to use* the agents, skills, processes, r
 
 ```
 voxera-workspace/                   <- you are here
-├── voxera-command/                 strategy, decisions, processes, brand, operations
+├── voxera-command/                 strategy, company decisions, processes, brand, operations
 │   ├── docs/strategy/              strategy.md + vertical-strategy-english-markets.md
-│   ├── docs/architecture/          system docs (vision-and-principles, execution, voice-calling, …)
 │   ├── docs/operations/            CEO ops: weekly reviews, customer pulse, templates
 │   ├── docs/product/               roadmap.md + features/ (FEAT-xxx) + bugs/ (BUG-xxx)
 │   ├── docs/brand/                 brand guidelines (voice, palette, writing rules)
-│   ├── decisions/                  ADR-0001 … ADR-NNNN (the strategic "why")
+│   ├── decisions/                  company-level ADRs + README.md (workspace-wide ADR registry)
 │   ├── .a5c/processes/             babysitter process .js files (workflows)
 │   └── .claude/skills/             local skills (extract-adr, capture-decision, …)
 ├── voxera-crm/                     CRM product (NestJS + Pothos + Prisma + Mantine, Nx monorepo)
 │   ├── apps/{backend, frontend}/
 │   ├── libs/                       shared TS libs (Pothos, Prisma schema, shared-types)
 │   ├── features/<id>/              per-feature SDLC artifacts (spec / test-cases / plan)
+│   ├── docs/architecture/          CRM platform architecture (vision-and-principles, execution, voice-calling, …)
+│   ├── docs/implementation/        cross-cutting technical notes
 │   ├── docs/patterns/              concrete code-pattern documentation
-│   └── .claude/{agents,skills,rules}/   feature SDLC stack + per-domain rules
+│   ├── decisions/                  CRM product/technical ADRs
+│   └── .claude/{agents,skills,rules}/   feature SDLC stack + per-domain rules (incl. adrs.md)
 ├── voxera-website/                 marketing site (Astro on Cloudflare Pages)
 │   ├── src/{pages, components}/
 │   ├── functions/                  Cloudflare Pages Functions (api endpoints)
 │   └── .claude/{agents,skills,rules}/   brand voice reviewer + i18n + per-tech rules
+├── voxera-sales/                   sales-consulting site (Astro on Cloudflare)
 └── voxera-infra/                   Terraform code for GCP infrastructure (Fabric modules)
     ├── bootstrap/                  one-time: ops project, state bucket, terraform SA
     ├── environments/dev/           per-env: project, APIs, workload scaffolding
-    └── .claude/rules/              terraform + gcp + security rules
+    ├── decisions/                  infra ADRs
+    └── .claude/rules/              terraform + gcp + security + adrs rules
 ```
 
-**External services**: GCP (primary cloud, per [ADR-0010](./voxera-command/decisions/ADR-0010-terraform-gcp-fabric-modules.md)) + Cloudflare (marketing site only) + Twilio + Ultravox (voice stack, [ADR-0007](./voxera-command/decisions/ADR-0007-twilio-ultravox-voice-stack.md)) + SendGrid + Honeycomb.
+**External services**: GCP (primary cloud, per [ADR-0010](./voxera-infra/decisions/ADR-0010-terraform-gcp-fabric-modules.md)) + Cloudflare (marketing site only) + Twilio + Ultravox (voice stack, [ADR-0007](./voxera-crm/decisions/ADR-0007-twilio-ultravox-voice-stack.md)) + SendGrid + Honeycomb.
+
+> **Decisions are federated.** Each ADR lives in the repo that owns what it decides; numbers are global + permanent across the workspace. `voxera-command/decisions/README.md` is the cross-repo registry.
 
 ---
 
@@ -196,7 +202,7 @@ You wear multiple hats. The tooling supports that without forcing context-switch
 ### First time as a new collaborator (future hire)
 1. Read this README + [workspace `CLAUDE.md`](./CLAUDE.md). 10 minutes.
 2. Read [`voxera-command/docs/strategy/strategy.md`](./voxera-command/docs/strategy/strategy.md). 15 minutes — the bet, the two motions, the milestones.
-3. Skim [`voxera-command/decisions/`](./voxera-command/decisions/) — at least ADR-0001, 0008, 0009, 0010. These are the load-bearing strategic + architectural choices.
+3. Skim the [workspace ADR registry](./voxera-command/decisions/README.md) — start with the company-level ones in `voxera-command/decisions/` (ADR-0001, 0008, 0009, 0012). Technical choices live with their code: CRM in `voxera-crm/decisions/` (e.g. ADR-0002/0011 platform, 0007 voice), infra in `voxera-infra/decisions/` (ADR-0010).
 4. Open the repo relevant to your role and read its `CLAUDE.md` (or `.claude/CLAUDE.md` for voxera-crm).
 5. Skim the relevant `.claude/rules/*.md` — auto-loaded every session, so behavior follows them whether you know them or not. Knowing them lets you push back when they're wrong.
 6. For engineering: skim [`voxera-crm/docs/patterns/`](./voxera-crm/docs/patterns/) — these are the concrete how-to docs the rules reference.
@@ -234,7 +240,7 @@ Canonical docs, ADR log, code conventions, infra scaffolded, CEO operations laye
 ### Stage 4 — $1M+ (year 2)
 - **Adjacent DACH vertical** (Hörgeräte or private health) — per `strategy.md` §7 24-month milestone.
 - **Multi-language voice agents** — EN first-class alongside DE.
-- **Promoter automation tier 2** — low-risk auto-approval per `architecture/multi-agent-architecture.md`.
+- **Promoter automation tier 2** — low-risk auto-approval per `voxera-crm/docs/architecture/multi-agent-architecture.md`.
 - **Formal OKRs** start mattering at ~8-12 people. Add `docs/operations/okrs/` then.
 - **Workload identity federation** for CI (retire service account keys).
 - **Cloud SQL HA (REGIONAL availability)** in prod once revenue justifies it.
@@ -246,7 +252,7 @@ The strategy doc's §7 milestones are the canonical "what's next at each stage."
 ## Where to dig deeper
 
 ### The "why" (decisions)
-[`voxera-command/decisions/`](./voxera-command/decisions/) — ADR-0001 to ADR-0010. Each one frames a strategic / architectural choice with alternatives considered + consequences. Read in order, or filter by what touches your area.
+The decision log is **federated** — start at the [workspace ADR registry](./voxera-command/decisions/README.md), which lists every ADR and the repo that owns it. Company-level ADRs (strategy/brand/vision) live in [`voxera-command/decisions/`](./voxera-command/decisions/); CRM product/technical ADRs in [`voxera-crm/decisions/`](./voxera-crm/decisions/); infra ADRs in [`voxera-infra/decisions/`](./voxera-infra/decisions/). Numbers are global + permanent. Each frames a choice with alternatives considered + consequences.
 
 ### The "how" (patterns + rules)
 - **voxera-crm patterns** — [`voxera-crm/docs/patterns/`](./voxera-crm/docs/patterns/) — backend-nest-modules, frontend-mantine, graphql-pothos, prisma-data-access, nx-boundaries, authorization-with-casl, observability-otel. 2,700+ lines of concrete how-to.

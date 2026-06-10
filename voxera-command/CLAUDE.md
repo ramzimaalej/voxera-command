@@ -9,11 +9,11 @@ This repo holds Voxera's strategy docs, the decision log, and every babysitter p
 - `docs/product/features/` — `FEAT-xxx-*.md` specs (inputs to implementation runs)
 - `docs/product/bugs/` — `BUG-xxx-*.md` reports
 - `docs/website/` — website plan/IA/content
-- `docs/implementation/` — cross-cutting technical notes
 - `docs/strategy/` — `strategy.md` (the bet, wedge, moat, milestones) + `vertical-strategy-english-markets.md` (English-markets playbook)
-- `docs/architecture/` — system-level architecture docs (vision-and-principles, execution, multi-agent, voice-calling, …)
 - `docs/operations/` — CEO ops: weekly reviews, per-customer pulse, meeting notes, templates
-- `decisions/` — ADRs (the decision log) + `_template.md`
+- `decisions/` — **company-level** ADRs (strategy/brand/vision/governance) + `_template.md` + `README.md` (the workspace-wide ADR registry / number allocator)
+
+> Product/platform architecture lives with the code that owns it: CRM platform architecture + technical decisions are in `../voxera-crm/docs/architecture/` and `../voxera-crm/decisions/`; infra in `../voxera-infra/`. The decision log is **federated** — see `decisions/README.md` and `.claude/rules/adrs.md`.
 - `.a5c/processes/` — babysitter process definitions (see `processes/README.md` for the catalog)
 - `.a5c/runs/` — babysitter run journals (gitignored)
 - `.claude/skills/` — local skills (`extract-adr`, `brand-conformance`, `capture-decision`, `meeting-notes`, `customer-pulse-update`, `priorities-coach`, `accountability-check`)

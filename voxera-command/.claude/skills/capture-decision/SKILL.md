@@ -27,6 +27,16 @@ OR explicitly: "capture this decision" / "make an ADR for this."
 
 If unsure: ask. "Is this a real decision you want to record as an ADR, or a thought in progress?"
 
+## Route by domain first
+
+The decision log is **federated** — an ADR lives in the repo that owns what it decides (see `../../decisions/README.md`). Before drafting, route:
+
+- **Company strategy, GTM, brand, vision, workspace governance** → this repo's `decisions/`. Proceed here.
+- **CRM product/platform** (data model, schema, GraphQL API, agents, voice, execution) → `voxera-crm/decisions/`. Hand off to voxera-crm's `capture-decision` skill.
+- **Cloud / infrastructure / IaC** → `voxera-infra/decisions/`. Hand off to voxera-infra (its ADR rule + template).
+
+If the decision is technical, don't draft it here — point to the owning repo so the ADR lands next to the code it constrains. Numbers are global across the workspace regardless of which repo holds the file.
+
 ## Workflow
 
 1. **Listen for the three ADR elements.** A real ADR-shaped decision has:

@@ -162,7 +162,7 @@ export async function process(inputs, ctx) {
         ``,
         `> ${arch.summary}`,
         ``,
-        `Record an ADR in ../voxera-command/decisions/?`,
+        `Record an ADR in this repo's decisions/ (product/technical decisions live next to the code; strategy/company decisions go to ../voxera-command/decisions/)?`,
       ].join('\n'),
     });
     const adr = await ctx.task(writeFeatureAdrTask, { spec, decision: arch });
@@ -446,14 +446,16 @@ export const writeFeatureAdrTask = defineTask('write-feature-adr', (args, taskCt
   agent: {
     name: 'general-purpose',
     prompt: {
-      role: 'ADR author following voxera-command conventions',
-      task: 'Create the next ADR file in ../voxera-command/decisions/ from _template.md.',
+      role: 'ADR author following the federated decision-log conventions',
+      task: 'Create the next ADR file in THIS repo\'s local decisions/ (the repo being implemented in), from the local _template.md.',
       context: args,
       instructions: [
-        'Use the extract-adr skill at ../voxera-command/.claude/skills/extract-adr/SKILL.md as the workflow reference.',
-        'List ../voxera-command/decisions/ADR-*.md, take the next number.',
-        'Copy _template.md to ADR-XXXX-<slug>.md. Fill from the decision context.',
-        `Set affects: include ${args.spec} and the main code files changed.`,
+        'The decision log is federated: a product/technical decision made while implementing this repo\'s feature belongs in THIS repo\'s decisions/, not the command repo. Use the local extract-adr skill (.claude/skills/extract-adr/SKILL.md) as the workflow reference; fall back to ../voxera-command/.claude/skills/extract-adr/SKILL.md.',
+        'Ensure a local decisions/ exists with a _template.md (copy ../voxera-command/decisions/_template.md if this repo has none yet).',
+        'Allocate the number GLOBALLY: take the highest ADR-NNNN across all repos — `ls ../voxera-command/decisions/ADR-*.md ../voxera-*/decisions/ADR-*.md decisions/ADR-*.md 2>/dev/null | grep -oE \'ADR-[0-9]{4}\' | sort -V | tail -1` — and increment.',
+        'Copy decisions/_template.md to decisions/ADR-XXXX-<slug>.md. Fill from the decision context.',
+        `Set affects: include ${args.spec} and the main code files changed (repo-relative paths).`,
+        'Register the new ADR (number, title, owner repo, status) in the workspace index at ../voxera-command/decisions/README.md.',
         'Return the full ADR path.',
       ],
       outputFormat: 'JSON with adrPath (string), adrNumber (number).',

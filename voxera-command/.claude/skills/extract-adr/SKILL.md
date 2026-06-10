@@ -18,8 +18,9 @@ If the decision is small or hasn't been made yet, **don't** extract. ADRs are fo
 ## Steps
 
 1. **Confirm decision shape.** A real ADR-candidate has: (a) a context with forces in tension, (b) at least one alternative actually considered and rejected, (c) consequences that propagate to other docs/code.
-2. **Pick the next ADR number.** `ls voxera-command/decisions/ADR-*.md | tail -1` and increment.
-3. **Draft from the template.** Copy `decisions/_template.md` to `decisions/ADR-XXXX-<slug>.md`. Fill in:
+1b. **Route by domain.** The decision log is federated (see `decisions/README.md`). A **company** decision (strategy/brand/vision/governance) is extracted into this repo's `decisions/`. A **CRM product/technical** decision belongs in `voxera-crm/decisions/` (use voxera-crm's `extract-adr` skill); an **infra** decision in `voxera-infra/decisions/`. Extract the ADR into the owning repo so it sits next to the code/docs it constrains.
+2. **Pick the next ADR number — global.** Numbers are unique across the whole workspace. Take the highest across **all** repos + 1: `ls voxera-command/decisions/ADR-*.md voxera-*/decisions/ADR-*.md 2>/dev/null | grep -oE 'ADR-[0-9]{4}' | sort -V | tail -1`. Then add the new ADR's row to the registry in `voxera-command/decisions/README.md`.
+3. **Draft from the template.** Copy the owning repo's `decisions/_template.md` to `decisions/ADR-XXXX-<slug>.md`. Fill in:
    - `id`, `title`, `status: accepted` (or `proposed` if not yet committed), today's date
    - `affects:` list of doc paths touched by the decision
    - **Context** — the forces in tension, in 1–2 short paragraphs

@@ -70,11 +70,18 @@ When in doubt: substantive.
 | `docs/product/roadmap.md` | Now / next / later. Single file. |
 | `docs/product/features/` | `FEAT-xxx-<slug>.md` specs. |
 | `docs/product/bugs/` | `BUG-xxx-<slug>.md` reports. |
-| `docs/architecture/` | System-level architecture docs. |
 | `docs/website/` | Website-specific plans (IA, content, etc.). |
-| `docs/implementation/` | Cross-cutting technical notes. |
-| `docs/marketing/` | Lives in `voxera-website/docs/marketing/` (implementation specifics). |
-| `decisions/` | ADRs. Numbered, never renumbered. |
+| `docs/operations/` | CEO ops — weekly reviews, customer pulse, meeting notes. |
+| `decisions/` | Company-level ADRs (strategy/brand/vision/governance). Numbered, never renumbered. |
+
+Product/platform architecture lives **with the code that owns it**, not here:
+
+| Doc | Now lives in |
+|---|---|
+| CRM platform architecture (`architecture/`) + cross-cutting technical notes (`implementation/`) | `voxera-crm/docs/` |
+| Marketing-site specifics (`marketing/`) | `voxera-website/docs/marketing/` |
+| Infra docs | `voxera-infra/` |
+| Product/technical ADRs | the owning code repo's `decisions/` (see `decisions/README.md`) |
 
 ## Editing workflow
 
