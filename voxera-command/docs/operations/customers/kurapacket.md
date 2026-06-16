@@ -1,12 +1,12 @@
 ---
 title: Kurapacket
 slug: kurapacket
-version: 3
+version: 4
 status: churned
-health: unknown
+health: red
 since: "2026-01-01"   # unconfirmed start date
-churned_on: "2026-06-06"   # contract closed; Pflegebox operation moved to Customer XY (customer-xy.md)
-updated: 2026-06-06
+churned_on: "2026-06-06"   # contract closed; loss confirmed 2026-06-13. Pflegebox now has no active payer (Customer XY not yet signed).
+updated: 2026-06-13
 owner: you
 motion: dach
 plan: "Performance / commission — €80 per confirmed new customer (Pflegebox line)"
@@ -38,6 +38,11 @@ Kurapacket is a Pflegebox supplier — they sell the free monthly care-supply bo
 
 ## Pulse log (newest first)
 
+### 2026-06-13 — red
+- **Loss confirmed.** The Kurapacket churn is now confirmed — they are gone as a payer on the Pflegebox line.
+- **Correction to the 2026-06-06 entry**: that entry framed the loss as a clean migration of the Pflegebox operation to "Customer XY" at €90/confirmed from 2026-06-08. That framing was premature. As of today, Customer XY is **not yet signed** (still in negotiation — see `customer-xy.md`), so the Pflegebox line currently has **no active paying customer**. This is a live revenue gap, not a clean handover.
+- Action item: decide where Pflegebox confirmations are billed in the interim (or pause the line). See below.
+
 ### 2026-06-06 — churned
 - **Contract closed.** Voxera ended its commission contract with Kurapacket. The Pflegebox calling operation transitions to a new customer, **Customer XY** (see `customer-xy.md`), at a higher rate — **€90 per confirmed Pflegebox customer** (vs €80 here) — starting **2026-06-08**.
 - Not a service failure: replaced by a better-paying customer for the same product line. The ~3,500 calls/day Pflegebox operation continues under XY.
@@ -53,6 +58,7 @@ Kurapacket is a Pflegebox supplier — they sell the free monthly care-supply bo
 
 ## Open action items
 
+- [ ] **you**: Pflegebox confirmations are still being produced by the calling operation, but Kurapacket is gone and Customer XY isn't signed — confirm where Pflegebox confirmations are billed in the interim, or pause the line (due 2026-06-16)
 - [ ] **you**: confirm actual contract start date with Ahmed (due 2026-06-12)
 - [ ] **you**: establish the qualified→confirmed conversion rate and confirmed-customers/day — the core profitability metric (due 2026-06-12)
 - [ ] **you**: confirm whether Ahmed Abida is internal Voxera-side or payer-side, and capture the economic buyer if different (due 2026-06-12)
@@ -73,6 +79,7 @@ _(none yet)_
 - Potential to add a second product line (e.g., Hausnotruf, mirroring the lifeo account) if the Pflegebox line proves out.
 
 ## Changelog
+- 2026-06-13 v4: loss confirmed — health → red. Corrected the 2026-06-06 "clean migration to Customer XY" framing: XY is not yet signed, so the Pflegebox line currently has no active payer. Flagged the interim Pflegebox billing gap.
 - 2026-06-06 v3: contract closed — status → churned, health → unknown. Pflegebox operation moves to Customer XY at €90/confirmed from 2026-06-08.
 - 2026-06-05 v2: filled in scaffold with real account (Kurapacket, Pflegebox line); recorded €80/confirmed-customer commission model, ~3,500 calls/day → ~25 qualified/day, Ahmed Abida as primary contact; set health green; renamed from `pflegebox-payer-1.md`.
 - 2026-05-31 v1: scaffold file created. Awaiting rename + fill-in.

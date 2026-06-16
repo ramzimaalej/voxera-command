@@ -1,15 +1,15 @@
 ---
 title: Customer XY
 slug: customer-xy
-version: 1
-status: active
-health: unknown        # signed; operation goes live 2026-06-08 — no live signals yet
-since: "2026-06-08"     # first day of the commission relationship
-updated: 2026-06-06
+version: 2
+status: pre-customer    # in negotiation; not yet signed
+health: unknown         # no signed contract yet
+since: null             # relationship not yet started — set on signature
+updated: 2026-06-13
 owner: you
 motion: dach
-plan: "Performance / commission — €90 per confirmed Pflegebox customer, €95 per confirmed Hausnotruf customer"
-mrr_usd: null          # commission-based; no fixed MRR. Revenue = €90×confirmed Pflegebox + €95×confirmed Hausnotruf.
+plan: "Performance / commission (in negotiation, unsigned) — €100 per confirmed Pflegebox customer, €110 per confirmed Hausnotruf customer"
+mrr_usd: null          # commission-based; no fixed MRR. Proposed (unsigned): €100×confirmed Pflegebox + €110×confirmed Hausnotruf.
 primary_contact: "Ahmed Abida — relationship champion (confirm he carries over from the prior payers)"
 secondary_contact: ""
 ---
@@ -19,7 +19,7 @@ secondary_contact: ""
 > **Real account name TBD** — "Customer XY" is a placeholder. Replace `title`/`slug`/filename with the real name once confirmed.
 
 ## Summary
-Customer XY is the single commission customer that replaces both prior DACH payers (Kurapacket / Pflegebox and lifeo / Hausnotruf) from 2026-06-08. They buy both product lines at a higher rate than the prior payers: **€90 per confirmed Pflegebox customer** and **€95 per confirmed Hausnotruf customer**. The same Voxera calling operation (~7,000 calls/day across both lines) now feeds confirmations to this one account.
+Customer XY is a prospective commission customer in **active negotiation** (not yet signed). The proposed deal covers both product lines at higher rates than the prior payers: **€100 per confirmed Pflegebox customer** and **€110 per confirmed Hausnotruf customer**. The earlier plan — that XY would replace both prior payers from 2026-06-08 — has not materialized: Kurapacket is confirmed lost, but lifeo remains an active Hausnotruf payer at €80 (see `lifeo.md`), and XY's contract is still being negotiated.
 
 ## Account context
 
@@ -38,6 +38,13 @@ Customer XY is the single commission customer that replaces both prior DACH paye
 
 ## Pulse log (newest first)
 
+### 2026-06-13 — unknown (in negotiation; not signed)
+- **Not signed — still negotiating.** The 2026-06-06 "signed, go-live 2026-06-08" entry was premature. Customer XY is **not yet confirmed**; the deal is still in negotiation. Status reverted active → pre-customer.
+- **Rates on the table moved up**: now negotiating **€100 per confirmed Pflegebox contract** and **€110 per confirmed Hausnotruf contract** (vs the €90/€95 recorded on 2026-06-06).
+- **Consequence**: because XY isn't signed and Kurapacket is confirmed lost, the **Pflegebox line currently has no active payer** (lifeo, the Hausnotruf payer, is still active at €80 — see `lifeo.md`). XY is no longer "the only customer."
+- **Leverage**: the operation **signed 49 new contracts** this week (30 Pflegebox + 19 Hausnotruf) with **1,051 leads** in the bottom of the funnel — concrete throughput to negotiate from (note: payers bill on *confirmed*, not signed).
+- Action items below.
+
 ### 2026-06-06 — unknown (signed; goes live 2026-06-08)
 - **Signed.** Customer XY replaces both prior payers (Kurapacket, lifeo) on a single contract covering both product lines, at higher rates: €90/confirmed Pflegebox, €95/confirmed Hausnotruf. Go-live 2026-06-08.
 - Same calling operation continues (~7,000 calls/day). The change is commercial (one higher-paying customer instead of two at €80), not operational.
@@ -47,6 +54,8 @@ Customer XY is the single commission customer that replaces both prior DACH paye
 
 ## Open action items
 
+- [ ] **you**: close the Customer XY negotiation (proposed €100 Pflegebox / €110 Hausnotruf) — or set and hold a walk-away rate (due 2026-06-20)
+- [ ] **you**: while XY is unsigned and Kurapacket is gone, decide where Pflegebox confirmations are billed in the interim, or pause the line (due 2026-06-16)
 - [ ] **you**: confirm Customer XY's real legal name + replace the placeholder (due 2026-06-09)
 - [ ] **you**: confirm whether Ahmed Abida is the contact on XY too, and capture XY's economic buyer (due 2026-06-09)
 - [ ] **you**: after go-live, record the first-week confirmed/day per product line and set health from real signals (due 2026-06-15)
@@ -58,7 +67,8 @@ _(none yet)_
 
 ## Risks + watch-outs
 
-- **Concentration risk**: XY is now the *only* customer. One contract = 100% of commission revenue. A single-customer base is the dominant business risk — diversify once the operation is stable.
+- **Deal risk**: XY is unsigned and in active price negotiation (€100/€110 proposed). No revenue until signed; the negotiation could stall or fall through. Set a walk-away rate.
+- **Pflegebox payer gap**: with Kurapacket lost and XY unsigned, the Pflegebox line has no active payer. lifeo still covers Hausnotruf at €80, so XY is *not* the only customer — but Pflegebox confirmations currently have nowhere to bill.
 - **Margin holds only if sales throughput holds**: revenue scales with confirmed/day, which is capped by sales-agent capacity (currently ~8/day) well below the funnel's ~20/day ceiling. See revenue model.
 - **Unproven terms**: the €90/€95 rates and product mix are contracted but not yet observed in production. Validate in week 1.
 - **Pflegekassen paperwork / UWG §7** compliance — same existential churn risk as the prior payers.
@@ -68,4 +78,5 @@ _(none yet)_
 - Higher per-confirmed rates already secured vs the prior payers — XY values the lead quality. Room to push volume (more sales capacity) rather than price.
 
 ## Changelog
+- 2026-06-13 v2: reversed premature "signed" framing — status active → pre-customer; deal still in negotiation. Proposed rates moved up to €100/confirmed Pflegebox, €110/confirmed Hausnotruf (from €90/€95). Noted Pflegebox line currently has no active payer (Kurapacket lost, XY unsigned); lifeo still active so XY is not the only customer.
 - 2026-06-06 v1: created. Customer XY replaces Kurapacket + lifeo from 2026-06-08 at €90/confirmed Pflegebox, €95/confirmed Hausnotruf.

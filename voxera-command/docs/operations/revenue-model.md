@@ -1,139 +1,140 @@
 ---
 title: Revenue Model
-version: 3
+version: 7
 status: active
-updated: 2026-06-07
+updated: 2026-06-14
 owner: you
 ---
 
 # Revenue model — financial health monitor
 
-A small, transparent model of Voxera's commission economics. It answers: **Are we profitable? What's the binding constraint? How much runway is left? How many leads must we inject?**
+A small, transparent model of Voxera's commission economics. It answers: **Are we profitable? What's the binding constraint? How much is the pipeline worth? How many leads must we inject?**
 
-Figures are for the **Customer XY** contract (live 2026-06-08). See [`customers/customer-xy.md`](./customers/customer-xy.md).
+As of **2026-06-14** the payer picture (see customer pulse files):
 
-> **Headline (v3):** ~**€6.8k/month underwater** at 4 closed/day → 1.6 confirmed/day, financed by a credit line that's **80% drawn**. **Runway ≈ 3 weeks.** Sales can't reach break-even (12.5 closed/day) that fast, so **the runway must be fixed directly and now** — extend credit / raise cash / cut burn — in parallel with lifting the sales conversion rate.
+- **lifeo** — **active**, pays **€80 per confirmed Hausnotruf contract**. The only live payer. ([`customers/lifeo.md`](./customers/lifeo.md))
+- **Pflegebox line** — **no active payer.** Kurapacket is confirmed lost; Customer XY is not yet signed. Pflegebox confirmations are produced but **unbillable (€0)**. ([`customers/kurapacket.md`](./customers/kurapacket.md))
+- **Customer XY** — **in negotiation, unsigned.** Proposed **€100 per confirmed Pflegebox**, **€110 per confirmed Hausnotruf**. ([`customers/customer-xy.md`](./customers/customer-xy.md))
+
+> **Headline (v7):** The operation **signs ~49 contracts/week** (30 Pflegebox + 19 Hausnotruf), near the 50/week target. Payers bill on **confirmed**, and confirmation rates are now known per line — **Hausnotruf 70%, Pflegebox 40%** → **~25 confirmed/week**. With the Pflegebox line at €0, today's billable revenue is **~€4.7k/month vs ~€10.1k cost → ~−€5.4k/month** (runway ~3.5 weeks). **Signing Customer XY flips the business to ~+€1.7k/month profit.** The Pflegebox payer is the single decisive lever; the higher 70% Hausnotruf confirmation already helps lifeo, while Pflegebox at 40% has the most headroom to lift.
 
 ## The funnel (where the numbers attach)
 
 ```
-AI voice ~7,000 calls/day → ~50 qualified leads/day → reps work ~40/day → 4 closed/day → 1.6 CONFIRMED/day
-                                  ▲ ~10/day stall here (→ 700 backlog)   (400 calls,        (40% of closed)
-                                                                          10 calls/lead)     € paid here: €90/€95
+AI voice ~7,000 calls/day → ~50 qualified/day → reps work ~40/day → ~49 SIGNED/week → CONFIRMED (per-line rate)
+                                  ▲ surplus stalls → 1,051-lead backlog        € paid only on confirmed, per line:
+                                                                               Hausnotruf €80 (lifeo) · Pflegebox €0
 ```
 
-- The payer pays **per confirmed deal**. **Confirmed = closed × 40%** = 1.6/day.
-- The AI generates ~50 qualified/day but reps only work ~40/day → the ~10/day surplus stalls and, over ~3 months, became the **700-deal dead pile**.
+- The payer pays **per *confirmed* contract**, per product line. **Signed ≠ billable** — a signed contract must clear confirmation (e.g. Pflegekasse paperwork) first.
+- **This week: 49 signed = 30 Pflegebox + 19 Hausnotruf.** Confirmed = signed × line confirmation rate (**HN 70%, PB 40%**) = **13.3 HN + 12.0 PB ≈ 25 confirmed/week** (~52% blended).
+- **1,051 leads sit in the bottom of the funnel** — must still pass *both* the signed and confirmed gates.
 
 ## Inputs (edit these; everything recomputes)
 
 | Input | Value | Note |
 |---|---|---|
-| Sales reps | **2** | confirmed |
-| Rep calls/day (actual) | **200 each → 400 team** | ~6h of calling (100 calls / 3h) |
-| Rep call capacity | 250 each (500 team) | full 7.5h (8h − 30min pause) → only ~25% headroom left |
-| Calls per lead | **10** | dials before a lead closes or is killed |
-| Closed deals/day (team) | **4** | 1% call→close (4÷400); 10% lead→close (4÷40 worked) |
-| Confirmation rate (of closed) | **40%** | confirmed = closed × 40% |
-| **Confirmed/day** | **1.6** | = 4 × 40% — what XY pays on |
-| Price — Pflegebox / Hausnotruf | €90 / €95 | mix 70/30 → **€91.50 blended** |
-| Call cost (AI voice) | $250/day ≈ **€230/day** | $1=€0.92; calls run **5 days/week** |
+| Signed/week (observed) | **49** | 30 Pflegebox + 19 Hausnotruf; sustained run-rate after the scale-up |
+| Signed/week (target) | **50** | the new operating expectation — nearly met this week |
+| **Confirmation rate — Hausnotruf** | **70%** | signed→confirmed (known) |
+| **Confirmation rate — Pflegebox** | **40%** | signed→confirmed (known); most headroom to lift |
+| Confirmed/week | **~25.3** | 13.3 Hausnotruf + 12.0 Pflegebox |
+| Price — Hausnotruf (lifeo) | **€80** | **active payer** |
+| Price — Pflegebox | **€0 today** | no payer; **€100 if XY signs** |
+| Price — XY proposed (unsigned) | €100 Pflegebox / €110 Hausnotruf | negotiation target |
+| Call cost (AI voice) | $250/day ≈ **€230/day** | $1=€0.92; 5 days/week → ~€5,060/mo |
 | Fixed expenses | **€5,000/mo** | includes sales salaries |
-| Working days/month | ~22 | 5 days/week |
-| Pipeline (stuck/"dead") | **700 deals** | reactivatable, but only after a **3-month cold period** |
+| Working days/month | ~22 | 5 days/week (~4.4 weeks/mo) |
+| Bottom-of-funnel pipeline | **1,051 leads** | replaces the old 700 "dead pile" figure — confirm overlap |
 | Cash reserves | **€0** | financed by a credit line |
 | Credit line | **$25,000 limit, $20,000 drawn** | headroom **$5,000 ≈ €4,600** |
-| Credit interest | **15% APR** | ≈ $250/mo (€230) on the drawn balance |
+| Credit interest | **15% APR** | ≈ €230/mo on the drawn balance |
 
-**Blended price** (70/30) = 0.7×€90 + 0.3×€95 = **€91.50/confirmed**.
+**Total monthly cost** = €5,060 call + €5,000 fixed = **€10,060/mo**.
+Monthly signed: 132 Pflegebox + 83.6 Hausnotruf. **Confirmed/mo: 52.8 Pflegebox + 58.5 Hausnotruf.**
 
-## P&L at current run-rate (1.6 confirmed/day)
+## P&L — at 49 signed/week, HN 70% / PB 40% confirmation
 
-| Line | Per month |
-|---|---:|
-| Revenue (1.6 × €91.50 × 22) | **€3,221** |
-| Call cost (€230 × 22) | −€5,060 |
-| Fixed (incl. salaries) | −€5,000 |
-| **Operating profit** | **−€6,839** ⚠️ |
+| Line | Confirmed/mo | Today price | Today rev | XY price | XY rev |
+|---|---:|---:|---:|---:|---:|
+| Hausnotruf | 58.5 | €80 | €4,682 | €110 | €6,437 |
+| Pflegebox | 52.8 | €0 | €0 | €100 | €5,280 |
+| **Revenue** | | | **€4,682** | | **€11,717** |
+| Cost | | | −€10,060 | | −€10,060 |
+| **Operating profit** | | | **−€5,378** ⚠️ | | **+€1,657** ✅ |
 
-## Cash & runway — ~3 weeks ⚠️
+- **Today (lifeo only):** ~**−€5.4k/month**. Better than the flat-40% estimate (the 70% Hausnotruf rate helps), but still underwater — lifeo's Hausnotruf alone can't cover fixed + call cost.
+- **If XY signs:** ~**+€1.7k/month** — the business turns profitable. The Pflegebox line going from €0 to €100/confirmed adds **€5,280/month**, and Hausnotruf re-pricing €80→€110 adds another ~€1,755/month.
+- **lifeo-only break-even** would need ~**41 signed Hausnotruf/week** (vs 19 today) — ~2.1× current Hausnotruf volume. Not reachable soon → **a Pflegebox payer is essential, not optional.**
 
-No reserves; the monthly loss is **borrowed** against a credit line that's already **80% drawn**.
+## Cash & runway
 
-- **Headroom left:** $25,000 − $20,000 = **$5,000 ≈ €4,600**.
-- **Monthly burn:** operating loss €6,839 + interest (~€230) ≈ **€7,070/month**.
-- **Runway = €4,600 ÷ €7,070 ≈ 0.65 months ≈ ~3 weeks.**
+No reserves; the loss is borrowed against a credit line **80% drawn** (€4,600 headroom).
 
-This is the binding fact of the business. Reaching break-even (12.5 closed/day) takes longer than 3 weeks (below), so **runway must be addressed directly and immediately**.
+- **Today:** burn ≈ €5,378 + €230 interest ≈ **€5,600/mo** → runway ≈ €4,600 ÷ €5,600 ≈ **~3.5 weeks** ⚠️.
+- **If XY signs:** profitable — the credit line can begin repaying; runway stops being the binding constraint.
 
-*(FX: $1 = €0.92, assumed. Interest grows slightly as the last $5k is drawn — negligible over 3 weeks. Confirm whether the €5,000 fixed already includes this interest; modelled here as on top.)*
+**Securing XY (or any Pflegebox payer) is simultaneously the runway fix and the path to profit.** Move on it inside the runway window.
 
-## Break-even
+## What's the pipeline worth? (1,051 bottom-of-funnel leads)
 
-- Total cost = €5,000 + €5,060 = **€10,060/mo**. Each confirmed/day = €2,013/mo; each closed/day (at 40%) = **€805/mo**.
-- **Break-even = 12.5 closed/day = 5.0 confirmed/day** — **3.1× today's 4**.
+Leads must clear **both** gates (lead→signed, then the per-line confirmation). Using this week's 61/39 signed mix → **~643 Pflegebox / ~408 Hausnotruf** leads if all signed. Applying the known confirmation rates (PB 40%, HN 70%):
 
-| Closed/day | Confirmed/day | Monthly profit* |
+**Ceiling — if every lead signs, then confirms at line rates:**
+
+| Priced at | Pflegebox (643→257 conf) | Hausnotruf (408→286 conf) | **Total** |
+|---|---:|---:|---:|
+| Today (€0 / €80) | €0 | €22,848 | **€22,848** |
+| XY signed (€100 / €110) | €25,720 | €31,416 | **€57,136** |
+
+**Risk-adjusted by lead→signed rate (confirmation already applied), at XY prices:**
+
+| lead→signed | Value @ XY | Value @ today (€0 / €80) |
 |---:|---:|---:|
-| **4 (today)** | 1.6 | **−€6,839** |
-| 5 (full calling) | 2.0 | −€6,034 |
-| 10 | 4.0 | −€2,008 |
-| **12.5 (break-even)** | 5.0 | ~€0 |
-| 15 | 6.0 | +€2,018 |
-| 20 | 8.0 | +€6,044 |
+| 100% (ceiling) | €57,136 | €22,848 |
+| 50% | €28,568 | €11,424 |
+| 25% | €14,284 | €5,712 |
+| 10% | €5,714 | €2,285 |
 
-\* profit = 805 × closed/day − €10,060.
+⚠️ The **lead→signed** rate for these 1,051 leads is still unmeasured — pick the row once known. The confirmation gates are now real (PB 40% / HN 70%). **~55% of the pipeline's value at XY prices is the Pflegebox half — all of it locked behind signing a Pflegebox payer.**
 
-## Sales is the bottleneck — and it's conversion, not calling time
+## Levers (ranked by value)
 
-Reps already call **200/day each (400 team)** — ~80% of the 250/day capacity. Only ~25% more dialing is available; the real problem is **how little converts**:
+1. **Sign a Pflegebox payer (XY or other).** Turns ~−€5.4k/mo into ~+€1.7k/mo and unlocks ~€25k of pipeline value. The decisive move.
+2. **Lift the Pflegebox confirmation rate (40%).** Most headroom of the two — each 10 points of PB confirmation ≈ +13 confirmed/mo. Worth €0 today, but ~€1.3k/mo once XY signs. Understand *why* PB confirms at 40% vs HN's 70% (paperwork? Pflegekasse rejections? qualification?).
+3. **Reconfirm lifeo in writing** — the only live revenue (€4.7k/mo) rests on an account with no signed continuation.
+4. **Grow signed volume / conversion** (v3 sales levers) — compounds once both prices are non-zero.
 
-- **Call→close ≈ 1%** (4 ÷ 400). **Lead→close ≈ 10%** (4 closed ÷ 40 leads worked).
-- **Full calling time** (200 → 250/rep) ≈ +25% dials → ~5 closed/day. Helpful, not enough.
-- **Break-even (12.5 closed/day)** with 2 reps needs lead→close to roughly **triple (10% → ~30%)**, or **~5 reps** at today's conversion. Neither lands in 3 weeks.
+## Survival actions (next few weeks)
 
-### Levers (ranked)
-1. **Conversion.** 10% lead→close is low — scripts, speed-to-lead, objection handling, lead quality. Tripling it → ~12 closed/day ≈ break-even with the current 2 reps. Takes weeks; start now, but it won't save the 3-week runway alone.
-2. **Full calling time** (200 → 250/rep): quick ~+25% (~5 closed/day).
-3. **Raise the 40% confirmation rate** — qualify harder before "closed."
-4. **Add reps** — each ≈ +2.5 closed/day at current conversion; expensive and slow to ramp.
-
-## Survival actions (next 3 weeks) — runway first
-
-Sales can't reach break-even before the line runs out, so protect the runway directly:
-
-1. **Secure cash now** — extend/raise the credit line or inject capital. It's the only lever faster than the burn.
-2. **Cut burn** — the biggest controllable cost is the **€5,060/mo AI call spend**. The AI makes ~50 qualified/day but reps work only ~40/day (the surplus dies). Trim AI volume to match capacity → save ~15–20% (~€1k/mo) and stop feeding the dead pile.
-3. **Run the conversion + calling-time levers in parallel** — the path to break-even once runway is bought.
-4. **The 700 backlog is locked for 3 months** — it returns as lead supply ~September, not now. Don't count on it to reduce lead spend yet.
-
-## How many leads to inject per day
-
-Inject to **match what reps can work** — no more, or you regrow the dead pile.
-
-- Reps work **400 calls ÷ 10 calls/lead ≈ 40 leads/day** today (≈50/day at full calling time).
-- The AI generates **~50 qualified/day** — slightly more than reps can work, so ~10/day stall.
-- **Target injection ≈ 40/day now** (≈50/day once reps are at full calling time). The **700 backlog can't help — locked for a 3-month cold period** — so you do need fresh leads daily.
-- Quick win: trim AI generation from ~50 → ~40/day to match supply to capacity (cuts call cost; see Survival actions).
+1. **Close the XY Pflegebox deal** (or find an interim Pflegebox payer). Runway fix *and* the switch to profitability.
+2. **Get lifeo's continuation in writing** — don't let the one live payer lapse on a missing letter.
+3. **Investigate the 40% Pflegebox confirmation rate** — the biggest controllable upside once a payer exists.
+4. **Mind the runway (~3.5 weeks)** — secure cash in parallel until XY closes.
 
 ## How to recompute
 
 ```
-confirmed_day = closed_day * confirm_rate
-revenue_month = confirmed_day * blended_price * working_days
-profit_month  = revenue_month − call_cost_day_eur*working_days − fixed_month
-breakeven_closed_day = (call_cost_day_eur*working_days + fixed_month) / (blended_price*working_days*confirm_rate)
-monthly_burn  = max(0, −profit_month) + credit_interest_month
-runway_months = (credit_limit − drawn_balance) / monthly_burn
-leads_worked_day = team_calls_day / calls_per_lead   # = inject target
+confirmed_hn_wk   = signed_hn_wk * 0.70
+confirmed_pb_wk   = signed_pb_wk * 0.40
+revenue_month     = (confirmed_pb_wk*pb_price + confirmed_hn_wk*hn_price) * 4.4
+profit_month      = revenue_month − call_cost_day_eur*working_days − fixed_month
+pipeline_value    = leads * mix_share * lead_to_signed * line_confirm_rate * price   # per line, summed
 ```
 
-## Open questions (smaller now)
+## Open questions
 
+- Real **lead→signed** rate for the 1,051 pipeline leads (the last unmeasured gate; used to value the pipeline).
+- **Why** does Pflegebox confirm at 40% vs Hausnotruf 70% — Pflegekasse paperwork, customer drop-off, qualification? Determines how liftable PB is.
+- Does the 1,051 pipeline include or replace the old 700 "dead pile" (locked for a 3-month cold period)?
 - FX rate to lock ($1 = €0.92 assumed); does the €5,000 fixed already include credit interest?
-- After XY goes live (2026-06-08), replace assumed product mix (70/30) and the 40% confirmation with week-1 actuals.
 
 ## Changelog
-- 2026-06-07 v3: quantified runway — credit line $25k limit / $20k drawn / 15% APR → ~€4.6k headroom, ~€7.07k/mo burn → **~3 weeks runway**. Updated funnel with confirmed actuals: 2 reps × 200 calls/day, 10 calls/lead → ~40 leads worked/day, 1% call→close / 10% lead→close; 700 backlog locked for a 3-month cold period; calls run 5 days/week. Reframed bottleneck from "idle calling time" to **low conversion**, and added a "Survival actions" section (runway first). Confirmed 1.6 confirmed/day reading (closed 4 × 40%).
-- 2026-06-07 v2: corrected inputs (€5,000 fixed incl. salaries; 4 closed/day; 40% of closed → 1.6 confirmed/day); showed ~€6.8k/mo loss, break-even 12.5 closed/day; added cash/credit-line note.
+- 2026-06-14 v7: applied known per-line confirmation rates — **Hausnotruf 70%, Pflegebox 40%** (~52% blended, ~25 confirmed/week). Today ~−€5.4k/mo (lifeo only); **XY-signed turns profitable at ~+€1.7k/mo**; runway ~3.5 weeks. lifeo-only break-even needs ~41 signed HN/week. Re-valued the pipeline with line-rate confirmation. Reframed the confirmation lever around Pflegebox's 40% (most headroom).
+- 2026-06-13 v6: corrected signed-vs-confirmed — the 49/week are **signed**; payers bill on **confirmed**. Re-derived on a flat 40% confirmation assumption; established the two compounding gates (Pflegebox payer + confirmation rate).
+- 2026-06-13 v5: confirmed the scale-up — 49/week is the sustained run-rate (not a spike), against a new 50/week target; dropped the v3 1.6/day assumption.
+- 2026-06-13 v4: corrected payer/price state — lifeo active (€80 Hausnotruf), Pflegebox unbillable (Kurapacket lost, XY unsigned), XY prospective €100/€110.
+- 2026-06-07 v3: quantified runway (credit line $25k/$20k/15% APR → ~3 weeks); reframed bottleneck to low conversion; added "Survival actions."
+- 2026-06-07 v2: corrected inputs (€5,000 fixed incl. salaries; 4 closed/day; 40% of closed → 1.6 confirmed/day); break-even 12.5 closed/day.
 - 2026-06-06 v1: initial model (assumed 8 confirmed/day, €3,500 fixed) — superseded.
+</content>
