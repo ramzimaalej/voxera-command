@@ -6,6 +6,7 @@ voxera-crm
 voxera-sales
 voxera-infra
 voxera-website
+voxera-os
 
 # babysitter — ignore generated/transient folders under ANY .a5c dir, at any depth.
 # Kept tracked on purpose: .a5c/processes/ (process defs) and config files

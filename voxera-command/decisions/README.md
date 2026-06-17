@@ -1,6 +1,8 @@
-# Decision log (ADRs) — workspace index
+# Decision log (ADRs) — company-level + routing
 
-One file per real decision. Decisions are **federated by domain**: each ADR lives in the repo that owns the thing it decides, but **numbers are global, unique, and permanent across the whole workspace**. This file is the cross-repo registry and the number allocator.
+One file per real decision. Decisions are **federated by domain**: each ADR lives in the repo that owns the thing it decides, but **numbers are global, unique, and permanent across the whole workspace**.
+
+> **Number allocator moved.** The workspace-wide ADR number allocator + full cross-repo registry now lives in **`../../voxera-os/decisions/ADR-REGISTRY.md`** (engineer-accessible, per `ADR-0014`) — `voxera-command` is exec-only, so the allocator can't live here or non-execs couldn't claim numbers. This folder holds the **company-level** ADR files (strategy / GTM / brand / vision / governance); the table below is just those, for convenience. The registry in `voxera-os` is the source of truth for which numbers are taken.
 
 ## Where an ADR lives
 
@@ -16,34 +18,21 @@ Rule of thumb: **the ADR lives next to the code or docs it constrains.** A decis
 ## Numbering — global + permanent
 
 - `ADR-NNNN`, zero-padded to 4 digits. Numbers are **never reused, never renumbered**, even when an ADR is superseded or moves repos.
-- To claim the next number, take the highest number **across every repo's `decisions/`** and add 1. From the workspace root:
-  ```sh
-  ls voxera-command/decisions/ADR-*.md voxera-*/decisions/ADR-*.md 2>/dev/null \
-    | grep -oE 'ADR-[0-9]{4}' | sort -V | tail -1
-  ```
-  Then add the new ADR to the registry table below.
-- This index is the source of truth for "which numbers are taken." Keep it current when you add or move an ADR.
+- **Claim the next number from `../../voxera-os/decisions/ADR-REGISTRY.md`** (highest in that table + 1), then add your row there. Don't glob the filesystem — non-execs can't read `voxera-command/decisions/`, so a glob would miss company ADRs and risk a collision; the `voxera-os` registry is the authoritative list of taken numbers.
 
-## Registry — every ADR across the workspace
+## Company-level ADRs in this folder
 
-| ADR | Title | Owner repo | Status |
-|---|---|---|---|
-| [ADR-0001](./ADR-0001-three-repo-workspace.md) | Three-repo workspace (command + website + crm) | voxera-command | accepted |
-| ADR-0002 | Custom state machine on Postgres, not Temporal/Inngest/Restate | voxera-crm | accepted |
-| ADR-0003 | Two-log audit model — outbox + Decision Records | voxera-crm | accepted |
-| ADR-0004 | Fixed roster of seven agent roles, no runtime agent creation | voxera-crm | accepted |
-| ADR-0005 | Generic internal DSL vocabulary with per-workflow label presets | voxera-crm | accepted |
-| ADR-0006 | JSON Forms + Mantine renderer set | voxera-crm | accepted |
-| ADR-0007 | Twilio + Ultravox for the v1 voice stack | voxera-crm | accepted |
-| [ADR-0008](./ADR-0008-pflegebox-wedge-on-workflow-agnostic-platform.md) | Pflegebox / DACH as v1 wedge on a workflow-agnostic platform | voxera-command | accepted |
-| [ADR-0009](./ADR-0009-english-markets-parallel-motion.md) | English-speaking markets GTM in parallel with DACH | voxera-command | accepted |
-| ADR-0010 | GCP primary cloud, managed with Fabric modules | voxera-infra | accepted |
-| ADR-0011 | Postgres-only outbox implementation | voxera-crm | accepted |
-| [ADR-0012](./ADR-0012-retain-atlas-palette-accent-vs-approval-color.md) | Retain Atlas palette; brand accent vs approval color | voxera-command | accepted |
-| ADR-0013 | Membership-scoped audit identity; deletedAt soft-delete tombstone | voxera-crm | proposed |
-| [ADR-0014](./ADR-0014-split-engineering-os-from-confidential-command-repo.md) | Split the engineering OS into voxera-os; keep voxera-command exec-only | voxera-command | accepted |
+These are the strategy / GTM / brand / vision / governance ADRs owned by `voxera-command`. The full cross-repo registry is in `voxera-os`.
 
-ADRs owned by another repo are listed without a link because relative links across independent git repos break when a repo is checked out standalone. Find them at `<owner-repo>/decisions/ADR-NNNN-*.md`.
+| ADR | Title | Status |
+|---|---|---|
+| [ADR-0001](./ADR-0001-three-repo-workspace.md) | Three-repo workspace (command + website + crm) | accepted |
+| [ADR-0008](./ADR-0008-pflegebox-wedge-on-workflow-agnostic-platform.md) | Pflegebox / DACH as v1 wedge on a workflow-agnostic platform | accepted |
+| [ADR-0009](./ADR-0009-english-markets-parallel-motion.md) | English-speaking markets GTM in parallel with DACH | accepted |
+| [ADR-0012](./ADR-0012-retain-atlas-palette-accent-vs-approval-color.md) | Retain Atlas palette; brand accent vs approval color | accepted |
+| [ADR-0014](./ADR-0014-split-engineering-os-from-confidential-command-repo.md) | Split the engineering OS into voxera-os; keep voxera-command exec-only | accepted |
+
+Product/technical ADRs (CRM, infra, web) live in their owning repo's `decisions/` and are indexed in the `voxera-os` registry.
 
 ## Conventions
 

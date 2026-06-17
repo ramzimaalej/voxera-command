@@ -1,8 +1,8 @@
 ---
 title: Product Roadmap
-version: 2
+version: 3
 status: active
-updated: 2026-05-31
+updated: 2026-06-16
 owner: you
 ---
 
@@ -11,8 +11,8 @@ owner: you
 ## Now
 
 **English-markets motion** — [playbook](../strategy/vertical-strategy-english-markets.md):
-- [ ] [FEAT-001](./features/FEAT-001-vertical-landing-templates-astro.md) — Translate vertical landing-page specs to Astro (website) — foundational; blocks every vertical page below
-- [ ] [FEAT-002](./features/FEAT-002-real-estate-landing-page.md) — Build /real-estate landing page (website) — depends on FEAT-001
+- [ ] **FEAT-001** — Translate vertical landing-page specs to Astro — foundational; blocks every vertical page below · spec: `voxera-website/features/FEAT-001-vertical-landing-templates-astro.md`
+- [ ] **FEAT-002** — Build /real-estate landing page — depends on FEAT-001 · spec: `voxera-website/features/FEAT-002-real-estate-landing-page.md`
 
 **DACH motion**:
 - [ ] Continuing on the existing motion — no new specs open right now
@@ -32,8 +32,9 @@ owner: you
 - [ ] Adjacent DACH vertical (Hörgeräte or private health insurance) — year-2 milestone per [`strategy.md`](../strategy/strategy.md) §7
 - [ ] Multi-language voice agents — EN as first-class alongside DE — year-2 milestone
 
-> Check the box when the implementing run is merged. Each item maps to a FEAT spec; if the line doesn't have a FEAT id yet, draft one in `docs/product/features/` before starting work.
+> Check the box when the implementing run is merged. Each item maps to a FEAT spec; the spec lives in the **implementing code repo** (`voxera-website/features/`, `voxera-crm/features/`), referenced here by ID per [ADR-0014](../../decisions/ADR-0014-split-engineering-os-from-confidential-command-repo.md). If a line has no FEAT id yet, draft the spec in that code repo before starting work.
 
 ## Changelog
+- 2026-06-16 v3: FEAT-001 and FEAT-002 relocated to `voxera-website/features/` per ADR-0014 (specs live in the implementing repo; the confidential roadmap references them by ID). Replaced the broken cross-repo file-links with ID + spec-path pointers.
 - 2026-05-31 v2: replaced placeholder entries with real FEAT-001 and FEAT-002 (both website, both English-markets motion). Restructured to group items by motion (DACH vs English-markets) per [ADR-0009](../../decisions/ADR-0009-english-markets-parallel-motion.md). Added "Next" items for home services + insurance landing pages and the demo-endpoint backend integration (no FEAT ids yet — to be drafted before work starts). Added "Later" items pulled from `vertical-strategy-english-markets.md` and `strategy.md` §7 milestones.
 - 2026-05-27 v1: initial.

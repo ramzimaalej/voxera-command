@@ -43,7 +43,7 @@ voxera-workspace/                   <- you are here
 
 **External services**: GCP (primary cloud, per [ADR-0010](./voxera-infra/decisions/ADR-0010-terraform-gcp-fabric-modules.md)) + Cloudflare (marketing site only) + Twilio + Ultravox (voice stack, [ADR-0007](./voxera-crm/decisions/ADR-0007-twilio-ultravox-voice-stack.md)) + SendGrid + Honeycomb.
 
-> **Decisions are federated.** Each ADR lives in the repo that owns what it decides; numbers are global + permanent across the workspace. `voxera-command/decisions/README.md` is the cross-repo registry.
+> **Decisions are federated.** Each ADR lives in the repo that owns what it decides; numbers are global + permanent across the workspace. `voxera-os/decisions/ADR-REGISTRY.md` is the cross-repo registry.
 
 ---
 
@@ -76,9 +76,9 @@ voxera-workspace/                   <- you are here
 | Task | Where to do it | How |
 |---|---|---|
 | Draft a FEAT-xxx spec | `voxera-command` | Copy `docs/product/features/FEAT-000-template.md`; follow [specs.md rule](./voxera-command/.claude/rules/specs.md) |
-| Implement a FEAT end-to-end (in code repo) | `voxera-crm` or `voxera-website` | `/babysitter:call implement ../voxera-command/docs/product/features/FEAT-xxx.md` |
+| Implement a FEAT end-to-end (in code repo) | `voxera-crm` or `voxera-website` | `/babysitter:call implement features/<id>/spec.md` (voxera-crm folder-based) or `features/FEAT-xxx-<slug>.md` |
 | File a BUG-xxx | `voxera-command` | Copy `docs/product/bugs/BUG-000-template.md`; include the regression-test contract |
-| Fix a BUG test-first | `voxera-crm` or `voxera-website` | `/babysitter:call fix ../voxera-command/docs/product/bugs/BUG-xxx.md` |
+| Fix a BUG test-first | `voxera-crm` or `voxera-website` | `/babysitter:call fix features/<id>/spec.md` (voxera-crm folder-based) or `features/BUG-xxx-<slug>.md` |
 | PR-style code review on a diff | any repo | Spawn `code-reviewer` agent via Task tool (loads target repo's CLAUDE.md + rules + ADRs first) |
 | Generate spec / tests / plan within voxera-crm | `voxera-crm` | `/new-feature`, `/refine-feature-spec`, `/generate-test-cases`, `/generate-implementation-plan` (the local skills) |
 
@@ -195,14 +195,14 @@ You wear multiple hats. The tooling supports that without forcing context-switch
 
 ### First time on this machine
 1. `/babysitter:user-install` (if not yet — there's a profile at `~/.a5c/user-profile.json` already from this session).
-2. `cd voxera-command/.a5c/processes && npm install` (installs the babysitter SDK so processes can import `defineTask`).
+2. `cd voxera-os/.a5c/processes && npm install` (installs the babysitter SDK for the engineering processes so they can import `defineTask`). The business processes need their own install too: `cd voxera-command/.a5c/processes && npm install`.
 3. Install Terraform 1.9.8 + gcloud CLI (only if you're going to touch infra).
 4. `gcloud auth login && gcloud auth application-default login` (only for infra).
 
 ### First time as a new collaborator (future hire)
 1. Read this README + [workspace `CLAUDE.md`](./CLAUDE.md). 10 minutes.
 2. Read [`voxera-command/docs/strategy/strategy.md`](./voxera-command/docs/strategy/strategy.md). 15 minutes — the bet, the two motions, the milestones.
-3. Skim the [workspace ADR registry](./voxera-command/decisions/README.md) — start with the company-level ones in `voxera-command/decisions/` (ADR-0001, 0008, 0009, 0012). Technical choices live with their code: CRM in `voxera-crm/decisions/` (e.g. ADR-0002/0011 platform, 0007 voice), infra in `voxera-infra/decisions/` (ADR-0010).
+3. Skim the [workspace ADR registry](./voxera-os/decisions/ADR-REGISTRY.md) — start with the company-level ones in `voxera-command/decisions/` (ADR-0001, 0008, 0009, 0012). Technical choices live with their code: CRM in `voxera-crm/decisions/` (e.g. ADR-0002/0011 platform, 0007 voice), infra in `voxera-infra/decisions/` (ADR-0010).
 4. Open the repo relevant to your role and read its `CLAUDE.md` (or `.claude/CLAUDE.md` for voxera-crm).
 5. Skim the relevant `.claude/rules/*.md` — auto-loaded every session, so behavior follows them whether you know them or not. Knowing them lets you push back when they're wrong.
 6. For engineering: skim [`voxera-crm/docs/patterns/`](./voxera-crm/docs/patterns/) — these are the concrete how-to docs the rules reference.
@@ -252,7 +252,7 @@ The strategy doc's §7 milestones are the canonical "what's next at each stage."
 ## Where to dig deeper
 
 ### The "why" (decisions)
-The decision log is **federated** — start at the [workspace ADR registry](./voxera-command/decisions/README.md), which lists every ADR and the repo that owns it. Company-level ADRs (strategy/brand/vision) live in [`voxera-command/decisions/`](./voxera-command/decisions/); CRM product/technical ADRs in [`voxera-crm/decisions/`](./voxera-crm/decisions/); infra ADRs in [`voxera-infra/decisions/`](./voxera-infra/decisions/). Numbers are global + permanent. Each frames a choice with alternatives considered + consequences.
+The decision log is **federated** — start at the [workspace ADR registry](./voxera-os/decisions/ADR-REGISTRY.md), which lists every ADR and the repo that owns it. Company-level ADRs (strategy/brand/vision) live in [`voxera-command/decisions/`](./voxera-command/decisions/); CRM product/technical ADRs in [`voxera-crm/decisions/`](./voxera-crm/decisions/); infra ADRs in [`voxera-infra/decisions/`](./voxera-infra/decisions/). Numbers are global + permanent. Each frames a choice with alternatives considered + consequences.
 
 ### The "how" (patterns + rules)
 - **voxera-crm patterns** — [`voxera-crm/docs/patterns/`](./voxera-crm/docs/patterns/) — backend-nest-modules, frontend-mantine, graphql-pothos, prisma-data-access, nx-boundaries, authorization-with-casl, observability-otel. 2,700+ lines of concrete how-to.
@@ -260,7 +260,7 @@ The decision log is **federated** — start at the [workspace ADR registry](./vo
 - **Skill files** — `.claude/skills/<name>/SKILL.md` in each repo. Each one documents when to invoke it + the workflow.
 
 ### The "what's running" (processes)
-[`voxera-command/.a5c/processes/README.md`](./voxera-command/.a5c/processes/README.md) — catalog of every babysitter process with where to invoke it from + what it does.
+[`voxera-os/.a5c/processes/README.md`](./voxera-os/.a5c/processes/README.md) (engineering processes) + [`voxera-command/.a5c/processes/README.md`](./voxera-command/.a5c/processes/README.md) (business processes) — catalog of every babysitter process with where to invoke it from + what it does.
 
 ### The "what's coming" (roadmap)
 [`voxera-command/docs/product/roadmap.md`](./voxera-command/docs/product/roadmap.md) — Now / Next / Later, grouped by motion.

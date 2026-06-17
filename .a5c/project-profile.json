@@ -215,7 +215,7 @@
       {
         "name": ".a5c",
         "path": ".a5c",
-        "description": "Shared babysitter runtime at workspace root (@a5c-ai/babysitter-sdk ^0.0.187). Holds runs/, cache/, logs/. Process definitions are canonical in voxera-command/.a5c/processes/."
+        "description": "Shared babysitter runtime at workspace root (@a5c-ai/babysitter-sdk ^0.0.187). Holds runs/, cache/, logs/. Engineering process definitions are canonical in voxera-os/.a5c/processes/; business process definitions are canonical in voxera-command/.a5c/processes/."
       }
     ],
     "entryPoints": [
@@ -224,9 +224,10 @@
       "voxera-crm/apps/frontend/src/main.tsx (React root; App.tsx + Router.tsx)",
       "voxera-website/src/pages/ (Astro routing) + functions/api/*.ts (Pages Functions)",
       "voxera-infra/environments/dev/main.tf (+ bootstrap/main.tf)",
-      "voxera-command/.a5c/processes/{implement-feature,fix-bug,iterate-doc,iterate-vision,weekly-business-review}.js"
+      "voxera-os/.a5c/processes/{implement-feature,fix-bug,iterate-doc}.js (engineering)",
+      "voxera-command/.a5c/processes/{iterate-vision,weekly-business-review}.js (business)"
     ],
-    "dataFlow": "Specs originate in voxera-command/docs (FEAT/BUG/ADR). A babysitter run is invoked from a code repo pointing at a spec path + a process in voxera-command/.a5c/processes; journals land in the invoking repo's .a5c while process defs stay canonical. In the CRM, Prisma schema is the data-model source of truth -> Prisma client + Pothos types -> NestJS resolvers/services expose GraphQL -> frontend consumes via codegen + urql. PostgreSQL is the DB; Redis/BullMQ handle jobs; a transactional outbox drives async events. Website is static Astro on Cloudflare Pages; forms hit Pages Functions calling SendGrid (Turnstile + KV rate-limit). Terraform/GCP provisions runtime (Cloud Run, Cloud SQL, Secret Manager) with state in GCS."
+    "dataFlow": "Engineering specs (FEAT/BUG) live in the code repo that implements them; company ADRs originate in voxera-command/decisions. A babysitter run is invoked from a code repo pointing at a spec path + an engineering process in voxera-os/.a5c/processes (business processes in voxera-command/.a5c/processes); journals land in the invoking repo's .a5c while process defs stay canonical. In the CRM, Prisma schema is the data-model source of truth -> Prisma client + Pothos types -> NestJS resolvers/services expose GraphQL -> frontend consumes via codegen + urql. PostgreSQL is the DB; Redis/BullMQ handle jobs; a transactional outbox drives async events. Website is static Astro on Cloudflare Pages; forms hit Pages Functions calling SendGrid (Turnstile + KV rate-limit). Terraform/GCP provisions runtime (Cloud Run, Cloud SQL, Secret Manager) with state in GCS."
   },
   "team": [
     {
@@ -279,7 +280,7 @@
       "description": "FEAT-xxx specs drive implementation in product repos.",
       "steps": [
         "cd voxera-crm",
-        "/babysitter:call implement ../voxera-command/docs/product/features/FEAT-xxx.md"
+        "/babysitter:call implement features/FEAT-xxx-<slug>/spec.md"
       ],
       "triggers": [
         "manual, spec path as input"
@@ -290,7 +291,7 @@
       "description": "BUG-xxx specs drive fixes.",
       "steps": [
         "cd voxera-website",
-        "/babysitter:call fix ../voxera-command/docs/product/bugs/BUG-xxx.md"
+        "/babysitter:call fix features/BUG-xxx-<slug>.md"
       ],
       "triggers": [
         "manual, spec path as input"
@@ -337,7 +338,7 @@
   "conventions": {
     "naming": {
       "specs": "FEAT-xxx-<slug>.md / BUG-xxx-<slug>.md (3-digit, permanent numbers) with templates",
-      "decisions": "ADR-NNNN-<slug>.md, federated by domain: company ADRs in voxera-command/decisions/, product/technical ADRs in the owning code repo's decisions/ (voxera-crm, voxera-infra). 4-digit, global + permanent across repos; voxera-command/decisions/README.md is the registry/allocator",
+      "decisions": "ADR-NNNN-<slug>.md, federated by domain: company ADRs in voxera-command/decisions/, product/technical ADRs in the owning code repo's decisions/ (voxera-crm, voxera-infra). 4-digit, global + permanent across repos; voxera-os/decisions/ADR-REGISTRY.md is the registry/allocator",
       "crmFeatures": "voxera-crm/features/<feature-id>/ with fixed artifact set",
       "nxProjects": "'backend' and 'frontend' under apps/; reusable code in libs/",
       "terraform": "main.tf/variables.tf/outputs.tf/providers.tf/versions.tf/backend.tf; environments/<env>/ + bootstrap/",
@@ -367,9 +368,9 @@
     "testingConventions": "CRM: test-cases.md is the validation contract; every acceptance criterion maps to >=1 test. Jest+ts-jest (backend), Vitest+testing-library (frontend), Cypress (e2e), Testcontainers/PGlite (DB). Cover happy path, edge cases, authz boundaries, regressions. Tests ship with the feature in the same PR ('with tests'). A feature is not complete with failing tests. Website gate: astro check + npm run build.",
     "additionalRules": [
       "Golden rule: Canonical strategy lives in voxera-command/docs/ — reference it, never fork it; if the website or CRM needs a product fact, read it from there. If spec and code disagree, spec wins.",
-      "Golden rule: Process definitions live once in voxera-command/.a5c/processes/; code repos invoke them by relative path, never copy.",
+      "Golden rule: Process definitions live once (engineering in voxera-os/.a5c/processes/, business in voxera-command/.a5c/processes/); code repos invoke them by relative path, never copy.",
       "Golden rule: Specs drive work — a feature is a FEAT-xxx.md, a bug is a BUG-xxx.md; implementation runs take a spec path as input. Do not implement from chat alone.",
-      "Golden rule: Real decisions get an ADR, federated by domain — strategy/brand/vision/governance ADRs in voxera-command/decisions/, product/technical ADRs in the owning code repo's decisions/ (voxera-crm, voxera-infra); numbers are global + permanent, voxera-command/decisions/README.md is the registry. Babysitter's run journal is execution history, ADRs are the strategic why.",
+      "Golden rule: Real decisions get an ADR, federated by domain — strategy/brand/vision/governance ADRs in voxera-command/decisions/, product/technical ADRs in the owning code repo's decisions/ (voxera-crm, voxera-infra); numbers are global + permanent, voxera-os/decisions/ADR-REGISTRY.md is the registry. Babysitter's run journal is execution history, ADRs are the strategic why.",
       "Golden rule: Versioning = git — one canonical file per doc with frontmatter (version, status, updated) + changelog; freeze milestones with annotated tags, not *-final-final.md copies.",
       "CRM SDLC gating: no production code until features/<feature-id>/status.json === PLAN_APPROVED; never skip approval checkpoints.",
       "Prisma schema is the source of truth: change schema first, then generate migrations + GraphQL.",

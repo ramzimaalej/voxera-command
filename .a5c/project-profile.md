@@ -1,6 +1,6 @@
 # Project Profile: voxera-workspace
 
-Voxera is a poly-repo 'workspace of repos' for an AI voice/telephony CRM aimed primarily at the German (DACH) care-insurance market. A single workspace root contains four sibling git repositories plus a shared babysitter orchestration layer in root .a5c/: voxera-command (the source-of-truth brain holding vision, brand, roadmap, FEAT/BUG specs, ADRs, and all canonical babysitter process definitions), voxera-crm (the CRM product — an Nx monorepo with a NestJS 10 + GraphQL/Pothos + Prisma 6 backend and a React 18 + Vite + Mantine frontend, integrating Twilio/Telnyx/Ultravox voice), voxera-website (an Astro 6 static-first marketing site on Cloudflare Pages with EN/DE i18n and Pages Functions), and voxera-infra (Terraform 1.9.8 IaC targeting GCP via Cloud Foundation Fabric modules). Code repos reference voxera-command by relative path and never fork its content; specs drive all work and real decisions are captured as ADRs.
+Voxera is a poly-repo 'workspace of repos' for an AI voice/telephony CRM aimed primarily at the German (DACH) care-insurance market. A single workspace root contains four sibling git repositories plus a shared babysitter orchestration layer in root .a5c/: voxera-command (the source-of-truth brain holding vision, brand, roadmap, company-level ADRs, and business babysitter process definitions), voxera-crm (the CRM product — an Nx monorepo with a NestJS 10 + GraphQL/Pothos + Prisma 6 backend and a React 18 + Vite + Mantine frontend, integrating Twilio/Telnyx/Ultravox voice), voxera-website (an Astro 6 static-first marketing site on Cloudflare Pages with EN/DE i18n and Pages Functions), and voxera-infra (Terraform 1.9.8 IaC targeting GCP via Cloud Foundation Fabric modules). Code repos reference voxera-command by relative path and never fork its content; specs drive all work and real decisions are captured as ADRs.
 
 > Last updated: 2026-06-05T23:30:00.000Z | Version: 1
 
@@ -65,20 +65,20 @@ Voxera is a poly-repo 'workspace of repos' for an AI voice/telephony CRM aimed p
 
 ## Architecture
 
-**Pattern:** Poly-repo 'workspace of repos'. A single workspace root contains four sibling repositories (each its own git repo) plus a shared babysitter orchestration layer in root .a5c/. voxera-command is the source-of-truth brain (docs, ADRs, canonical babysitter process definitions); code repos reference it by relative path and never fork its content.
-**Data flow:** Specs originate in voxera-command/docs (FEAT/BUG/ADR). A babysitter run is invoked from a code repo pointing at a spec path + a process in voxera-command/.a5c/processes; journals land in the invoking repo's .a5c while process defs stay canonical. In the CRM, Prisma schema is the data-model source of truth -> Prisma client + Pothos types -> NestJS resolvers/services expose GraphQL -> frontend consumes via codegen + urql. PostgreSQL is the DB; Redis/BullMQ handle jobs; a transactional outbox drives async events. Website is static Astro on Cloudflare Pages; forms hit Pages Functions calling SendGrid (Turnstile + KV rate-limit). Terraform/GCP provisions runtime (Cloud Run, Cloud SQL, Secret Manager) with state in GCS.
+**Pattern:** Poly-repo 'workspace of repos'. A single workspace root contains four sibling repositories (each its own git repo) plus a shared babysitter orchestration layer in root .a5c/. voxera-command is the source-of-truth brain (strategy docs, company-level ADRs, business babysitter process definitions) and voxera-os holds the engineering process definitions; code repos reference them by relative path and never fork their content.
+**Data flow:** Specs originate in the code repo that implements them (FEAT/BUG); company-level ADRs live in voxera-command. A babysitter run is invoked from a code repo pointing at a spec path + a process in voxera-os/.a5c/processes; journals land in the invoking repo's .a5c while process defs stay canonical. In the CRM, Prisma schema is the data-model source of truth -> Prisma client + Pothos types -> NestJS resolvers/services expose GraphQL -> frontend consumes via codegen + urql. PostgreSQL is the DB; Redis/BullMQ handle jobs; a transactional outbox drives async events. Website is static Astro on Cloudflare Pages; forms hit Pages Functions calling SendGrid (Turnstile + KV rate-limit). Terraform/GCP provisions runtime (Cloud Run, Cloud SQL, Secret Manager) with state in GCS.
 
 ### Modules
 
 | Module | Path | Description |
 |--------|------|-------------|
-| voxera-command | `voxera-command` | Source of truth: vision, brand, roadmap, FEAT-xxx/BUG-xxx specs, company-level ADRs (decisions/ — the federated workspace ADR registry), operations, and all canonical babysitter process definitions (.a5c/processes/). Markdown-heavy; no application code. |
+| voxera-command | `voxera-command` | Source of truth: vision, brand, roadmap, company-level ADRs (decisions/), operations, and business babysitter process definitions (iterate-doc, iterate-vision, weekly-business-review in .a5c/processes/). Markdown-heavy; no application code. |
 | voxera-crm | `voxera-crm` | CRM product. Nx monorepo: apps/backend (NestJS 10 + GraphQL via Pothos/Apollo + Prisma 6/PostgreSQL) and apps/frontend (React 18 + Vite + Mantine + Redux Toolkit + urql). Shared libs/. Voice: Twilio, Telnyx, Ultravox. Owns its platform architecture (docs/architecture/, docs/implementation/) + product/technical ADRs (decisions/). Depends on voxera-command. |
 | voxera-website | `voxera-website` | Marketing site. Astro 6 static-first on Cloudflare Pages; dynamic JSON endpoints as Pages Functions (contact, beta-signup, SendGrid, Turnstile). EN/DE i18n via public/i18n.json. Depends on voxera-command. |
 | voxera-infra | `voxera-infra` | IaC. Terraform 1.9.8 targeting GCP via Cloud Foundation Fabric modules (v34.1.0). bootstrap/ creates project + GCS remote-state bucket; environments/dev/ composes project, APIs, service accounts. |
-| .a5c | `.a5c` | Shared babysitter runtime at workspace root (@a5c-ai/babysitter-sdk ^0.0.187). Holds runs/, cache/, logs/. Process definitions are canonical in voxera-command/.a5c/processes/. |
+| .a5c | `.a5c` | Shared babysitter runtime at workspace root (@a5c-ai/babysitter-sdk ^0.0.187). Holds runs/, cache/, logs/. Process definitions are canonical in voxera-os/.a5c/processes/ (engineering: implement-feature, fix-bug, design-review) and voxera-command/.a5c/processes/ (business: iterate-doc, iterate-vision, weekly-business-review). |
 
-**Entry points:** `voxera-crm/apps/backend/src/main.ts (NestJS bootstrap; tracing.ts loads OpenTelemetry)`, `voxera-crm/apps/backend/src/app/app.module.ts (NestJS root module)`, `voxera-crm/apps/frontend/src/main.tsx (React root; App.tsx + Router.tsx)`, `voxera-website/src/pages/ (Astro routing) + functions/api/*.ts (Pages Functions)`, `voxera-infra/environments/dev/main.tf (+ bootstrap/main.tf)`, `voxera-command/.a5c/processes/{implement-feature,fix-bug,iterate-doc,iterate-vision,weekly-business-review}.js`
+**Entry points:** `voxera-crm/apps/backend/src/main.ts (NestJS bootstrap; tracing.ts loads OpenTelemetry)`, `voxera-crm/apps/backend/src/app/app.module.ts (NestJS root module)`, `voxera-crm/apps/frontend/src/main.tsx (React root; App.tsx + Router.tsx)`, `voxera-website/src/pages/ (Astro routing) + functions/api/*.ts (Pages Functions)`, `voxera-infra/environments/dev/main.tf (+ bootstrap/main.tf)`, `voxera-os/.a5c/processes/{implement-feature,fix-bug,design-review}.js`, `voxera-command/.a5c/processes/{iterate-doc,iterate-vision,weekly-business-review}.js`
 
 ## Team
 
@@ -103,7 +103,7 @@ FEAT-xxx specs drive implementation in product repos.
 **Triggers:** manual, spec path as input
 
 1. cd voxera-crm
-2. /babysitter:call implement ../voxera-command/docs/product/features/FEAT-xxx.md
+2. /babysitter:call implement features/FEAT-xxx/spec.md
 
 ### Babysitter bug fix
 
@@ -111,7 +111,7 @@ BUG-xxx specs drive fixes.
 **Triggers:** manual, spec path as input
 
 1. cd voxera-website
-2. /babysitter:call fix ../voxera-command/docs/product/bugs/BUG-xxx.md
+2. /babysitter:call fix features/BUG-xxx-<slug>.md
 
 ### Git branch + PR workflow
 
@@ -229,7 +229,7 @@ Bootstrap creates ops project + GCS state bucket + Terraform SA; per-env (dev) u
 ### Naming
 
 - **specs:** FEAT-xxx-<slug>.md / BUG-xxx-<slug>.md (3-digit, permanent numbers) with templates
-- **decisions:** ADR-NNNN-<slug>.md, federated by domain — company ADRs in voxera-command/decisions/, product/technical in the owning code repo's decisions/ (voxera-crm, voxera-infra). Numbers are 4-digit, global + permanent across all repos; voxera-command/decisions/README.md is the registry + allocator
+- **decisions:** ADR-NNNN-<slug>.md, federated by domain — company ADRs in voxera-command/decisions/, product/technical in the owning code repo's decisions/ (voxera-crm, voxera-infra). Numbers are 4-digit, global + permanent across all repos; voxera-os/decisions/ADR-REGISTRY.md is the registry + allocator
 - **crmFeatures:** voxera-crm/features/<feature-id>/ with fixed artifact set
 - **nxProjects:** 'backend' and 'frontend' under apps/; reusable code in libs/
 - **terraform:** main.tf/variables.tf/outputs.tf/providers.tf/versions.tf/backend.tf; environments/<env>/ + bootstrap/
@@ -253,9 +253,9 @@ Bootstrap creates ops project + GCS state bucket + Terraform SA; per-env (dev) u
 ### Additional Rules
 
 - Golden rule: Canonical strategy lives in voxera-command/docs/ — reference it, never fork it; if the website or CRM needs a product fact, read it from there. If spec and code disagree, spec wins.
-- Golden rule: Process definitions live once in voxera-command/.a5c/processes/; code repos invoke them by relative path, never copy.
+- Golden rule: Process definitions live once — engineering processes (implement-feature, fix-bug, design-review) in voxera-os/.a5c/processes/, business processes (iterate-doc, iterate-vision, weekly-business-review) in voxera-command/.a5c/processes/; code repos invoke them by relative path, never copy.
 - Golden rule: Specs drive work — a feature is a FEAT-xxx.md, a bug is a BUG-xxx.md; implementation runs take a spec path as input. Do not implement from chat alone.
-- Golden rule: Real decisions get an ADR, federated by domain — strategy/brand/vision/governance ADRs in voxera-command/decisions/, product/technical ADRs in the owning code repo's decisions/ (voxera-crm, voxera-infra). Numbers are global + permanent; voxera-command/decisions/README.md is the registry. Babysitter's run journal is execution history, ADRs are the strategic why.
+- Golden rule: Real decisions get an ADR, federated by domain — strategy/brand/vision/governance ADRs in voxera-command/decisions/, product/technical ADRs in the owning code repo's decisions/ (voxera-crm, voxera-infra). Numbers are global + permanent; voxera-os/decisions/ADR-REGISTRY.md is the registry. Babysitter's run journal is execution history, ADRs are the strategic why.
 - Golden rule: Versioning = git — one canonical file per doc with frontmatter (version, status, updated) + changelog; freeze milestones with annotated tags, not *-final-final.md copies.
 - CRM SDLC gating: no production code until features/<feature-id>/status.json === PLAN_APPROVED; never skip approval checkpoints.
 - Prisma schema is the source of truth: change schema first, then generate migrations + GraphQL.
