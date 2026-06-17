@@ -11,6 +11,7 @@ The **business** babysitter processes — run by execs, operating on this repo's
 | **iterate-doc.js** | `cd voxera-command` | Plan + review + apply a change to any versioned doc (frontmatter bump + changelog). Lightest-weight — no brand gate, no ADR check. |
 | **iterate-vision.js** | `cd voxera-command` | Same as iterate-doc, plus a consistency + brand-voice quality gate (refines up to 2x if score <85) and an optional ADR capture when a strategic decision is detected. Use for vision/brand/roadmap/website-plan edits. |
 | **weekly-business-review.js** | `cd voxera-command` | CEO weekly rhythm with **active coaching**: gather state → per-customer pulse loop (invokes `customer-pulse-update`) → coach-pushback (invokes `accountability-check` + `priorities-coach`) → conditional acknowledgment breakpoint (silent on clean weeks) → draft weekly note → CEO approves/refines → CEO sets next-week priorities → archive. Run on Friday or end-of-week. |
+| **revenue-pulse.js** | `cd voxera-command` | Between-weekly **survival heartbeat**: read `revenue-model.md` + customer pulse → assess runway + the binding constraint (the deal/lever solvency depends on) + the single top action → **conditional breakpoint that fires only when RED** (runway ≤ alert threshold or the key deal is overdue; silent otherwise) → append a dated row to `docs/operations/revenue-pulse-log.md`. Run any day when runway is short; the one signal that must never go dark. Inputs: `{ asOf?, runwayAlertWeeks? }` (default threshold 4 weeks). |
 
 ## First-time setup
 
