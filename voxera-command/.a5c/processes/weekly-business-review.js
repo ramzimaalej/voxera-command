@@ -351,7 +351,7 @@ export const draftWeeklyNoteTask = defineTask('draft-weekly-note', (args, taskCt
         'Be terse. The note should fit on one screen. One bullet per item, not a paragraph.',
         'Do NOT invent metrics. If MRR / CAC / trial counts aren\'t in the gathered state, leave those slots as "[CEO to fill]".',
         'Do NOT pad with platitudes. If nothing surprising happened, write "no surprises".',
-        'Match Voxera brand voice (per ../brand/brand-guidelines.md): plain-spoken, confident not loud, anti-hype, specific. No "synergies", "leveraged", "best-in-class".',
+        'Match Voxera brand voice (per ../voxera-os/docs/brand/brand-guidelines.md): plain-spoken, confident not loud, anti-hype, specific. No "synergies", "leveraged", "best-in-class".',
         `Write the draft to "artifacts/${taskCtx.effectId}-weekly-${args.weekEnding}.md".`,
       ],
       outputFormat: 'JSON with draftPath (string), highlights (array of strings, ≤3), surprises (array of strings, may be empty), blockers (array of strings, may be empty).',

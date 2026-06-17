@@ -3,7 +3,7 @@
  * @description Evolve a strategy doc (vision/brand/roadmap/website-plan) with consistency + brand-voice gates, a human approval gate, and an optional ADR capture for strategic decisions.
  * @inputs { docPath: string, change: string, dryRun?: boolean }
  * @outputs { success: boolean, docPath: string, newVersion?: number, adrCreated?: string|null }
- * @skill brand-conformance ../../../.claude/skills/brand-conformance/SKILL.md
+ * @skill brand-conformance ../../../../voxera-os/.claude/skills/brand-conformance/SKILL.md
  * @skill extract-adr ../../../.claude/skills/extract-adr/SKILL.md
  * @agent general-purpose
  */
@@ -127,7 +127,7 @@ export const draftRevisionTask = defineTask('draft-revision', (args, taskCtx) =>
       instructions: [
         `Read ${args.docPath} in full.`,
         'Read docs/vision/vision.md (if not the same file).',
-        'Read docs/brand/brand-guidelines.md (voice + writing rules).',
+        'Read ../voxera-os/docs/brand/brand-guidelines.md (voice + writing rules).',
         'Read docs/product/roadmap.md if the change touches roadmap items.',
         'Apply the change scoped tightly to the relevant section(s). Do not touch unrelated content.',
         'Preserve frontmatter and the existing Changelog section.',
@@ -163,7 +163,7 @@ export const consistencyReviewTask = defineTask('consistency-review', (args, tas
       context: { docPath: args.docPath, draftPath: args.draftPath },
       instructions: [
         `Read the draft at ${args.draftPath}.`,
-        'Read docs/vision/vision.md, docs/strategy/strategy.md (if exists), docs/brand/brand-guidelines.md.',
+        'Read docs/vision/vision.md, docs/strategy/strategy.md (if exists), ../voxera-os/docs/brand/brand-guidelines.md.',
         'Score 0-100. Heuristic: 100 = ships as-is. 85 = ships after small fixes. 70 = real issues to address. <70 = rework.',
         'Check for: positioning contradictions, voice violations (forbidden words, italic overuse, hype phrases), brand verbs misuse, honesty stance drift, scope creep beyond the requested change.',
         'Run the brand-conformance skill checks if the doc is brand-adjacent.',

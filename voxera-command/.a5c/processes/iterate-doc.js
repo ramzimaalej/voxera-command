@@ -3,7 +3,7 @@
  * @description Apply a change to a versioned voxera-command doc — plan, review, apply, bump frontmatter + changelog.
  * @inputs { docPath: string, change: string, dryRun?: boolean }
  * @outputs { success: boolean, docPath: string, newVersion: number, changelogEntry: string }
- * @skill brand-conformance ../../../voxera-command/.claude/skills/brand-conformance/SKILL.md
+ * @skill brand-conformance ../../../voxera-os/.claude/skills/brand-conformance/SKILL.md
  * @agent general-purpose
  */
 

@@ -12,11 +12,10 @@ This README is the leverage guide: *how to use* the agents, skills, processes, r
 
 ```
 voxera-workspace/                   <- you are here
-├── voxera-command/                 strategy, company decisions, processes, brand, operations
+├── voxera-command/                 strategy, company decisions, processes, operations (brand moved to voxera-os/docs/brand/)
 │   ├── docs/strategy/              strategy.md + vertical-strategy-english-markets.md
 │   ├── docs/operations/            CEO ops: weekly reviews, customer pulse, templates
 │   ├── docs/product/               roadmap.md + features/ (FEAT-xxx) + bugs/ (BUG-xxx)
-│   ├── docs/brand/                 brand guidelines (voice, palette, writing rules)
 │   ├── decisions/                  company-level ADRs + README.md (workspace-wide ADR registry)
 │   ├── .a5c/processes/             babysitter process .js files (workflows)
 │   └── .claude/skills/             local skills (extract-adr, capture-decision, …)
@@ -87,9 +86,9 @@ voxera-workspace/                   <- you are here
 | Task | Where to do it | How |
 |---|---|---|
 | Review copy against brand voice | `voxera-website` | Spawn `brand-voice-reviewer` agent via Task tool |
-| Lint copy against brand rules (read-only check) | `voxera-command` | `brand-conformance` skill |
+| Lint copy against brand rules (read-only check) | `voxera-os` | `brand-conformance` skill |
 | Check EN ↔ DE parity in i18n.json | `voxera-website` | `i18n-parity-check` skill |
-| Update the brand guidelines doc | `voxera-command` | `/babysitter:call iterate docs/brand/brand-guidelines.md: <change>` |
+| Update the brand guidelines doc | `voxera-command` (run iterate; doc lives in `voxera-os`) | `/babysitter:call --process .a5c/processes/iterate-vision.js#process --inputs '{"docPath":"../voxera-os/docs/brand/brand-guidelines.md","change":"<change>"}'` |
 
 ### Customer + CEO ops
 
@@ -140,7 +139,7 @@ voxera-workspace/                   <- you are here
 - **Review accumulated ADRs** — anything that should propagate to strategy.md or a pattern doc?
 - **Health-trend review** across customer pulse files — any pattern across the 3? (e.g., 2 of 3 mentioned the same friction)
 - **Cost dashboard** — Cloudflare + GCP. Top 5 line items should be expected.
-- **Brand-voice spot-check** — run `brand-conformance` over recent website / blog / customer-facing copy.
+- **Brand-voice spot-check** — run `brand-conformance` (now in `voxera-os`) over recent website / blog / customer-facing copy.
 
 ### Quarterly
 

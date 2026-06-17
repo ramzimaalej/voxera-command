@@ -6,14 +6,14 @@ date: 2026-06-04
 supersedes: []
 superseded_by: null
 affects:
-  - docs/brand/brand-guidelines.md
+  - ../voxera-os/docs/brand/brand-guidelines.md
   - ../voxera-website/src/styles/site.css
   - ../voxera-crm (in-product design tokens)
 ---
 
 ## Context
 
-The website and CRM both ship on the **Atlas** palette (near-white + near-black ink + a single deep-brass accent `#8E6824` + navy secondary, mono-accent, editorial), documented in `docs/brand/brand-guidelines.md` v2. Atlas itself replaced an earlier warm-cream + electric-orange palette that read too close to Anthropic.
+The website and CRM both ship on the **Atlas** palette (near-white + near-black ink + a single deep-brass accent `#8E6824` + navy secondary, mono-accent, editorial), documented in `../voxera-os/docs/brand/brand-guidelines.md` v2. Atlas itself replaced an earlier warm-cream + electric-orange palette that read too close to Anthropic.
 
 The question raised: should we adopt a different palette, and specifically — given the product's core gesture is **Approve / Reject / Roll back** and the mark is literally an approval check — should the accent be a color that *means* the gesture?
 
@@ -57,7 +57,7 @@ Two principles confirmed alongside the retention:
   - In-product, brand-brass and functional-green/red must stay visually distinct so the brand dot never reads as a status pip. Mitigation: rely on the **check shape** to carry "approved," reserve a clearly distinct `--ok` green, and never place the brand dot adjacent to a status pip of similar size.
 
 - **Follow-ups:**
-  - Add a one-line note to `docs/brand/brand-guidelines.md` § Color recording the "brand accent ≠ approval color" principle and the rejected alternatives, so the guideline doc reflects this ADR. (Brand doc owns *what*; this ADR owns *why*.)
+  - Add a one-line note to `../voxera-os/docs/brand/brand-guidelines.md` § Color recording the "brand accent ≠ approval color" principle and the rejected alternatives, so the guideline doc reflects this ADR. (Brand doc owns *what*; this ADR owns *why*.)
   - When CRM in-product design tokens are formalized, ensure they inherit the same `--accent` and keep `--ok` / reject-red as functional-only.
 
 ## Relationship to prior ADRs

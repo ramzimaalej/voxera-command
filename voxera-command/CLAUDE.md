@@ -4,7 +4,7 @@ This repo holds Voxera's strategy docs, the decision log, and every babysitter p
 
 ## Layout
 - `docs/vision/` — vision (north star, ICP, positioning)
-- `docs/brand/` — brand guidelines, voice, assets
+- brand guidelines, voice, assets now live in `voxera-os/docs/brand/brand-guidelines.md` (moved per ADR-0015); the confidential company facts stay here in `docs/operations/company-facts.md`
 - `docs/product/roadmap.md` — now / next / later
 - `docs/product/features/` — `FEAT-xxx-*.md` specs (inputs to implementation runs)
 - `docs/product/bugs/` — `BUG-xxx-*.md` reports
@@ -16,7 +16,7 @@ This repo holds Voxera's strategy docs, the decision log, and every babysitter p
 > Product/platform architecture lives with the code that owns it: CRM platform architecture + technical decisions are in `../voxera-crm/docs/architecture/` and `../voxera-crm/decisions/`; infra in `../voxera-infra/`. The decision log is **federated** — see `decisions/README.md` and `.claude/rules/adrs.md`.
 - `.a5c/processes/` — babysitter process definitions (see `processes/README.md` for the catalog)
 - `.a5c/runs/` — babysitter run journals (gitignored)
-- `.claude/skills/` — local skills (`extract-adr`, `brand-conformance`, `capture-decision`, `meeting-notes`, `customer-pulse-update`, `priorities-coach`, `accountability-check`)
+- `.claude/skills/` — local skills (`extract-adr`, `capture-decision`, `meeting-notes`, `customer-pulse-update`, `priorities-coach`, `accountability-check`) — note `brand-conformance` moved to `voxera-os/.claude/skills/`
 
 ## Doc conventions
 Every doc starts with frontmatter:
@@ -50,7 +50,7 @@ Under `.claude/`:
 - **skills/customer-pulse-update** — append a dated entry to a per-customer pulse file in `docs/operations/customers/`, updating health rating + frontmatter.
 - **skills/priorities-coach** — recommend a ranked priority list for the next planning horizon from state (FEATs, roadmap, strategy, customer pulse, past notes). Pushes back on a user-proposed top-3 if it doesn't match the strategy. Forward-looking pair of `accountability-check`.
 - **skills/accountability-check** — surface chronic slippers (3+ week carry-overs), silently-dropped commitments, past-due commitments to others, customer-pulse declines without closed action items, strategic drift. Backward-looking pair of `priorities-coach`. Silent when the picture is clean.
-- **skills/brand-conformance** — lint copy against `docs/brand/brand-guidelines.md` (forbidden words, italic limits, brand verbs, CTA patterns, honesty stance). Read-only.
+- **skills/brand-conformance** — moved to `voxera-os/.claude/skills/brand-conformance/SKILL.md` (lints copy against `voxera-os/docs/brand/brand-guidelines.md`); no longer local to this repo.
 - **rules/** — auto-loaded on every session:
   - `docs.md` — frontmatter + version + changelog conventions for every versioned doc
   - `specs.md` — FEAT-xxx / BUG-xxx authoring discipline

@@ -66,7 +66,6 @@ When in doubt: substantive.
 |---|---|
 | `docs/vision/` | North star, ICP, positioning. |
 | `docs/strategy/` | Wedge, bet, moat, milestones. |
-| `docs/brand/` | Voice, visual identity, writing rules. |
 | `docs/product/roadmap.md` | Now / next / later. Single file. |
 | `docs/product/features/` | `FEAT-xxx-<slug>.md` specs. |
 | `docs/product/bugs/` | `BUG-xxx-<slug>.md` reports. |
@@ -78,6 +77,7 @@ Product/platform architecture lives **with the code that owns it**, not here:
 
 | Doc | Now lives in |
 |---|---|
+| Brand guidelines (`brand/` — voice, visual identity, writing rules) | `voxera-os/docs/brand/` |
 | CRM platform architecture (`architecture/`) + cross-cutting technical notes (`implementation/`) | `voxera-crm/docs/` |
 | Marketing-site specifics (`marketing/`) | `voxera-website/docs/marketing/` |
 | Infra docs | `voxera-infra/` |

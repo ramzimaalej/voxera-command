@@ -31,6 +31,7 @@ These are the strategy / GTM / brand / vision / governance ADRs owned by `voxera
 | [ADR-0009](./ADR-0009-english-markets-parallel-motion.md) | English-speaking markets GTM in parallel with DACH | accepted |
 | [ADR-0012](./ADR-0012-retain-atlas-palette-accent-vs-approval-color.md) | Retain Atlas palette; brand accent vs approval color | accepted |
 | [ADR-0014](./ADR-0014-split-engineering-os-from-confidential-command-repo.md) | Split the engineering OS into voxera-os; keep voxera-command exec-only | accepted |
+| [ADR-0015](./ADR-0015-brand-guidance-as-shared-asset-in-voxera-os.md) | Brand guidance is a shared asset in voxera-os; company facts stay confidential | accepted |
 
 Product/technical ADRs (CRM, infra, web) live in their owning repo's `decisions/` and are indexed in the `voxera-os` registry.
 
