@@ -40,7 +40,8 @@ Rule of thumb: **the ADR lives next to the code or docs it constrains.** A decis
 | ADR-0010 | GCP primary cloud, managed with Fabric modules | voxera-infra | accepted |
 | ADR-0011 | Postgres-only outbox implementation | voxera-crm | accepted |
 | [ADR-0012](./ADR-0012-retain-atlas-palette-accent-vs-approval-color.md) | Retain Atlas palette; brand accent vs approval color | voxera-command | accepted |
-| ADR-0013 | Membership-scoped audit identity; archivedAt soft-delete tombstone | voxera-crm | proposed |
+| ADR-0013 | Membership-scoped audit identity; deletedAt soft-delete tombstone | voxera-crm | proposed |
+| [ADR-0014](./ADR-0014-split-engineering-os-from-confidential-command-repo.md) | Split the engineering OS into voxera-os; keep voxera-command exec-only | voxera-command | accepted |
 
 ADRs owned by another repo are listed without a link because relative links across independent git repos break when a repo is checked out standalone. Find them at `<owner-repo>/decisions/ADR-NNNN-*.md`.
 
