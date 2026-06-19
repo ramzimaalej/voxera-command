@@ -4,17 +4,18 @@ This folder is a multi-repo workspace. Sibling repos, one shared brain.
 
 | Repo | Role | You run babysitter here to… |
 |------|------|------------------------------|
-| `voxera-command/` | Source of truth: vision, brand, roadmap, features, bugs, **company-level decisions**, **all babysitter processes** | iterate on strategy/vision/brand/roadmap |
+| `voxera-command/` | Source of truth: vision, roadmap, features, bugs, **company-level decisions**, **business processes** (exec-only) | iterate on strategy/vision/brand/roadmap |
+| `voxera-os/` | Shared engineering OS: engineering babysitter processes, **brand guidelines**, the cross-repo **ADR registry** | author/iterate engineering processes, brand, allocate ADR numbers |
 | `voxera-crm/` | CRM product code — owns its **platform architecture (`docs/architecture/`) + technical ADRs (`decisions/`)** | build/iterate the CRM from specs |
 | `voxera-infra/` | Infra/IaC code — owns its **infra ADRs (`decisions/`)** | build/iterate the cloud infrastructure |
 | `voxera-website/` | Marketing site code | build/iterate the website from specs |
 | `voxera-sales/` | Sales-consulting site code | build/iterate the sales site from specs |
 
-**Cohesion rule:** strategy/brand/vision are owned by `voxera-command` and *referenced* by the others; product/technical architecture and decisions are owned by the code repo they constrain and live there. Nothing forks.
+**Cohesion rule:** strategy/vision are owned by `voxera-command`, brand + engineering processes by `voxera-os` and *referenced* by the others; product/technical architecture and decisions are owned by the code repo they constrain and live there. Nothing forks.
 
 ## Golden rules for any agent working here
 1. **Canonical strategy lives in `voxera-command/docs/`. Reference it, never fork it.** If the website or CRM needs a fact about the product, read it from there.
-2. **Process definitions are split by audience.** Engineering processes (`implement-feature`, `fix-bug`, `design-review`) live in `voxera-os/.a5c/processes/` and code repos invoke them by relative path (`../voxera-os/...`); business processes (`iterate-doc`, `iterate-vision`, `weekly-business-review`) live in `voxera-command/.a5c/processes/`. Do not copy them.
+2. **Process definitions are split by audience.** Engineering processes (`implement-feature`, `fix-bug`, `design-review`) live in `voxera-os/.a5c/processes/` and code repos invoke them by relative path (`../voxera-os/...`); business processes (`iterate-doc`, `iterate-vision`, `weekly-business-review`, `revenue-pulse`) live in `voxera-command/.a5c/processes/`. Do not copy them.
 3. **Specs drive work.** A feature is a `FEAT-xxx.md`; a bug is a `BUG-xxx.md`. Implementation runs take a spec path as input.
 4. **Real decisions get an ADR — federated by domain.** Strategy/brand/vision/governance ADRs live in `voxera-command/decisions/`; product/technical ADRs live in the owning code repo's `decisions/` (CRM in `voxera-crm/decisions/`, infra in `voxera-infra/decisions/`). Numbers are global + permanent across the workspace; `voxera-os/decisions/ADR-REGISTRY.md` is the registry + allocator. Babysitter's run journal is execution history; ADRs are the strategic "why".
 5. **Versioning = git.** One canonical file per doc with frontmatter (`version`, `status`, `updated`) + a changelog block. Freeze milestones with annotated tags (e.g. `vision-v2`), not `vision-final-final.md`.

@@ -1,6 +1,6 @@
 {
   "projectName": "voxera-workspace",
-  "description": "Voxera is a poly-repo 'workspace of repos' for an AI voice/telephony CRM aimed primarily at the German (DACH) care-insurance market. A single workspace root contains four sibling git repositories plus a shared babysitter orchestration layer in root .a5c/: voxera-command (the source-of-truth brain holding vision, brand, roadmap, FEAT/BUG specs, ADRs, and all canonical babysitter process definitions), voxera-crm (the CRM product — an Nx monorepo with a NestJS 10 + GraphQL/Pothos + Prisma 6 backend and a React 18 + Vite + Mantine frontend, integrating Twilio/Telnyx/Ultravox voice), voxera-website (an Astro 6 static-first marketing site on Cloudflare Pages with EN/DE i18n and Pages Functions), and voxera-infra (Terraform 1.9.8 IaC targeting GCP via Cloud Foundation Fabric modules). Code repos reference voxera-command by relative path and never fork its content; specs drive all work and real decisions are captured as ADRs.",
+  "description": "Voxera is a poly-repo 'workspace of repos' for an AI voice/telephony CRM aimed primarily at the German (DACH) care-insurance market. A single workspace root contains six sibling git repositories plus a shared babysitter orchestration layer in root .a5c/: voxera-command (the source-of-truth brain holding vision, brand, roadmap, FEAT/BUG specs, ADRs, and the business babysitter process definitions (engineering process definitions are canonical in voxera-os; brand guidelines moved to voxera-os per ADR-0015)), voxera-crm (the CRM product — an Nx monorepo with a NestJS 10 + GraphQL/Pothos + Prisma 6 backend and a React 19 + Vite + Mantine frontend, integrating Twilio/Telnyx/Ultravox voice), voxera-website (an Astro 6 static-first marketing site on Cloudflare Pages with EN/DE i18n and Pages Functions), and voxera-infra (Terraform 1.9.8 IaC targeting GCP via Cloud Foundation Fabric modules). Code repos reference voxera-command by relative path and never fork its content; specs drive all work and real decisions are captured as ADRs.",
   "goals": [
     {
       "id": "goal-velocity-1",
@@ -76,7 +76,7 @@
         "category": "Authorization (CRM)"
       },
       {
-        "name": "React 18",
+        "name": "React 19",
         "category": "Frontend UI (CRM)"
       },
       {
@@ -190,17 +190,17 @@
     ]
   },
   "architecture": {
-    "pattern": "Poly-repo 'workspace of repos'. A single workspace root contains four sibling repositories (each its own git repo) plus a shared babysitter orchestration layer in root .a5c/. voxera-command is the source-of-truth brain (docs, ADRs, canonical babysitter process definitions); code repos reference it by relative path and never fork its content.",
+    "pattern": "Poly-repo 'workspace of repos'. A single workspace root contains six sibling repositories (each its own git repo) plus a shared babysitter orchestration layer in root .a5c/. voxera-command is the source-of-truth brain (docs, company ADRs, business babysitter process definitions); voxera-os holds the engineering process definitions + brand + ADR registry; code repos reference it by relative path and never fork its content.",
     "modules": [
       {
         "name": "voxera-command",
         "path": "voxera-command",
-        "description": "Source of truth: vision, brand, roadmap, FEAT-xxx/BUG-xxx specs, company-level ADRs (decisions/ — the federated workspace ADR registry), operations, and all canonical babysitter process definitions (.a5c/processes/). Markdown-heavy; no application code."
+        "description": "Source of truth: vision, brand, roadmap, FEAT-xxx/BUG-xxx specs, company-level ADRs (decisions/ — the federated workspace ADR registry), operations, and the business babysitter process definitions (.a5c/processes/); engineering process definitions are canonical in voxera-os. Markdown-heavy; no application code."
       },
       {
         "name": "voxera-crm",
         "path": "voxera-crm",
-        "description": "CRM product. Nx monorepo: apps/backend (NestJS 10 + GraphQL via Pothos/Apollo + Prisma 6/PostgreSQL) and apps/frontend (React 18 + Vite + Mantine + Redux Toolkit + urql). Shared libs/. Voice: Twilio, Telnyx, Ultravox. Depends on voxera-command."
+        "description": "CRM product. Nx monorepo: apps/backend (NestJS 10 + GraphQL via Pothos/Apollo + Prisma 6/PostgreSQL) and apps/frontend (React 19 + Vite + Mantine + Redux Toolkit + urql). Shared libs/. Voice: Twilio, Telnyx, Ultravox. Depends on voxera-command."
       },
       {
         "name": "voxera-website",
@@ -777,7 +777,7 @@
     {
       "name": "voxera-command",
       "path": "voxera-command",
-      "role": "Source of truth: vision, brand, roadmap, FEAT/BUG specs, company-level ADRs (decisions/ — federated workspace ADR registry), and all canonical babysitter process definitions (.a5c/processes/). Product/technical architecture + ADRs live in the owning code repo (voxera-crm, voxera-infra)."
+      "role": "Source of truth: vision, brand, roadmap, FEAT/BUG specs, company-level ADRs (decisions/ — federated workspace ADR registry), and the business babysitter process definitions (.a5c/processes/); engineering process definitions are canonical in voxera-os. Product/technical architecture + ADRs live in the owning code repo (voxera-crm, voxera-infra)."
     },
     {
       "name": "voxera-crm",

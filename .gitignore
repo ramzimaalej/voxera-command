@@ -1,6 +1,10 @@
 # intellij
 .idea/
 
+# macOS
+.DS_Store
+**/.DS_Store
+
 # voxera sibling repos (each is its own git repo)
 voxera-crm
 voxera-sales

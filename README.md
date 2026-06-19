@@ -12,13 +12,14 @@ This README is the leverage guide: *how to use* the agents, skills, processes, r
 
 ```
 voxera-workspace/                   <- you are here
-├── voxera-command/                 strategy, company decisions, processes, operations (brand moved to voxera-os/docs/brand/)
+├── voxera-command/                 strategy, company decisions, business processes, operations (brand moved to voxera-os/docs/brand/)
 │   ├── docs/strategy/              strategy.md + vertical-strategy-english-markets.md
 │   ├── docs/operations/            CEO ops: weekly reviews, customer pulse, templates
 │   ├── docs/product/               roadmap.md + features/ (FEAT-xxx) + bugs/ (BUG-xxx)
 │   ├── decisions/                  company-level ADRs + README.md (workspace-wide ADR registry)
 │   ├── .a5c/processes/             babysitter process .js files (workflows)
 │   └── .claude/skills/             local skills (extract-adr, capture-decision, …)
+├── voxera-os/                      shared engineering OS: engineering babysitter processes, brand guidelines, ADR registry
 ├── voxera-crm/                     CRM product (NestJS + Pothos + Prisma + Mantine, Nx monorepo)
 │   ├── apps/{backend, frontend}/
 │   ├── libs/                       shared TS libs (Pothos, Prisma schema, shared-types)
@@ -50,9 +51,11 @@ voxera-workspace/                   <- you are here
 
 | Repo | What's installed | Source-of-truth doc |
 |---|---|---|
-| **voxera-command** | 5 processes, 7 skills, 4 rules | [voxera-command/CLAUDE.md](./voxera-command/CLAUDE.md) |
+| **voxera-command** | 4 business processes, 7 skills, 4 rules | [voxera-command/CLAUDE.md](./voxera-command/CLAUDE.md) |
+| **voxera-os** | 5 engineering processes, brand guidelines + brand-conformance skill, ADR registry | [voxera-os/CLAUDE.md](./voxera-os/CLAUDE.md) |
 | **voxera-crm** | 6 subagents, 7 SDLC skills, 8 rules, ESLint w/ Nx tags + type-aware rules | [voxera-crm/.claude/CLAUDE.md](./voxera-crm/.claude/CLAUDE.md) |
 | **voxera-website** | 1 subagent (brand-voice), 1 skill (i18n parity), 4 rules, ESLint flat config | [voxera-website/CLAUDE.md](./voxera-website/CLAUDE.md) |
+| **voxera-sales** | Guidaro sales site (separate brand), commands.json, brand rules | [voxera-sales/CLAUDE.md](./voxera-sales/CLAUDE.md) |
 | **voxera-infra** | 3 rules (terraform, security, gcp) | [voxera-infra/CLAUDE.md](./voxera-infra/CLAUDE.md) |
 | **User-level** | `code-reviewer` agent at `~/.claude/agents/`; profile at `~/.a5c/user-profile.json` | n/a |
 
@@ -213,7 +216,7 @@ You wear multiple hats. The tooling supports that without forcing context-switch
 
 ## The 0 → $1M arc
 
-Where you are now (per [BRAND.md](./voxera-website/docs/marketing/BRAND.md) + [strategy.md](./voxera-command/docs/strategy/strategy.md)):
+Where you are now (per [strategy.md](./voxera-command/docs/strategy/strategy.md)):
 - 5 people. 1 customer in production (private beta) — Customer XY, a single commission account covering both DACH product lines. Bootstrapped.
 - Year-1 target: ~$1.7M combined ARR run-rate ($80K + $40K + $25K MRR English markets + DACH).
 

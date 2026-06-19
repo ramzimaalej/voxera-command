@@ -3,8 +3,8 @@
  * @description Evolve a strategy doc (vision/brand/roadmap/website-plan) with consistency + brand-voice gates, a human approval gate, and an optional ADR capture for strategic decisions.
  * @inputs { docPath: string, change: string, dryRun?: boolean }
  * @outputs { success: boolean, docPath: string, newVersion?: number, adrCreated?: string|null }
- * @skill brand-conformance ../../../../voxera-os/.claude/skills/brand-conformance/SKILL.md
- * @skill extract-adr ../../../.claude/skills/extract-adr/SKILL.md
+ * @skill brand-conformance ../../../voxera-os/.claude/skills/brand-conformance/SKILL.md
+ * @skill extract-adr ../../.claude/skills/extract-adr/SKILL.md
  * @agent general-purpose
  */
 

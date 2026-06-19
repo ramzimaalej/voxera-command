@@ -1,8 +1,8 @@
 ---
 title: Strategy
-version: 2
+version: 3
 status: active
-updated: 2026-05-31
+updated: 2026-06-18
 owner: you
 ---
 
@@ -41,10 +41,6 @@ The product is a CRM. The differentiating capability is AI calling. The defensib
 Both motions share the product, engine, design system, voice stack (Twilio + Ultravox per [ADR-0007]), audit model ([ADR-0003]), agent roster ([ADR-0004]). They differ in lead source, sales-motion shape, vocabulary preset ([ADR-0005]), and compliance frame.
 
 Detailed playbook for the English-markets motion: [`vertical-strategy-english-markets.md`](./vertical-strategy-english-markets.md).
-
----
-
-## 2. The Wedge
 
 ---
 
@@ -225,5 +221,6 @@ To prevent strategy drift, these are explicit non-competitions:
 The architecture docs preserve the long-term vision; this doc enforces the short-term focus.
 
 ## Changelog
+- 2026-06-18 v3: removed a duplicated '## 2. The Wedge' header.
 - 2026-05-31 v2: added the two-motion structure (DACH + English-speaking markets in parallel) per [ADR-0009](../../decisions/ADR-0009-english-markets-parallel-motion.md). New §1a "Two parallel motions" table. §1 The Bet rewritten to acknowledge both motions. §2 Wedge expanded with the three English-market verticals (real estate Q1, home services Q2, insurance Q2+). §5 "What We Are Not" updated — softened the strict regulated-verticals-only clause; added explicit "no DACH cold-outbound" line. §7 Milestones expanded to include English-market MRR targets ($80K + $40K + $25K = $145K by month 12). Customer profile updated for the dual sales-motion + self-serve trial path. Backlink to ADR-0009 added in §1.
 - 2026-05-31 v1: imported from `/Users/ramzi/Downloads/files-6/strategy-v1.0.md`; frontmatter added (status active), inline "**Status:** v1.0" line removed in favor of frontmatter.

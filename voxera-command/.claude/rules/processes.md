@@ -2,7 +2,7 @@
 
 The **canonical** conventions for authoring any babysitter process across the workspace live in **`../../../voxera-os/.claude/rules/processes.md`** (moved there with the engineering processes per `ADR-0014`). Read that when writing or changing a process.
 
-This repo (`voxera-command`) holds only the **business / CEO** processes — `iterate-doc.js`, `iterate-vision.js`, `weekly-business-review.js` — in `.a5c/processes/`. They follow the same conventions. The engineering processes (`implement-feature`, `fix-bug`, `design-review`) live in `voxera-os/.a5c/processes/`.
+This repo (`voxera-command`) holds only the **business / CEO** processes — `iterate-doc.js`, `iterate-vision.js`, `weekly-business-review.js`, `revenue-pulse.js` — in `.a5c/processes/`. They follow the same conventions. The engineering processes (`implement-feature`, `fix-bug`, `design-review`) live in `voxera-os/.a5c/processes/`.
 
 ## The essentials (full detail in voxera-os)
 
