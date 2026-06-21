@@ -35,10 +35,10 @@ Every code repo (`voxera-crm`, `voxera-website`, `voxera-sales`, `voxera-infra`)
 
 | Folder | Meaning | Scale |
 |---|---|---|
-| `engineering-os/` | Durable engineering knowledge + governance. CRM: full (architecture, patterns, reference, standards, gates, domain, learning, roadmap, operations). Sites: lean (`patterns/` + `learning/`). | per repo |
-| `decisions/` | Technical ADRs, numbered from the `voxera-os` registry. One ADR home per repo. | all repos |
-| `features/` | Feature work, **folder-per-feature** with an anti-rot lifecycle (below). | all repos |
-| `.a5c/` · `.claude/` | Babysitter (`commands.json`, runs) · Claude Code harness (agents, rules, skills). | all repos |
+| `engineering-os/` | Durable engineering knowledge + governance. CRM: **full** (architecture, patterns, reference, standards, gates, domain, learning, roadmap, operations). Sites + infra: **lean** (`patterns/` + `learning/`). | all code repos |
+| `decisions/` | Technical ADRs, numbered from the `voxera-os` registry. One ADR home per repo. | all code repos |
+| `features/` | Feature work, **folder-per-feature** with an anti-rot lifecycle (below). | feature-driven repos (crm, website, sales) — **not** infra, which is stage-driven via `apply-infra` |
+| `.a5c/` · `.claude/` | Babysitter (`commands.json`, runs) · Claude Code harness (agents, rules, skills). | all code repos |
 
 **Feature anti-rot lifecycle (don't let `features/` become a bag of files):**
 `_template/` → active `FEAT-xxx-<slug>/` (spec, test-cases, plan, status, handoff) → **on DONE run `harvest-feature`** → durable knowledge promoted UP (patterns → `engineering-os/patterns/`, lessons → `learning/lessons-log`, debt → `tech-debt-inventory`, decisions → a `decisions/` ADR) → folder slimmed to `spec.md` + `outcome.md` and moved to `features/_archive/`. The `harvest-feature` process (`voxera-os/.a5c/processes/`) does this; working files stay recoverable in git history.
