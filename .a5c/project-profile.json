@@ -198,6 +198,11 @@
         "description": "Source of truth: vision, brand, roadmap, FEAT-xxx/BUG-xxx specs, company-level ADRs (decisions/ — the federated workspace ADR registry), operations, and the business babysitter process definitions (.a5c/processes/); engineering process definitions are canonical in voxera-os. Markdown-heavy; no application code."
       },
       {
+        "name": "voxera-os",
+        "path": "voxera-os",
+        "description": "Shared workspace OS (non-confidential). Canonical engineering babysitter processes (.a5c/processes/: implement-feature, fix-bug, design-review, refactor, apply-infra + _lib/), the process-authoring conventions (.claude/rules/processes.md), brand guidelines (docs/brand/), and the cross-repo ADR number registry (decisions/ADR-REGISTRY.md). Split from voxera-command per ADR-0014/0015 so non-execs never need the confidential repo."
+      },
+      {
         "name": "voxera-crm",
         "path": "voxera-crm",
         "description": "CRM product. Nx monorepo: apps/backend (NestJS 10 + GraphQL via Pothos/Apollo + Prisma 6/PostgreSQL) and apps/frontend (React 19 + Vite + Mantine + Redux Toolkit + urql). Shared libs/. Voice: Twilio, Telnyx, Ultravox. Depends on voxera-command."
@@ -206,6 +211,11 @@
         "name": "voxera-website",
         "path": "voxera-website",
         "description": "Marketing site. Astro 6 static-first on Cloudflare Pages; dynamic JSON endpoints as Pages Functions (contact, beta-signup, SendGrid, Turnstile). EN/DE i18n via public/i18n.json. Depends on voxera-command."
+      },
+      {
+        "name": "voxera-sales",
+        "path": "voxera-sales",
+        "description": "Guidaro sales-consulting site — a SEPARATE brand from Voxera (German DACH sales agency). Astro static-first on Cloudflare Pages (@astrojs/cloudflare adapter), German-only. Owns its local brand (docs/brand/) and ADRs (decisions/); must NOT reference Voxera brand/strategy/product. Invokes engineering processes from voxera-os; does not depend on voxera-command."
       },
       {
         "name": "voxera-infra",
@@ -224,7 +234,7 @@
       "voxera-crm/apps/frontend/src/main.tsx (React root; App.tsx + Router.tsx)",
       "voxera-website/src/pages/ (Astro routing) + functions/api/*.ts (Pages Functions)",
       "voxera-infra/environments/dev/main.tf (+ bootstrap/main.tf)",
-      "voxera-os/.a5c/processes/{implement-feature,fix-bug,iterate-doc}.js (engineering)",
+      "voxera-os/.a5c/processes/{implement-feature,fix-bug,design-review,refactor,apply-infra}.js (engineering)",
       "voxera-command/.a5c/processes/{iterate-vision,weekly-business-review}.js (business)"
     ],
     "dataFlow": "Engineering specs (FEAT/BUG) live in the code repo that implements them; company ADRs originate in voxera-command/decisions. A babysitter run is invoked from a code repo pointing at a spec path + an engineering process in voxera-os/.a5c/processes (business processes in voxera-command/.a5c/processes); journals land in the invoking repo's .a5c while process defs stay canonical. In the CRM, Prisma schema is the data-model source of truth -> Prisma client + Pothos types -> NestJS resolvers/services expose GraphQL -> frontend consumes via codegen + urql. PostgreSQL is the DB; Redis/BullMQ handle jobs; a transactional outbox drives async events. Website is static Astro on Cloudflare Pages; forms hit Pages Functions calling SendGrid (Turnstile + KV rate-limit). Terraform/GCP provisions runtime (Cloud Run, Cloud SQL, Secret Manager) with state in GCS."
