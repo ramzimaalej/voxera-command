@@ -5,13 +5,29 @@ This folder is a multi-repo workspace. Sibling repos, one shared brain.
 | Repo | Role | You run babysitter here to… |
 |------|------|------------------------------|
 | `voxera-command/` | Source of truth: vision, roadmap, features, bugs, **company-level decisions**, **business processes** (exec-only) | iterate on strategy/vision/brand/roadmap |
-| `voxera-os/` | Shared engineering OS: engineering babysitter processes, **brand guidelines**, the cross-repo **ADR registry** | author/iterate engineering processes, brand, allocate ADR numbers |
-| `voxera-crm/` | CRM product code — owns its **platform architecture (`docs/architecture/`) + technical ADRs (`decisions/`)** | build/iterate the CRM from specs |
+| `voxera-os/` | Shared **Workspace OS**: the generic engineering babysitter processes, **brand guidelines**, the cross-repo **ADR registry** | author/iterate engineering processes, brand, allocate ADR numbers |
+| `voxera-crm/` | CRM product code — owns its **product engineering OS (`engineering-os/`: standards + gates), platform architecture (`docs/`) + technical ADRs (`decisions/`)** | build/iterate the CRM from specs |
 | `voxera-infra/` | Infra/IaC code — owns its **infra ADRs (`decisions/`)** | build/iterate the cloud infrastructure |
 | `voxera-website/` | Marketing site code | build/iterate the website from specs |
 | `voxera-sales/` | Sales-consulting site code | build/iterate the sales site from specs |
 
 **Cohesion rule:** strategy/vision are owned by `voxera-command`, brand + engineering processes by `voxera-os` and *referenced* by the others; product/technical architecture and decisions are owned by the code repo they constrain and live there. Nothing forks.
+
+## The three OS layers
+
+Every artifact in this workspace belongs to exactly one of three operating-system layers. Most "duplication" you might spot across them is deliberate layering — **read the actual files before concluding two things are the same.**
+
+1. **Workspace OS — `voxera-os/` ("how we all work").** Shared, non-confidential: the *generic* engineering babysitter processes (`implement-feature`, `fix-bug`, `design-review`, `refactor`, `apply-infra` + `_lib/`), the process-authoring conventions (`.claude/rules/processes.md`), the brand guidelines (`docs/brand/`), and the cross-repo **ADR number registry** (`decisions/ADR-REGISTRY.md`). Any engineer or copywriter uses it without touching confidential business data.
+2. **Business OS — `voxera-command/` ("why / what, for the business"), exec-only.** Vision, strategy, roadmap, company-level ADRs, CEO operations, and the business processes (`iterate-doc`, `iterate-vision`, `weekly-business-review`, `revenue-pulse`). Confidential — non-execs never need it (ADR-0014/0015).
+3. **Product Engineering OS — one per code repo ("how THIS codebase must be built").** Lives *with the code it constrains* (the cohesion rule), never centralized. The richest is `voxera-crm/engineering-os/`: architecture standards + machine-readable checklists + **executable conformance gates** + reviewer agents + a subsystem ADR log + the bounded-context map + tech-debt/lessons ledgers. Sites and infra carry a lighter version.
+
+### Two names that mean two things — don't conflate
+
+- **"Engineering OS" lives at two altitudes.** `voxera-os` is the *shared* layer (how processes run + shared conventions). A code repo's `engineering-os/` is *product-specific* (how that one codebase must be structured). Both are legitimate; the product one correctly lives in the code repo, not in `voxera-os`.
+- **There are two ADR tiers, both intentional.** Workspace-**federated** ADRs are `ADR-NNNN` (globally numbered via the `voxera-os` registry, stored in each repo's `decisions/`). A code repo may *also* keep a **subsystem** ADR set for its own engineering standards (e.g. `voxera-crm/engineering-os/standards/adr-<concern>.md`, indexed by `engineering-os/decisions/adr-log.md`) — these are not workspace-numbered and are blessed by the federated ADR that authorizes the subsystem (ADR-0019). Rule of thumb: a decision that constrains the whole workspace → `ADR-NNNN`; a decision internal to one repo's standards → that repo's subsystem set.
+- **Processes can be generic *or* gate-aware.** `voxera-os` ships the generic baseline processes. A code repo with an `engineering-os/` may keep its own *gate-aware* processes that wire its conformance gates (e.g. the CRM's `feature-delivery` / `bug-fix` / `tech-debt-paydown`). The local gate-aware version is canonical *for that repo*; the `voxera-os` version is the baseline for repos without an engineering OS. This is not a fork.
+
+> **Before "fixing" the taxonomy:** renaming a subsystem ADR, centralizing a code repo's `engineering-os/` into `voxera-os`, or deleting a gate-aware process all *look* like cleanups but break deliberate layering. Confirm against the files first.
 
 ## Golden rules for any agent working here
 1. **Canonical strategy lives in `voxera-command/docs/`. Reference it, never fork it.** If the website or CRM needs a fact about the product, read it from there.
