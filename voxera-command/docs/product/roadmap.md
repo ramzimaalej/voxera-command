@@ -11,8 +11,8 @@ owner: you
 ## Now
 
 **English-markets motion** — [playbook](../strategy/vertical-strategy-english-markets.md):
-- [ ] **FEAT-001** — Translate vertical landing-page specs to Astro — foundational; blocks every vertical page below · spec: `voxera-website/features/FEAT-001-vertical-landing-templates-astro.md`
-- [ ] **FEAT-002** — Build /real-estate landing page — depends on FEAT-001 · spec: `voxera-website/features/FEAT-002-real-estate-landing-page.md`
+- [ ] **FEAT-001** — Translate vertical landing-page specs to Astro — foundational; blocks every vertical page below · spec: `voxera-website/features/FEAT-001-vertical-landing-templates-astro/spec.md`
+- [ ] **FEAT-002** — Build /real-estate landing page — depends on FEAT-001 · spec: `voxera-website/features/FEAT-002-real-estate-landing-page/spec.md`
 
 **DACH motion**:
 - [ ] Continuing on the existing motion — no new specs open right now
