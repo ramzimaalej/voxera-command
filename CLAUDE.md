@@ -6,7 +6,7 @@ This folder is a multi-repo workspace. Sibling repos, one shared brain.
 |------|------|------------------------------|
 | `voxera-command/` | Source of truth: vision, roadmap, features, bugs, **company-level decisions**, **business processes** (exec-only) | iterate on strategy/vision/brand/roadmap |
 | `voxera-os/` | Shared **Workspace OS**: the generic engineering babysitter processes, **brand guidelines**, the cross-repo **ADR registry** | author/iterate engineering processes, brand, allocate ADR numbers |
-| `voxera-crm/` | CRM product code — owns its **product engineering OS (`engineering-os/`: standards + gates), platform architecture (`docs/`) + technical ADRs (`decisions/`)** | build/iterate the CRM from specs |
+| `voxera-crm/` | CRM product code — owns its **product engineering OS (`engineering-os/`: architecture + patterns + standards + gates) + technical ADRs (`decisions/`)** | build/iterate the CRM from specs |
 | `voxera-infra/` | Infra/IaC code — owns its **infra ADRs (`decisions/`)** | build/iterate the cloud infrastructure |
 | `voxera-website/` | Marketing site code | build/iterate the website from specs |
 | `voxera-sales/` | Sales-consulting site code | build/iterate the sales site from specs |
