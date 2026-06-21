@@ -1,15 +1,17 @@
 ---
 id: ADR-0012
 title: Retain Atlas palette; brand accent and approval color are separate knobs
-status: accepted
+status: superseded
 date: 2026-06-04
 supersedes: []
-superseded_by: null
+superseded_by: ADR-0021
 affects:
   - ../voxera-os/docs/brand/brand-guidelines.md
   - ../voxera-website/src/styles/site.css
   - ../voxera-crm (in-product design tokens)
 ---
+
+> **Superseded by [[ADR-0021]]** (adopt the Voxera v2 design system) on 2026-06-21 — the Atlas palette + Fraunces/DM Sans are replaced by the v2 indigo/cyan/ember two-mode system. The "brand accent ≠ approval color" principle survives (v2 gives AI its own reserved cyan). Retained for history.
 
 ## Context
 
