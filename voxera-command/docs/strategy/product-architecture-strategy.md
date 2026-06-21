@@ -1,190 +1,168 @@
 ---
 title: Product Architecture Strategy
-version: 1
+version: 2
 status: active
-updated: 2026-06-16
+updated: 2026-06-20
 owner: you
 ---
 
-# Product Architecture Strategy — v1.0
+# Product Architecture Strategy
 
-> **Confidential — exec only.** This doc frames the CRM platform architecture (in `../../../voxera-crm/docs/architecture/`) but contains business specifics (customers, milestones), so it lives in `voxera-command`, not in the code repo. Engineer-facing architecture docs reference this conceptually, not by link.
+> **Confidential — exec only.** This is the *architecture-facing* strategy: the bridge between the
+> canonical company strategy and the CRM platform architecture docs (in
+> `../../../voxera-crm/docs/architecture/` + `voxera-crm/engineering-os/`). It contains business
+> specifics, so it lives in `voxera-command`, not the code repo. Engineer-facing architecture docs
+> reference it conceptually, not by link.
 >
-> **Cohesion:** this is the *product/architecture* strategy. The **canonical company strategy is [`strategy.md`](./strategy.md)** and wins on company strategy. Reconcile the two via `iterate-vision`; do not let them fork.
-
-This document sits above the architecture docs and frames them. The architecture docs answer "how does the system work." This one answers "what are we building, for whom, why now, and what are we not."
-
-When this doc and the architecture docs disagree, this one wins.
-
----
-
-## 1. The Bet, in One Sentence
-
-We are building an **AI-native CRM for outbound-heavy regulated verticals, starting with Pflegebox in DACH, on a platform architecture that lets us expand into adjacent verticals without rebuilding**.
-
-The product is a CRM. The differentiating capability is AI calling. The defensible moat is vertical depth in regulated markets that generalists can't easily enter. The optionality is the OS underneath.
+> **Precedence:** the canonical company strategy is [`strategy.md`](./strategy.md) and it **wins on
+> company strategy** (the bet, the two motions, verticals, customer profile, milestones, what-we-are-not).
+> This doc **does not restate** those — it points to them, and adds only what the *architecture* must do
+> to serve them. This doc in turn **wins over the architecture docs** on architecture strategy. So:
+> `strategy.md` › this doc › the architecture docs. (Reconciled to the two-motion strategy 2026-06-20;
+> previously this doc carried the superseded single-motion v1.0 framing.)
 
 ---
 
-## 2. The Wedge
+## 1. The architecture bet
 
-### Vertical and geography
+The company bet — an AI-native CRM with AI calling as the core capability, run via **two parallel
+motions** (DACH/Pflegebox + English-speaking markets), on a workflow-kind-agnostic platform — is
+stated canonically in [`strategy.md`](./strategy.md) §1 and §1a. Read it there.
 
-- **v1 vertical:** Pflegebox (free monthly care supplies in Germany funded by Pflegekassen under § 40 SGB XI). Two paying customers already, commission-based.
-- **v2 verticals (year 2):** Adjacent DACH care/insurance — Hörgeräte (hearing aids), private health insurance, care services, mobility aids.
-- **v3 verticals (year 3+):** English-speaking regulated markets (US/UK Medicare-adjacent, dental, specific insurance lines) — conditional on v1/v2 success.
+For architecture purposes, that bet reduces to four wagers the platform is built to honor:
 
-### Sales motion
+- **Structured business descriptions drive predictable agent behavior** — better than generic agents discovering the domain, better than hand-configured CRMs that don't know it.
+- **Agent reliability comes from constraint, not capability** — fixed roster, scoped tools, autonomy ceilings, mandatory diff review, full audit.
+- **Observability beats automation** — users tolerate AI mistakes when every action is visible with rationale and easy to intervene on.
+- **The OS underneath is preserved through architectural discipline, not shipped breadth** — the DSL, engine, audit, agent roster, and real-time infra are process-agnostic from day one; v1 ships one workflow kind (`linear_funnel`), other kinds are extension points.
 
-- **Outbound-heavy.** AI agents place outbound calls to inbound leads (paid search, partner referral, marketing lists) and qualify them through the funnel.
-- **Hybrid close.** AI handles qualification; human handles closing where regulation or trust requires it.
-- **Volume profile:** customers run 1k–20k+ calls/day per workspace.
-
-### Buyer and user
-
-- **Economic buyer:** CEO at SMB (5–30 person company).
-- **User-buyer / day-to-day operator:** marketing manager, ops manager, or sales lead — whoever owns the outbound function.
-- **Both are designed for.** CEO buys based on ROI demos and commission economics. Marketing/ops manager judges the daily product.
-
-### Customer profile
-
-- **Company size:** 10–30 reps (where "reps" includes AI agents replacing human SDRs).
-- **Geography:** Germany/Austria/Switzerland for v1. UK/US for v2-3.
-- **Sales cycle from first contact to signed contract:** 1–2 weeks.
-- **Setup model:** 5-minute customer-facing setup call (we configure the rest with the Context Copilot behind the scenes, not pure self-serve).
+> *Wedge + workflow-kind-agnostic-platform decision: [ADR-0008](../../decisions/ADR-0008-pflegebox-wedge-on-workflow-agnostic-platform.md). Parallel English-markets motion: [ADR-0009](../../decisions/ADR-0009-english-markets-parallel-motion.md).*
 
 ---
 
-## 3. Why This Wedge Wins
+## 2. What the architecture must support
 
-### Why regulated verticals
+The full wedge, buyer, customer profile, and geographies are in [`strategy.md`](./strategy.md) §2 and §1a.
+The load-bearing facts the **architecture** is sized for:
 
-- **Generalist competitors (HubSpot, Pipedrive, Close, Salesforce SMB) won't enter.** The compliance, paperwork integration, and vertical workflow depth aren't worth their effort.
-- **AI-SDR specialists (Clay, 11x, Artisan, Regie) compete on volume and outreach, not vertical depth.** They sell outreach tools, not CRMs that handle the full lifecycle including paperwork and signed enrollments.
-- **AI voice infrastructure (Vapi, Retell, Bland) sells the runtime, not the workflow.** Customers using their products still need a CRM on top. We're that CRM, with the voice agent baked in.
-- **Regulated verticals pay for compliance.** Pflegekassen paperwork integration, German § 7 UWG opt-in handling, GDPR Art. 9 special-category data — these are real costs that generalists avoid and customers will pay for.
-
-### Why DACH first
-
-- Two paying customers already.
-- German-language voice agent tuning gives us a head start on competitors.
-- DACH care market has clear adjacent verticals — Hörgeräte, private insurance, mobility — with similar buyer profiles and paperwork patterns.
-- Lower competitive density vs. English-speaking markets where AI CRM tools are saturated.
-
-### Why outbound calling specifically
-
-- It's the highest-leverage capability for these customers — outbound qualification is the bottleneck in their funnel.
-- AI calling is genuinely differentiated right now. Text-based AI is commodity. Voice agents that hold real conversations and handle objections in German are still a real engineering achievement.
-- Customers can attribute revenue directly to the calling capability, which makes the ROI case unambiguous (commission models are possible because of this).
+- **Two motions on one product.** Same engine, audit model ([ADR-0003]), agent roster ([ADR-0004]), voice stack ([ADR-0007]); they differ only in lead source, vocabulary preset ([ADR-0005]), and compliance frame. The architecture must not fork per motion.
+- **Outbound-heavy + hybrid close.** AI places outbound calls to inbound leads and qualifies; humans close where regulation or trust requires. Both an AI qualifier and a clean AI→human handoff are first-class.
+- **High volume.** 1k–20k+ calls/day per workspace — cost-per-call discipline and per-workspace rate/cost budgets are architectural requirements, not tuning.
+- **Two onboarding paths.** A 5-minute customer-facing setup call for DACH (Context Copilot behind the scenes) **and** a ~30-minute self-serve trial with per-vertical templates for English markets. Templates + Copilot-interview both ship.
+- **Span of customer size.** Solo agents (English-markets real estate) through 30-rep DACH SMBs, where "reps" includes AI agents.
+- **Two compliance frames.** UWG §7 / GDPR Art. 9 / Pflegekasse paperwork (DACH) and TCPA / CMS / state rules (English markets), declared per workspace in the Business Context — never hard-coded.
 
 ---
 
-## 4. The Moat
+## 3. Why outbound calling is the center of gravity
 
-Three layers, deepening over time:
+(Why *regulated verticals* and *why DACH first* are company-strategy questions — see [`strategy.md`](./strategy.md) §3. The architecture-relevant reasons calling is the core capability:)
+
+- It's the highest-leverage capability for these customers — outbound qualification is the funnel bottleneck.
+- AI calling is genuinely differentiated today: text-based AI is commodity; voice agents that hold real conversations and handle objections (in German *and* English) are still a real engineering achievement — and the moat we invest the platform in.
+- Revenue attributes directly to the calling capability, which is what makes commission economics (and the ROI demo) work.
+
+---
+
+## 4. The moat, as architecture
+
+Three layers, deepening over time. (The *business* moat framing is in [`strategy.md`](./strategy.md) §4; this is how the platform realizes it.)
 
 ### Vertical depth (immediate)
-
-- Pflegekasse paperwork integration (partner PDF mappings, signature flows, submission workflows)
-- German call disclosure rules, opt-in verification, DNC scrubbing
-- Pflegegrad-aware qualification flows
-- German-tuned voice agent prompts, brand voice, cultural norms (Sie/du, dignity, professionalism)
-- Outcome definitions that match how the vertical actually thinks about wins and losses
+- Per-vertical compliance + paperwork as configuration: Pflegekasse PDF mappings / signature / submission flows (DACH); TCPA consent + DNC discipline (English markets).
+- Vertical-tuned voice-agent prompts, brand voice, cultural norms (Sie/du and dignity for DACH; speed-of-response scripts for RE/HS).
+- Outcome definitions and reason taxonomies that match how each vertical actually scores wins and losses.
 
 ### AI calling depth (year 1)
+- Voice-agent runtime tuned for the domain — voicemail detection, calendar booking mid-call, mid-call CRM lookups, mid-call human escalation, live observability.
+- Cost-per-call discipline that lets customers run high volume profitably.
+- The Critic/Promoter loop improving prompts continuously from real call data (year 2+).
 
-- The voice agent runtime tuned for this domain — voicemail detection, calendar booking during calls, mid-call CRM lookups, mid-call escalation to human, real-time observability
-- Cost-per-call discipline that lets customers run high volume profitably
-- The Critic/Promoter loop improving voice agent prompts continuously from real call data (year 2+)
-
-### OS underneath (year 2+)
-
-- The architecture is workflow-kind-agnostic from day one. v1 ships `linear_funnel` only, but the engine, audit, agent roster, and DSL are generic.
+### OS underneath (proven across both motions)
+- Workflow-kind-agnostic from day one: engine, audit, agent roster, DSL all generic; v1 ships `linear_funnel` only.
 - Custom objects are workspace-scoped, decoupled from specific workflows.
-- New verticals (Hörgeräte, private insurance) get added by configuring new workflow definitions, new operator definitions, and new compliance rules — not by rebuilding.
-- The OS is invisible to v1 customers but enables fast expansion when the time comes.
+- A new vertical (Hörgeräte, private insurance, or a new English-market line) is added by configuring workflow + operator + compliance definitions — **not** by rebuilding. The year-1 proof point is the same engine demonstrably serving four verticals across two motions (Pflegebox + real estate + home services + insurance) without a fork.
 
 ---
 
-## 5. What We Are Not
+## 5. Architecture non-goals
 
-To prevent strategy drift, these are explicit non-competitions:
+Market/positioning non-competes (not a generic SMB CRM, not voice infrastructure, not an AI-SDR tool,
+SMB-not-enterprise, no DACH cold-outbound) are in [`strategy.md`](./strategy.md) §5. The **architecture-level**
+non-goals (from `architecture-vision-and-principles-v1.0` §4):
 
-- **We are not a generic SMB CRM.** HubSpot/Pipedrive/Close own that space; we don't fight there.
-- **We are not a voice agent infrastructure company.** Vapi/Retell/Bland sell runtimes; we use Ultravox as runtime and compete one level up.
-- **We are not an AI SDR tool.** Clay/11x/Artisan sell outreach automation; we sell the CRM that holds the full lifecycle.
-- **We are not a horizontal SMB OS.** Not yet. The OS underneath is pivot insurance and year 2+ optionality, not the v1 positioning.
-- **We are not selling to enterprise.** SMB only in v1-2. Enterprise has different compliance, procurement, and integration requirements.
-- **We are not selling outside regulated verticals in v1.** A generic B2B SaaS customer asking for our product gets politely declined or redirected — they're not the ICP.
-
----
-
-## 6. Funding Posture
-
-- **Bootstrapped.** Cash flow from Pflegebox commission revenue funds operations.
-- **No external capital raised.** This is a structural choice for the next 12 months; revisit if growth exceeds what bootstrapping can fund.
-- **Implication:** every architecture and product decision needs to defend its cost. The OS underneath has to be cheap to preserve, not expensive. We're paying for it in code discipline, not in feature delays.
+- **No general-purpose code execution in workflows.** Declarative DSL, not run-arbitrary-JS (Zapier/n8n own that).
+- **No marketplace of community-built agents.** Roster fixed in code.
+- **No custom model training.** Prompts + Business Context are the customization surface.
+- **No no-code form builder.** JSON Forms + Mantine renderer; we don't reinvent.
+- **No CRM that works without a Business Context.** An empty-Context workspace is broken by design.
+- **No zero-touch automation / agent swarms / dynamic spawning.** Proposal-and-approve; fixed roster.
 
 ---
 
-## 7. Milestones
+## 6. Funding posture — the architecture implication
+
+Bootstrapped, no external capital for now (see [`strategy.md`](./strategy.md) §6). For architecture this
+means one rule: **every decision defends its cost.** The OS underneath has to be *cheap to preserve* —
+paid for in code discipline (the "does this generalize?" rejection criterion), not in feature delays.
+
+---
+
+## 7. Architecture milestones
+
+Business targets (ARR run-rate, per-vertical MRR, customer counts) are in [`strategy.md`](./strategy.md) §7.
+The **platform/architecture** milestones that must land to make those targets buildable:
 
 ### 12 months
-
-- Pflegebox customers scaled to operational maturity on the platform; commission revenue covers operating cost.
-- 3–5 additional Pflegebox-shaped customers signed (same vertical, similar buyer profile).
-- Voice calling at production reliability: voicemail handling, calendar booking, number pool management, live observability.
-- Compliance posture documented and defensible for DACH operations.
-- First Critic findings on voice agent prompts going through Promoter review.
-- Internal architecture confirmed workflow-kind-agnostic; one experimental non-Pflegebox workflow exists in a dev workspace as proof.
+- Voice calling at production reliability for **DE and EN**: voicemail handling, calendar booking, number-pool management, live observability.
+- Compliance posture documented and defensible for both frames (UWG §7 / GDPR / Pflegekasse; TCPA).
+- First Critic findings on voice-agent prompts going through Promoter review.
+- **Workflow-kind-agnostic claim proven** — the engine demonstrably serves four verticals across two motions without forking (the architecture claim in [ADR-0008] becomes a demonstrated fact).
 
 ### 24 months
-
-- Expanded to one adjacent DACH vertical (likely Hörgeräte or private health insurance).
-- 15–25 paying customers total across verticals.
-- Multi-language voice agents (DE primary, EN secondary, FR/IT optional).
+- One adjacent DACH vertical configured (Hörgeräte or private health insurance) — config, not rebuild.
+- Multi-language voice agents (DE + EN first-class; FR/IT optional on DACH expansion).
 - Promoter automation tier 2 (low-risk auto-approval).
 - Reporter agent shipped; user-defined reports operational.
-- Onboarding self-serve enough for a Pflegebox customer to set up in <60 minutes with Copilot assistance.
+- Onboarding self-serve enough for any vertical to set up in <60 minutes with per-vertical templates + Copilot.
 
 ### 36 months
-
-- 3+ verticals in DACH operational.
-- First English-speaking customers in regulated verticals (US dental, UK private health, or similar).
-- Voice calling capability competitive with the strongest voice-agent specialists.
-- The OS underneath is publicly described as a feature ("our platform handles your full workflow, not just your CRM").
-- Decision to make: continue bootstrapping or raise growth capital for horizontal expansion.
+- 3+ DACH verticals operational; English-markets verticals mature (see [`strategy.md`](./strategy.md) §7).
+- Voice calling competitive with the strongest voice-agent specialists.
+- The OS underneath is publicly described as a feature ("handles your full workflow, not just your CRM").
 
 ---
 
-## 8. Strategic Risks
+## 8. Architecture-relevant risks
+
+Business/market risks and mitigations are in [`strategy.md`](./strategy.md) §8. The two that are
+fundamentally *architecture* bets:
 
 | Risk | Mitigation |
 |---|---|
-| **Voice incumbents (Vapi/Retell) move up-stack into CRM territory** | Our moat is vertical depth and full-lifecycle CRM, not voice runtime. We use Ultravox; if voice gets commoditized further, that benefits us. |
-| **HubSpot/generalists ship AI calling** | They'll do it shallow and generic. Our vertical depth (Pflegekasse paperwork, German compliance) is unreachable for them in any reasonable timeframe. |
-| **DACH regulatory shift restricts AI cold-calling** | We're operating in inbound-then-outbound, not cold-calling, which is the higher-regulatory-risk zone. We track regulations and adjust. |
-| **Bootstrapping limits speed of product development** | Pflegebox revenue is real and growing; we ship what we can fund. We refuse to over-build. |
-| **OS preservation slows v1** | Architecture is mostly generic for free; rejection criterion for new features is "does this generalize?" The OS bet is a discipline, not a feature. |
-| **We hit Pflegebox PMF and don't expand** | That's an acceptable outcome. A profitable, focused DACH vertical company is a good business. The OS is option value, not obligation. |
-| **Expansion to adjacent vertical fails** | We learn the wedge isn't generalizable as we thought. Decide: deepen Pflegebox, try another adjacent vertical, or rethink the OS bet. |
+| **Voice incumbents (Vapi/Retell) move up-stack into CRM territory** | Our moat is vertical depth + full-lifecycle CRM, not voice runtime. We consume a runtime ([ADR-0007]); further voice commoditization benefits us. |
+| **OS preservation slows v1** | The architecture is mostly generic for free; the rejection criterion for new features is "does this generalize?". The OS bet is a discipline, not a feature — so it costs code clarity, not shipped time. |
 
 ---
 
-## 9. How This Doc Relates to the Architecture Docs
+## 9. How this maps to the architecture docs
 
-| Strategy doc says | Architecture doc implications |
+This is the unique job of this doc — translating the strategy into architecture obligations:
+
+| Strategy says | Architecture implication |
 |---|---|
-| AI-native CRM, voice-calling-first | New pillar: `voice-calling-v1.0.md` |
-| OS underneath, vertical on top | Vocabulary generalization across all docs (Workflow not Pipeline, Process Instance not Lead at DSL level; CRM surface keeps user-facing labels) |
-| Workflow-kind-agnostic | DSL declares `workflow_kind`; v1 ships `linear_funnel` only |
+| AI-native CRM, voice-calling-first | Dedicated pillar: `voice-calling-v1.0.md` |
+| Two motions, one product | No per-motion fork: shared engine/audit/roster; motion differs only by vocabulary preset, lead source, compliance config |
+| OS underneath, vertical on top | Generic internal vocabulary (Workflow / Process Instance / Workflow Stage at the DSL level); CRM-flavored labels (Lead / Pipeline / Stage) at the user surface |
+| Workflow-kind-agnostic | DSL declares `workflow_kind`; v1 ships `linear_funnel` only; other kinds are documented extension points |
 | Decoupled objects from workflows | Custom objects are workspace-scoped, referenced by workflows |
 | Multiple terminal stages per workflow | Terminal stages declare disposition + reason taxonomy (generalizes lost-reasons) |
-| Pflegebox is the v1 forcing function | Pflegebox example throughout the docs; v2 vertical examples deferred |
-| 5-minute setup + Copilot behind the scenes | Context Copilot interview can be shorter for known verticals; templates ship as starting points |
-| Bootstrapped, no v1 budget for nice-to-haves | v1 build order ruthlessly slim; Critic/Promoter/Reporter/sealed-forms/mini-forms/eval-set as v2+ |
+| Per-workspace compliance frames | Compliance declared in the Business Context drives operational policy; no one-size-fits-all |
+| 5-min setup (DACH) + self-serve trial (English markets) | Context Copilot interview shortens for known verticals; per-vertical templates ship as starting points |
+| Bootstrapped, cost-disciplined | v1 build order ruthlessly slim; Critic/Promoter/Reporter/sealed-forms/eval-set are v2+ |
 
-The architecture docs preserve the long-term vision; this doc enforces the short-term focus.
+The architecture docs preserve the long-term vision; `strategy.md` enforces the short-term focus; this doc keeps the two in sync.
 
 ## Changelog
+- 2026-06-20 v2: reconciled to the two-motion strategy ([`strategy.md`](./strategy.md) v3 / [ADR-0009]). Removed the superseded single-motion framing (English markets as a year-3+ conditional "v3"; DACH-regulated-only; "10–30 reps"; DACH-only milestones) and the duplicated company-strategy sections (wedge, why-wins, what-we-are-not, business milestones, business risks) — these now point to `strategy.md` as canonical. Refocused the doc on its distinct role: the architecture-facing strategy (architecture bet, requirements, moat-as-architecture, architecture non-goals/milestones/risks, and the strategy→architecture mapping). Added explicit precedence (`strategy.md` › this doc › architecture docs).
 - 2026-06-16 v1: relocated from voxera-crm architecture set into the confidential command repo (exec-only). Added frontmatter + cohesion banner pointing to canonical company strategy.md.
