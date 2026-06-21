@@ -29,10 +29,24 @@ Every artifact in this workspace belongs to exactly one of three operating-syste
 
 > **Before "fixing" the taxonomy:** renaming a subsystem ADR, centralizing a code repo's `engineering-os/` into `voxera-os`, or deleting a gate-aware process all *look* like cleanups but break deliberate layering. Confirm against the files first.
 
+### Standard code-repo skeleton
+
+Every code repo (`voxera-crm`, `voxera-website`, `voxera-sales`, `voxera-infra`) uses the same governance vocabulary, scaled to need — so the top level reads the same everywhere:
+
+| Folder | Meaning | Scale |
+|---|---|---|
+| `engineering-os/` | Durable engineering knowledge + governance. CRM: full (architecture, patterns, reference, standards, gates, domain, learning, roadmap, operations). Sites: lean (`patterns/` + `learning/`). | per repo |
+| `decisions/` | Technical ADRs, numbered from the `voxera-os` registry. One ADR home per repo. | all repos |
+| `features/` | Feature work, **folder-per-feature** with an anti-rot lifecycle (below). | all repos |
+| `.a5c/` · `.claude/` | Babysitter (`commands.json`, runs) · Claude Code harness (agents, rules, skills). | all repos |
+
+**Feature anti-rot lifecycle (don't let `features/` become a bag of files):**
+`_template/` → active `FEAT-xxx-<slug>/` (spec, test-cases, plan, status, handoff) → **on DONE run `harvest-feature`** → durable knowledge promoted UP (patterns → `engineering-os/patterns/`, lessons → `learning/lessons-log`, debt → `tech-debt-inventory`, decisions → a `decisions/` ADR) → folder slimmed to `spec.md` + `outcome.md` and moved to `features/_archive/`. The `harvest-feature` process (`voxera-os/.a5c/processes/`) does this; working files stay recoverable in git history.
+
 ## Golden rules for any agent working here
 1. **Canonical strategy lives in `voxera-command/docs/`. Reference it, never fork it.** If the website or CRM needs a fact about the product, read it from there.
 2. **Process definitions are split by audience.** Engineering processes (`implement-feature`, `fix-bug`, `design-review`) live in `voxera-os/.a5c/processes/` and code repos invoke them by relative path (`../voxera-os/...`); business processes (`iterate-doc`, `iterate-vision`, `weekly-business-review`, `revenue-pulse`) live in `voxera-command/.a5c/processes/`. Do not copy them.
-3. **Specs drive work.** A feature is a `FEAT-xxx.md`; a bug is a `BUG-xxx.md`. Implementation runs take a spec path as input.
+3. **Specs drive work.** In code repos a feature is a folder `features/FEAT-xxx-<slug>/` (with `spec.md`); a bug is a `BUG-xxx`. Implementation runs take a spec path as input. DONE features are harvested + archived (see the lifecycle above), not left to pile up.
 4. **Real decisions get an ADR — federated by domain.** Strategy/brand/vision/governance ADRs live in `voxera-command/decisions/`; product/technical ADRs live in the owning code repo's `decisions/` (CRM in `voxera-crm/decisions/`, infra in `voxera-infra/decisions/`). Numbers are global + permanent across the workspace; `voxera-os/decisions/ADR-REGISTRY.md` is the registry + allocator. Babysitter's run journal is execution history; ADRs are the strategic "why".
 5. **Versioning = git.** One canonical file per doc with frontmatter (`version`, `status`, `updated`) + a changelog block. Freeze milestones with annotated tags (e.g. `vision-v2`), not `vision-final-final.md`.
 
