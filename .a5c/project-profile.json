@@ -200,7 +200,7 @@
       {
         "name": "voxera-os",
         "path": "voxera-os",
-        "description": "Shared workspace OS (non-confidential). Canonical engineering babysitter processes (.a5c/processes/: implement-feature, fix-bug, design-review, refactor, apply-infra + _lib/), the process-authoring conventions (.claude/rules/processes.md), brand guidelines (docs/brand/), and the cross-repo ADR number registry (decisions/ADR-REGISTRY.md). Split from voxera-command per ADR-0014/0015 so non-execs never need the confidential repo."
+        "description": "Shared workspace OS (non-confidential). Canonical engineering babysitter processes (.a5c/processes/: build-feature, fix-bug, design-review, refactor, apply-infra + _lib/), the process-authoring conventions (.claude/rules/processes.md), brand guidelines (docs/brand/), and the cross-repo ADR number registry (decisions/ADR-REGISTRY.md). Split from voxera-command per ADR-0014/0015 so non-execs never need the confidential repo."
       },
       {
         "name": "voxera-crm",
@@ -234,7 +234,7 @@
       "voxera-crm/apps/frontend/src/main.tsx (React root; App.tsx + Router.tsx)",
       "voxera-website/src/pages/ (Astro routing) + functions/api/*.ts (Pages Functions)",
       "voxera-infra/environments/dev/main.tf (+ bootstrap/main.tf)",
-      "voxera-os/.a5c/processes/{implement-feature,fix-bug,design-review,refactor,apply-infra}.js (engineering)",
+      "voxera-os/.a5c/processes/{build-feature,fix-bug,design-review,refactor,apply-infra}.js (engineering)",
       "voxera-command/.a5c/processes/{iterate-vision,weekly-business-review}.js (business)"
     ],
     "dataFlow": "Engineering specs (FEAT/BUG) live in the code repo that implements them; company ADRs originate in voxera-command/decisions. A babysitter run is invoked from a code repo pointing at a spec path + an engineering process in voxera-os/.a5c/processes (business processes in voxera-command/.a5c/processes); journals land in the invoking repo's .a5c while process defs stay canonical. In the CRM, Prisma schema is the data-model source of truth -> Prisma client + Pothos types -> NestJS resolvers/services expose GraphQL -> frontend consumes via codegen + urql. PostgreSQL is the DB; Redis/BullMQ handle jobs; a transactional outbox drives async events. Website is static Astro on Cloudflare Pages; forms hit Pages Functions calling SendGrid (Turnstile + KV rate-limit). Terraform/GCP provisions runtime (Cloud Run, Cloud SQL, Secret Manager) with state in GCS."

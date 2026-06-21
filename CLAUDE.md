@@ -17,7 +17,7 @@ This folder is a multi-repo workspace. Sibling repos, one shared brain.
 
 Every artifact in this workspace belongs to exactly one of three operating-system layers. Most "duplication" you might spot across them is deliberate layering — **read the actual files before concluding two things are the same.**
 
-1. **Workspace OS — `voxera-os/` ("how we all work").** Shared, non-confidential: the *generic* engineering babysitter processes (`implement-feature`, `fix-bug`, `design-review`, `refactor`, `apply-infra` + `_lib/`), the process-authoring conventions (`.claude/rules/processes.md`), the brand guidelines (`docs/brand/`), and the cross-repo **ADR number registry** (`decisions/ADR-REGISTRY.md`). Any engineer or copywriter uses it without touching confidential business data.
+1. **Workspace OS — `voxera-os/` ("how we all work").** Shared, non-confidential: the *generic* engineering babysitter processes — the work-type taxonomy `design-feature` → `build-feature` · `improve-feature` · `fix-bug` · `pay-down-debt`, plus supporting `design-review` · `apply-infra` · `harvest-feature` (+ `_lib/`) — the process-authoring conventions (`.claude/rules/processes.md`), the brand guidelines (`docs/brand/`), and the cross-repo **ADR number registry** (`decisions/ADR-REGISTRY.md`). Any engineer or copywriter uses it without touching confidential business data.
 2. **Business OS — `voxera-command/` ("why / what, for the business"), exec-only.** Vision, strategy, roadmap, company-level ADRs, CEO operations, and the business processes (`iterate-doc`, `iterate-vision`, `weekly-business-review`, `revenue-pulse`). Confidential — non-execs never need it (ADR-0014/0015).
 3. **Product Engineering OS — one per code repo ("how THIS codebase must be built").** Lives *with the code it constrains* (the cohesion rule), never centralized. The richest is `voxera-crm/engineering-os/`: architecture standards + machine-readable checklists + **executable conformance gates** + reviewer agents + a subsystem ADR log + the bounded-context map + tech-debt/lessons ledgers. Sites and infra carry a lighter version.
 
@@ -25,7 +25,7 @@ Every artifact in this workspace belongs to exactly one of three operating-syste
 
 - **"Engineering OS" lives at two altitudes.** `voxera-os` is the *shared* layer (how processes run + shared conventions). A code repo's `engineering-os/` is *product-specific* (how that one codebase must be structured). Both are legitimate; the product one correctly lives in the code repo, not in `voxera-os`.
 - **There are two ADR tiers, both intentional.** Workspace-**federated** ADRs are `ADR-NNNN` (globally numbered via the `voxera-os` registry, stored in each repo's `decisions/`). A code repo may *also* keep a **subsystem** ADR set for its own engineering standards (e.g. `voxera-crm/engineering-os/standards/adr-<concern>.md`, indexed by `engineering-os/decisions/adr-log.md`) — these are not workspace-numbered and are blessed by the federated ADR that authorizes the subsystem (ADR-0019). Rule of thumb: a decision that constrains the whole workspace → `ADR-NNNN`; a decision internal to one repo's standards → that repo's subsystem set.
-- **Processes can be generic *or* gate-aware.** `voxera-os` ships the generic baseline processes. A code repo with an `engineering-os/` may keep its own *gate-aware* processes that wire its conformance gates (e.g. the CRM's `feature-delivery` / `bug-fix` / `tech-debt-paydown`). The local gate-aware version is canonical *for that repo*; the `voxera-os` version is the baseline for repos without an engineering OS. This is not a fork.
+- **Processes can be generic *or* gate-aware.** `voxera-os` ships the generic baseline processes. A code repo with an `engineering-os/` may keep its own *gate-aware* processes that wire its conformance gates (e.g. the CRM's gate-aware `build-feature` / `fix-bug` / `pay-down-debt`). The local gate-aware version is canonical *for that repo*; the `voxera-os` version is the baseline for repos without an engineering OS. This is not a fork.
 
 > **Before "fixing" the taxonomy:** renaming a subsystem ADR, centralizing a code repo's `engineering-os/` into `voxera-os`, or deleting a gate-aware process all *look* like cleanups but break deliberate layering. Confirm against the files first.
 
@@ -45,14 +45,14 @@ Every code repo (`voxera-crm`, `voxera-website`, `voxera-sales`, `voxera-infra`)
 
 ## Golden rules for any agent working here
 1. **Canonical strategy lives in `voxera-command/docs/`. Reference it, never fork it.** If the website or CRM needs a fact about the product, read it from there.
-2. **Process definitions are split by audience.** Engineering processes (`implement-feature`, `fix-bug`, `design-review`) live in `voxera-os/.a5c/processes/` and code repos invoke them by relative path (`../voxera-os/...`); business processes (`iterate-doc`, `iterate-vision`, `weekly-business-review`, `revenue-pulse`) live in `voxera-command/.a5c/processes/`. Do not copy them.
+2. **Process definitions are split by audience.** Engineering processes (`build-feature`, `fix-bug`, `design-review`) live in `voxera-os/.a5c/processes/` and code repos invoke them by relative path (`../voxera-os/...`); business processes (`iterate-doc`, `iterate-vision`, `weekly-business-review`, `revenue-pulse`) live in `voxera-command/.a5c/processes/`. Do not copy them.
 3. **Specs drive work.** In code repos a feature is a folder `features/FEAT-xxx-<slug>/` (with `spec.md`); a bug is a `BUG-xxx`. Implementation runs take a spec path as input. DONE features are harvested + archived (see the lifecycle above), not left to pile up.
 4. **Real decisions get an ADR — federated by domain.** Strategy/brand/vision/governance ADRs live in `voxera-command/decisions/`; product/technical ADRs live in the owning code repo's `decisions/` (CRM in `voxera-crm/decisions/`, infra in `voxera-infra/decisions/`). Numbers are global + permanent across the workspace; `voxera-os/decisions/ADR-REGISTRY.md` is the registry + allocator. Babysitter's run journal is execution history; ADRs are the strategic "why".
 5. **Versioning = git.** One canonical file per doc with frontmatter (`version`, `status`, `updated`) + a changelog block. Freeze milestones with annotated tags (e.g. `vision-v2`), not `vision-final-final.md`.
 
 ## Typical loops
 - **Vision/brand/roadmap:** `cd voxera-command && /babysitter:call iterate the vision doc: <what you want to change>`
-- **CRM feature:** `cd voxera-crm && /babysitter:call --process ../voxera-os/.a5c/processes/implement-feature.js#process implement features/FEAT-007-pipeline-view/spec.md`
+- **CRM feature:** `cd voxera-crm && /babysitter:call --process ../voxera-os/.a5c/processes/build-feature.js#process implement features/FEAT-007-pipeline-view/spec.md`
 - **Website fix:** `cd voxera-website && /babysitter:call --process ../voxera-os/.a5c/processes/fix-bug.js#process fix features/BUG-014-hero-cls.md`
 
 <!-- BEGIN babysitter (project-install) -->
@@ -61,8 +61,8 @@ Every code repo (`voxera-crm`, `voxera-website`, `voxera-sales`, `voxera-infra`)
 This workspace has a babysitter project profile at `.a5c/project-profile.json` (generated by `project-install`). It complements the "Typical loops" above — those are the everyday entry points; this section is the operating contract.
 
 **Canonical processes** are split by audience and invoked by relative path — never copy them into a repo. Engineering processes live in `voxera-os/.a5c/processes/` (invoked as `../voxera-os/...`):
-- `design-review.js` — engineering design gate: per-discipline design → adversarial-review → converge loops producing a design dossier. Ships the **DDD → ERD → Prisma → GraphQL → Webhook → AI-agent → Analytics → OO → React → TDD** lenses (`*-designer`/`*-reviewer` agents in `voxera-crm/.claude/agents/`). Runs standalone, and gates `implement-feature` before planning. Extend via `LENS_REGISTRY`.
-- `implement-feature.js` — build a `FEAT-xxx` spec (design-review gate → plan → implement → quality-gate loop).
+- `design-review.js` — engineering design gate: per-discipline design → adversarial-review → converge loops producing a design dossier. Ships the **DDD → ERD → Prisma → GraphQL → Webhook → AI-agent → Analytics → OO → React → TDD** lenses (`*-designer`/`*-reviewer` agents in `voxera-crm/.claude/agents/`). Runs standalone, and gates `build-feature` before planning. Extend via `LENS_REGISTRY`.
+- `build-feature.js` — build a `FEAT-xxx` spec (design-review gate → plan → implement → quality-gate loop).
 - `fix-bug.js` — resolve a `BUG-xxx` spec.
 
 Business processes live in `voxera-command/.a5c/processes/`:

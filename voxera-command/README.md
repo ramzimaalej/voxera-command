@@ -35,7 +35,7 @@ During each `project-install`, define the repo's real quality-gate commands
 | You want to… | From | Command |
 |---|---|---|
 | Evolve vision/brand/roadmap | `voxera-command` | `/babysitter:call iterate the vision: <change>` |
-| Build a CRM feature | `voxera-crm` | `/babysitter:call --process ../voxera-os/.a5c/processes/implement-feature.js#process -- spec features/FEAT-xxx/spec.md` |
+| Build a CRM feature | `voxera-crm` | `/babysitter:call --process ../voxera-os/.a5c/processes/build-feature.js#process -- spec features/FEAT-xxx/spec.md` |
 | Fix a website bug | `voxera-website` | `/babysitter:call --process ../voxera-os/.a5c/processes/fix-bug.js#process -- spec features/BUG-xxx-<slug>.md` |
 | Plan only, no edits | any | `/babysitter:plan ...` |
 | Resume / inspect | any | `/babysitter:resume`, `/babysitter:doctor`, `/babysitter:observe` |

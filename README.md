@@ -176,7 +176,7 @@ You wear multiple hats. The tooling supports that without forcing context-switch
 - **Commitments tracking** — the weekly note's "Commitments to others" section + `accountability-check` skill keep these from dropping.
 
 ### As engineering (you, until you hire)
-- **FEAT-driven development**: spec → test-cases → plan → implement, gated at each phase. Use the babysitter `implement-feature.js` process OR the local crm skills (`/new-feature` etc.) — both respect the same gates.
+- **FEAT-driven development**: spec → test-cases → plan → implement, gated at each phase. Use the babysitter `build-feature.js` process OR the local crm skills (`/new-feature` etc.) — both respect the same gates.
 - **Bug-fixing test-first**: `fix-bug.js` writes the failing regression test before the fix.
 - **Patterns first, not principles**: when in doubt, [`voxera-crm/docs/patterns/`](./voxera-crm/docs/patterns/) is the source-of-truth for how to write code in this repo.
 - **The rules in `.claude/rules/`** auto-load every session — they're the invariants the codebase relies on.
@@ -233,7 +233,7 @@ Canonical docs, ADR log, code conventions, infra scaffolded, CEO operations laye
 - **Launch real estate paid-search** in one MLS region (Phoenix / Austin / Tampa / Charlotte). Stay disciplined on CAC.
 
 ### Stage 3 — $500K → $1M+ ARR (6-12 months)
-- **Draft FEAT-003 (home services) + FEAT-004 (insurance)**. Run `implement-feature.js` for each.
+- **Draft FEAT-003 (home services) + FEAT-004 (insurance)**. Run `build-feature.js` for each.
 - **Staging env** — `cp -r voxera-infra/environments/dev/ staging/`.
 - **First non-founder engineer hire**: the docs/patterns + `.claude/rules` + per-repo CLAUDE.md handle onboarding. They read this README first, then their repo's CLAUDE.md, then the relevant patterns.
 - **Insurance vertical** needs TCPA compliance work in the backend first — separate FEAT, gated on legal review.

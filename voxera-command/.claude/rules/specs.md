@@ -1,6 +1,6 @@
 # Specs rules — FEAT-xxx and BUG-xxx
 
-Specs are the contract between strategy and implementation. The `implement-feature.js` and `fix-bug.js` babysitter processes expect specific shapes — don't deviate.
+Specs are the contract between strategy and implementation. The `build-feature.js` and `fix-bug.js` babysitter processes expect specific shapes — don't deviate.
 
 ## File naming + numbering
 
@@ -52,7 +52,7 @@ Anything you couldn't decide at spec time. Each question has a tentative answer 
 - 2026-05-31 v1: initial draft.
 ```
 
-The `acceptance criteria` section is the contract — `implement-feature.js` maps every criterion to a test in its planning phase.
+The `acceptance criteria` section is the contract — `build-feature.js` maps every criterion to a test in its planning phase.
 
 ## Required sections for a BUG-xxx
 

@@ -2,7 +2,7 @@
 
 The **business** babysitter processes — run by execs, operating on this repo's confidential docs (strategy, brand, roadmap, customer/financial state). They stay here, not in `voxera-os`, because they read exec-only content.
 
-> **Engineering processes** (`implement-feature`, `fix-bug`, `design-review`) live in **`voxera-os/.a5c/processes/`** and are invoked from code repos by `../voxera-os/.a5c/processes/<name>.js`. See `voxera-os/.a5c/processes/README.md`. This split is `ADR-0014`.
+> **Engineering processes** (`build-feature`, `fix-bug`, `design-review`) live in **`voxera-os/.a5c/processes/`** and are invoked from code repos by `../voxera-os/.a5c/processes/<name>.js`. See `voxera-os/.a5c/processes/README.md`. This split is `ADR-0014`.
 
 ## Available (business)
 

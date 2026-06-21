@@ -27,7 +27,7 @@ The shape of the feature. User-facing behavior, not implementation details (path
 
 ## Acceptance criteria
 
-Numbered, testable, observable. Each one MUST map to at least one test case in `test-cases.md` (the `fix-bug.js` / `implement-feature.js` processes enforce this).
+Numbered, testable, observable. Each one MUST map to at least one test case in `test-cases.md` (the `fix-bug.js` / `build-feature.js` processes enforce this).
 
 1. Given X, when user does Y, then Z appears within N seconds.
 2. ...
