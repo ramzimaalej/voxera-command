@@ -1,11 +1,11 @@
 ---
 title: lifeo
 slug: lifeo
-version: 4
+version: 5
 status: active
 health: yellow
 since: "2026-01-01"   # unconfirmed start date
-updated: 2026-06-13
+updated: 2026-06-21
 owner: you
 motion: dach
 plan: "Performance / commission — €80 per confirmed new customer (Hausnotruf line)"
@@ -36,6 +36,13 @@ lifeo sells **Hausnotruf** — home emergency-call systems, a Pflegehilfsmittel 
 - **Ahmed Abida** — primary contact, champions day-to-day communication with the account (same champion as Kurapacket). _(Confirm whether internal Voxera-side account owner or payer-side contact.)_
 
 ## Pulse log (newest first)
+
+### 2026-06-21 — yellow
+- **Volume this week: 20 Hausnotruf contracts signed** (the operation is now Hausnotruf-only — see below). At the carried 70% confirmation rate that's ~14 confirmed/week ≈ 62/mo billable to lifeo at €80 ≈ **~€4.9k/mo** — lifeo remains the only live payer.
+- **Strategic context — Pflegebox is sunsetting (winds down by end of 2027).** Hausnotruf is now the sole go-forward product, which raises lifeo's importance: it is the spine of the revenue model, not a "second vertical to learn from." Recorded in [`../revenue-model.md`](../revenue-model.md) v8.
+- **Economics flag (not a churn signal):** at €80 and the current ~8% lead→signed rate, the AI engine costs ~€65 per signed contract but returns only ~€56 expected — the funnel is upside-down before salaries. Re-pricing lifeo's Hausnotruf upward (XY proposes €110) is now a primary lever, alongside lifting conversion. Worth raising in the continuation conversation.
+- **Health stays yellow** — continuation still only implicit (no signed letter), and the account now carries more strategic weight while underpriced for break-even. No new churn signal.
+- Action items unchanged below; the written-continuation item is now overdue (due was 2026-06-20).
 
 ### 2026-06-13 — yellow
 - **Not churned — partnership continues.** No formal termination letter has been received from lifeo. The 2026-06-06 "contract closed / migrated to Customer XY" entry was premature: lifeo is **still an active payer** on the Hausnotruf line at **€80 per signed & confirmed contract** (unchanged). Status reverted churned → active.
@@ -83,6 +90,7 @@ _(none yet)_
 - Potential to add a Pflegebox line (mirroring Kurapacket) if Hausnotruf proves out — same champion, same calling operation.
 
 ## Changelog
+- 2026-06-21 v5: logged 20 Hausnotruf signed this week (~€4.9k/mo billable). Pflegebox is sunsetting (end-2027) → operation is now Hausnotruf-only, making lifeo the spine of the revenue model. Flagged upside-down unit economics at €80/8% conversion; re-pricing to €110 (XY) is now a primary lever. Health stays yellow (continuation still unwritten). See revenue-model.md v8.
 - 2026-06-13 v4: reversed premature churn — status churned → active, health → yellow. No termination letter received; lifeo is still an active Hausnotruf payer at €80/confirmed. Removed churned_on. Noted weekly operation throughput (49 signed, 1,051 leads bottom-of-funnel) pending per-line attribution.
 - 2026-06-06 v3: contract closed — status → churned, health → unknown. Hausnotruf operation moves to Customer XY at €95/confirmed from 2026-06-08.
 - 2026-06-05 v2: filled in scaffold with real account (lifeo, **Hausnotruf** line — corrected from the "Pflegebox Payer #2" placeholder); recorded €80/confirmed-customer commission model, ~3,500 calls/day → ~25 qualified/day, Ahmed Abida as primary contact; set health green; renamed from `pflegebox-payer-2.md`.
