@@ -1,15 +1,15 @@
 ---
 title: Customer XY
 slug: customer-xy
-version: 2
+version: 3
 status: pre-customer    # in negotiation; not yet signed
 health: unknown         # no signed contract yet
 since: null             # relationship not yet started — set on signature
-updated: 2026-06-13
+updated: 2026-06-23
 owner: you
 motion: dach
-plan: "Performance / commission (in negotiation, unsigned) — €100 per confirmed Pflegebox customer, €110 per confirmed Hausnotruf customer"
-mrr_usd: null          # commission-based; no fixed MRR. Proposed (unsigned): €100×confirmed Pflegebox + €110×confirmed Hausnotruf.
+plan: "Performance / commission (in negotiation, unsigned). Three structures on the table: (a) per-confirmed — €100/confirmed Pflegebox + €110/confirmed Hausnotruf; (b) NEW per-signed — €50 per signed contract (either line, regardless of confirmation); (c) NEW per-lead — €7.50 per qualified lead from our AI agents."
+mrr_usd: null          # commission-based; no fixed MRR. On the table (unsigned): (a) €100/confirmed PB + €110/confirmed HN; (b) €50/signed either line; (c) €7.50/qualified lead.
 primary_contact: "Ahmed Abida — relationship champion (confirm he carries over from the prior payers)"
 secondary_contact: ""
 ---
@@ -38,6 +38,20 @@ Customer XY is a prospective commission customer in **active negotiation** (not 
 
 ## Pulse log (newest first)
 
+### 2026-06-23 — unknown (new commission structure proposed; still unsigned)
+- **XY (Ahmed) proposed a new pricing structure** that shifts billing *upstream* from the per-confirmed model currently on the table:
+  - **Proposal A — €50 per *signed* contract** (Pflegebox **or** Hausnotruf), **regardless of whether it's confirmed.** Flat across both product lines.
+  - **Proposal B — €7.50 per *qualified lead*** produced by our AI agents.
+- Both compete with the existing per-*confirmed* negotiation (€100 Pflegebox / €110 Hausnotruf, ~€103 blended). The billing basis moves **confirmed → signed → qualified**, transferring downstream (close + Pflegekasse-confirmation) risk onto XY and **decoupling our revenue from the ~8/day sales-close bottleneck and the opaque confirmation step** the risk log already flags as existential.
+- **Financial read — break-evens (assumption-light):**
+  - **A beats the per-confirmed deal whenever our signed→confirmed rate runs below ~49%** (€50 ÷ €103). Above ~49% confirmation, per-confirmed pays more.
+  - **A beats B while signed→qualified stays above 15%** (€7.50 ÷ €50). We're at ~14–20%, so it flips on calling-days/week.
+  - **Per-confirmed beats B while confirmed→qualified stays above ~7.3%** (€7.50 ÷ €103).
+- **Weekly revenue at this week's funnel** (49 signed = 30 PB + 19 HN; ~50 qualified/day): **A ≈ €2,450/wk flat**; **B ≈ €1,875–2,625/wk** (5- vs 7-day calling); **per-confirmed ranges €1,545–€5,047/wk entirely on the confirmation rate** (€2,472 at the ~49% break-even). Full side-by-side captured for the negotiation.
+- **Trade-offs:** B = lowest per-unit but earliest-paid, zero close/confirm risk, scales with AI output (~50/day, ~6× the confirmed ceiling). A = flat & predictable but **erases the Hausnotruf premium** (€110 → €50). Per-confirmed = highest ceiling, highest variance, full funnel risk on us.
+- **Deciding unknown:** our actual **signed→confirmed conversion rate** — it determines whether €50/signed is a raise or a cut versus €103/confirmed. Get it before countering.
+- Action items below.
+
 ### 2026-06-13 — unknown (in negotiation; not signed)
 - **Not signed — still negotiating.** The 2026-06-06 "signed, go-live 2026-06-08" entry was premature. Customer XY is **not yet confirmed**; the deal is still in negotiation. Status reverted active → pre-customer.
 - **Rates on the table moved up**: now negotiating **€100 per confirmed Pflegebox contract** and **€110 per confirmed Hausnotruf contract** (vs the €90/€95 recorded on 2026-06-06).
@@ -54,6 +68,9 @@ Customer XY is a prospective commission customer in **active negotiation** (not 
 
 ## Open action items
 
+- [ ] **you**: get XY's actual **signed→confirmed conversion rate** — it's the swing variable that decides whether €50/signed (Proposal A) is a raise or a cut vs €103/confirmed (due 2026-06-27)
+- [ ] **you**: decide preferred structure (per-confirmed vs €50/signed vs €7.50/qualified) and counter — consider a **blended floor (€7.50/qualified) + per-signed kicker** to bank predictable upstream revenue while keeping confirmation upside (due 2026-06-27)
+- [ ] **you**: if accepting Proposal A, push to **preserve the Hausnotruf premium** (e.g. €50 PB / €60 HN) rather than a flat €50 that erases the €110-vs-€100 differentiation (due 2026-06-27)
 - [ ] **you**: close the Customer XY negotiation (proposed €100 Pflegebox / €110 Hausnotruf) — or set and hold a walk-away rate (due 2026-06-20)
 - [ ] **you**: while XY is unsigned and Kurapacket is gone, decide where Pflegebox confirmations are billed in the interim, or pause the line (due 2026-06-16)
 - [ ] **you**: confirm Customer XY's real legal name + replace the placeholder (due 2026-06-09)
@@ -78,5 +95,6 @@ _(none yet)_
 - Higher per-confirmed rates already secured vs the prior payers — XY values the lead quality. Room to push volume (more sales capacity) rather than price.
 
 ## Changelog
+- 2026-06-23 v3: recorded XY's new *upstream* pricing proposals — €50 per *signed* contract (either line, regardless of confirmation) and €7.50 per *qualified lead* — alongside the existing €100/€110 per-confirmed negotiation. Added side-by-side financial break-evens; flagged signed→confirmed rate as the deciding unknown.
 - 2026-06-13 v2: reversed premature "signed" framing — status active → pre-customer; deal still in negotiation. Proposed rates moved up to €100/confirmed Pflegebox, €110/confirmed Hausnotruf (from €90/€95). Noted Pflegebox line currently has no active payer (Kurapacket lost, XY unsigned); lifeo still active so XY is not the only customer.
 - 2026-06-06 v1: created. Customer XY replaces Kurapacket + lifeo from 2026-06-08 at €90/confirmed Pflegebox, €95/confirmed Hausnotruf.
