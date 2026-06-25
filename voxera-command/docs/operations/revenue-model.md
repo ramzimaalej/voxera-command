@@ -1,8 +1,8 @@
 ---
 title: Revenue Model
-version: 13
+version: 16
 status: active
-updated: 2026-06-21
+updated: 2026-06-25
 owner: you
 ---
 
@@ -138,6 +138,56 @@ At **$300/day** engine cost, the operating cost base is **€9,686/mo** (€5,74
 - Each whole extra signed/day above break-even adds ~`22 × confirm × price`/mo of profit — e.g. at €100/70%, **+€1,540/mo** per additional signed/day.
 - These are *operating* break-evens; adding ~€218/mo credit interest nudges each up ~0.05/day (negligible).
 
+## Break-even sensitivity — 40% & 50% confirmation (the grounded range)
+
+> **Why this section.** The headline model carries **70%** confirmation ("carried from v7 — re-measure"). But v7 itself recorded the **per-line rates as Hausnotruf 70% / Pflegebox 40%**, the 2026-06-05 snapshot used **40%**, and the rate has **never been re-measured** since the Pflegebox sunset. So **40–50% is the grounded range** and 70% is the optimistic ceiling. This directly answers the open question "*is 70% still current — a ±10-pt move is worth ±€1.4k/mo at baseline.*" It's worth far more than that: it decides whether break-even is reachable at all.
+
+Break-even **confirmed/day depends only on price** (€80→5.5, €90→4.9, €100→4.4, €110→4.0); a lower confirmation just forces proportionally more **signings** to land them. The trap: at 40–50% the required **conversion climbs above the proven 16% fresh-lead rate**, so break-even stops being reachable at the current 50-leads/day engine.
+
+**Table A — break-even at the current engine (50 qualified/day = 250/week, €9,686/mo):**
+
+| Price | Confirm | Signed/day BE | Signed/week BE | Implied conversion (of 250/wk) | Reachable at proven 16%? |
+|---|---|---:|---:|---:|---|
+| €80 | **40%** | ~13.8 | ~69 | 27.5% | ✗ — 1.7× the fresh rate |
+| €80 | **50%** | ~11.0 | ~55 | 22.0% | ✗ |
+| €90 | **40%** | ~12.2 | ~61 | 24.5% | ✗ |
+| €90 | **50%** | ~9.8 | ~49 | 19.6% | ✗ |
+| €100 | **40%** | ~11.0 | ~55 | 22.0% | ✗ |
+| €100 | **50%** | ~8.8 | ~44 | 17.6% | ✗ — just over 16% |
+| €110 | **40%** | ~10.0 | ~50 | 20.0% | ✗ |
+| €110 | **50%** | ~8.0 | ~40 | 16.0% | ✓ — exactly the baseline |
+| *€80* | *70% (ref)* | *~7.9* | *~39* | *16%* | *✓* |
+| *€110* | *70% (ref)* | *~5.7* | *~29* | *11%* | *✓* |
+
+**Only one cell in the grounded range breaks even at proven conversion: €110 + 50%.** Every other 40–50% cell needs conversion above the demonstrated 16% — unreachable at 50 leads/day without lifting conversion or injecting more leads (which raises the cost base in turn).
+
+**Table B — operating profit/(loss) by price × confirmation (Hausnotruf-only):**
+
+*40/week baseline — cost €9,686/mo, 176 signed/mo:*
+
+| Price | 40% | 50% | 70% (ref) |
+|---|---:|---:|---:|
+| €80 | −€4,054 | −€2,646 | +€170 |
+| €90 | −€3,350 | −€1,766 | +€1,402 |
+| €100 | −€2,646 | −€886 | +€2,634 |
+| €110 | −€1,942 | **−€6 (break-even)** | +€3,866 |
+
+*60/week target — cost €12,562/mo (75 leads/day), 264 signed/mo:*
+
+| Price | 40% | 50% | 70% (ref) |
+|---|---:|---:|---:|
+| €80 | −€4,114 | −€2,002 | +€2,222 |
+| €90 | −€3,058 | −€682 | +€4,070 |
+| €100 | −€2,002 | **+€638** | +€5,918 |
+| €110 | −€946 | **+€1,958** | +€7,766 |
+
+**How to read it:**
+
+- **At 40% confirmation, nothing in reach breaks even.** Every price at both volumes loses money — even €110 at the 60/week target is −€946/mo, and €80 (lifeo today) bleeds ~€4k/mo at baseline. If the Hausnotruf rate is anywhere near Pflegebox's documented 40%, the go-forward business is **structurally underwater at current scale**.
+- **At 50% confirmation, break-even needs €110 at the baseline (lands at ~€0) or €100+ at the 60/week target.** €80 loses money everywhere short of large scale.
+- **Two things become non-negotiable:** (1) **measure the real confirmation rate now** — it's the difference between "break-even reachable at €80" (70%) and "underwater except one corner" (40–50%), the single highest-leverage unknown in the model; (2) **re-pricing toward €110 is survival, not upside** — at 50% it's the only baseline price that breaks even.
+- **Pflegebox (DVP €90 / XY €100):** at Pflegebox's documented **40%**, €90 needs ~61 signed/week to break even (24.5% conversion, above proven) and €100 needs ~55/week; at 50%, ~49 and ~44/week. Bridge cash at best — and the line sunsets end-2027, so it can't anchor the model.
+
 ## 60/week scenario — the realistic profitable target
 
 Target: **2 reps sign 60/week total** (30/rep = 6 signed/day per rep) at the **16% fresh-lead close rate**. This is the sweet spot — feasible with today's headcount *and* cash-positive.
@@ -229,6 +279,98 @@ cost_per_signed     = (300 * usd_eur / leads_per_day) / lead_to_signed
 breakeven_signed_wk = (engine_month + fixed_month) / (0.70 * 4.4 * hn_price)
 ```
 
+## Two-line agent-based scenario — DVP €90 Pflegebox + lifeo €80 Hausnotruf (conditional)
+
+> **What this is.** A self-contained "what-if" (added v15): instead of Hausnotruf-only, run **both** lines — **DVP at €90/confirmed Pflegebox** (70% of contracts) alongside **lifeo at €80/confirmed Hausnotruf** (30%) — and model break-even by **sales headcount** at **€1,500/agent/mo**. ⚠️ **Conditional / off-thesis:** it revives Pflegebox to 70% of the book, against the Pflegebox-sunset thesis (the line expires end-2027). Bridge-cash analysis, not the durable plan.
+
+**Inputs:** €90 PB + €80 HN at a 70/30 signed mix → **blended €87/confirmed** (0.70×90 + 0.30×80). Sales agent **€1,500/mo**; lead-gen **€5.2/qualified lead**; office/other fixed **~€940/mo** *(assumption — the model's non-engine fixed beyond sales salaries; flag if different).*
+
+**The agent unit** — one fully-fed agent works ~40 leads/day (~880/mo, the historical capacity ceiling) at the **same €6,076/mo cost regardless of conversion** (lead-gen €4,576 + salary €1,500). Conversion sets how many they sign:
+
+| Conversion | Signed/agent/mo | Lead-gen €/signed |
+|---|---:|---:|
+| 16% (proven baseline) | 141 | €32 |
+| 20% (stretch) | 176 | €26 |
+
+**Per-agent contribution margin** (= signed × confirmation × €87 − €6,076; office-independent):
+
+| Confirmation | @ 16% conversion | @ 20% conversion |
+|---:|---:|---:|
+| 40% | **−€1,176** | **+€49** |
+| 50% | **+€49** | **+€1,580** |
+| 60% | **+€1,274** | **+€3,111** |
+| 70% | **+€2,499** | **+€4,642** |
+
+**Break-even is governed by the effective yield = conversion × confirmation.** Revenue/agent = 880 leads × (conv × conf) × €87, so break-even is one product: **conv × conf ≥ 7.94%**. Equivalently, break-even confirmation is **49.6% at 16% conversion** and **39.7% at 20% conversion** — and 16%×50% and 20%×40% land on the *same* +€49 knife-edge (each conversion point ≈ one confirmation point).
+
+**How many sales agents to break even** (monthly operating P&L, office €940 included; scales linearly at the per-agent contribution):
+
+*P&L at 2 agents:*
+
+| Confirmation | @ 16% conversion | @ 20% conversion |
+|---:|---:|---:|
+| 40% | −€3,292 | −€842 |
+| 50% | −€842 | **+€2,220** |
+| 60% | **+€1,608** | **+€5,282** |
+| 70% | **+€4,057** | **+€8,345** |
+
+*Break-even headcount:*
+
+| Confirmation | @ 16% conversion | @ 20% conversion |
+|---:|---:|---:|
+| 40% | **none** — each agent −€1,176 | ~19 (knife-edge) |
+| 50% | ~19 (knife-edge) | **agent 1** |
+| 60% | **agent 1** | **agent 1** |
+| 70% | **agent 1** | **agent 1** |
+
+**How to read it:**
+
+- **Headcount is a lever only once per-agent contribution is positive.** Where it's negative (16%×40%), *adding agents deepens the loss* — break-even is impossible at any headcount. Where it's a few €/agent (the +€49 cells), break-even needs ~19 agents — operationally unreal. **Clear the effective-yield line first, then hire.**
+- **The viable corner:** at **≥50% confirmation with 20% conversion**, or **≥60% with 16% conversion**, the model is **profitable from the first agent**; 2–3 agents deliver **+€1.6k–8.3k/mo** — enough to repay the credit line and end the runway problem. Each added agent then needs +40 leads/day (engine scales linearly at €5.2/lead).
+- **The two levers are interchangeable around break-even** (it's the product): lifting conversion 16%→20% buys the same ground as lifting confirmation ~10 points.
+
+**Caveats:** (1) **confirmation is unmeasured** — the one-agent outcome swings from −€891 to +€3,702 across 40–70%, entirely on this number; (2) **20% conversion is a stretch** (proven fresh-lead baseline is 16%); (3) **office €940 is an assumption** (shifts the knife-edge headcounts, not the impossible/viable verdicts); (4) **Pflegebox-majority and time-boxed** — even the profitable version expires end-2027, so the durable play remains the Hausnotruf €110 re-price (see "Break-even sensitivity").
+
+## Per-signed scenario — €50 per signed contract, any product line (XY Proposal A)
+
+> **What this is.** Customer XY's **Proposal A** (logged in `customers/customer-xy.md`): **€50 per *signed* contract**, either product line, **regardless of confirmation.** Modeled on the same agent unit (€1,500/agent, €6,076/mo cost, 880 leads/mo). The defining feature: **there is no confirmation rate** — revenue = €50 × signed — which removes the model's single largest unknown and shifts all Pflegekasse-confirmation risk onto the payer.
+
+**Break-even is on conversion alone:** `880 leads × conversion × €50 = €6,076` → **13.8% conversion** — *below* the proven 16% fresh-lead baseline, so one agent breaks even at normal performance.
+
+**Per-agent contribution** (= €50 × signed − €6,076; no confirmation term):
+
+| Conversion | Signed/agent/mo | Contribution/agent |
+|---|---:|---:|
+| 8% (stale backlog) | 70 | **−€2,556** |
+| 13.8% (break-even) | 97 | €0 |
+| 16% (proven fresh) | 141 | **+€964** |
+| 20% (stretch) | 176 | **+€2,724** |
+| 25% (high) | 220 | **+€4,924** |
+
+**Headcount P&L** (office €940):
+
+| Agents | @ 16% conversion | @ 20% conversion |
+|---:|---:|---:|
+| 1 | +€24 | +€1,784 |
+| 2 | +€988 | +€4,508 |
+| 3 | +€1,952 | +€7,232 |
+| 5 | +€3,880 | +€12,680 |
+
+Profitable from **agent 1** at any conversion above ~14%; each added agent adds +€964 (16%) to +€2,724 (20%).
+
+**€50/signed vs the per-confirmed deals.** €50/signed equals a confirmation rate of 50 ÷ (blended confirmed price) — it wins whenever the *real* confirmation runs below that:
+
+| Per-confirmed deal | €50/signed equals | Wins if confirmation below |
+|---|---:|---:|
+| €90 PB / €80 HN (€87) | 57.5% | 57.5% |
+| €100 PB / €110 HN (€103) | 48.5% | 48.5% |
+| lifeo €80 HN | 62.5% | 62.5% |
+| XY €110 HN | 45.5% | 45.5% |
+
+Since the documented Pflegebox confirmation is **40%** and the rate has never beaten 50% in the data, **€50/signed is the stronger structure against most of these prices** — predictable, paid earlier, product-agnostic (sidesteps the Pflegebox sunset), and zero confirmation risk.
+
+**Caveats:** (1) only the **8% stale-backlog conversion loses money** — the "keep reps on fresh leads" discipline still governs; (2) paying on *signed* removes our incentive to police confirmation — if the payer later disputes chronically low-confirming contracts, the protection erodes, so **signing standards must stay honest**; (3) same €1,500-agent / €940-office assumptions as the two-line scenario.
+
 ## Open questions
 
 - **Is the 40/week baseline sustainable on fresh leads?** It assumes **16% conversion** (2× this week's 8%). The team has hit it before on fresh AI output — confirm it's a holdable run-rate, not a good week. This is now the model's load-bearing assumption.
@@ -236,9 +378,13 @@ breakeven_signed_wk = (engine_month + fixed_month) / (0.70 * 4.4 * hn_price)
 - **Does the engine run 5 or 7 days/week?** Modeled at 5 (22 days/mo). At 7 days the engine cost is ~€7.9k/mo.
 - **Is the 70% Hausnotruf confirmation rate still current** after the Pflegebox wind-down? Carried from v7; a ±10-point move is worth ±€1.4k/mo at baseline.
 - **Why does fresh-lead conversion (16%) beat stale-backlog conversion (8%)?** Quantify the decay curve — it sets how fast leads must be worked and whether the aged backlog is worth touching at all.
+- **What is the true per-agent salary and the fixed office/overhead?** The agent-based scenario assumes **€1,500/agent/mo** + **~€940/mo office** (the €3,937 salaries+office split as ~2 agents + remainder). Confirm the real numbers — they move the break-even headcounts (not the impossible-vs-viable verdicts).
 - Credit-line / cash status unchanged since v7 — refresh if the drawn balance moved.
 
 ## Changelog
+- 2026-06-25 v16: added the **"Per-signed scenario — €50 per signed contract"** section (XY Proposal A). Pays €50/signed regardless of confirmation — **removes the confirmation variable entirely** and shifts Pflegekasse risk to the payer. Break-even is on conversion alone (**13.8%**, below the proven 16%), profitable from agent 1, +€964/agent at 16% conversion / +€2,724 at 20%. Equivalent to **57.5% confirmation** at the €90/€80 blend, so it beats the per-confirmed deals at any realistic (≤50%) confirmation — predictable, paid earlier, product-agnostic (sidesteps the Pflegebox sunset). Caveat: signing standards must stay honest.
+- 2026-06-24 v15: added the **"Two-line agent-based scenario — DVP €90 Pflegebox + lifeo €80 Hausnotruf"** section (conditional / off-thesis — revives Pflegebox to 70% of the book). Models break-even by **sales headcount** at €1,500/agent across a **conversion (16%/20%) × confirmation (40–70%) grid** on the €87 blended price. Key findings: break-even is governed by the **effective yield conv×conf ≥ 7.94%** (break-even confirmation 49.6% at 16% conversion, 39.7% at 20%); **headcount only helps once per-agent contribution is positive** — at 16%×40% every agent loses €1,176 (no viable headcount), while ≥50%/20% or ≥60%/16% is profitable from agent 1 (+€1.6k–8.3k/mo at 2 agents). Consolidates the DVP/blend/headcount thread.
+- 2026-06-24 v14: added the **"Break-even sensitivity — 40% & 50% confirmation"** section. Grounds the confirmation rate in v7's documented per-line figures (Hausnotruf 70% / **Pflegebox 40%**) and the 2026-06-05 snapshot's 40% — never re-measured since the sunset, so 40–50% is the realistic range and 70% the ceiling. Key finding: at 40% confirmation **nothing in reach breaks even** (even €110/60-week is −€946/mo); at 50% only **€110 at baseline** (~€0) or **€100+ at the 60/week target** clears. The single grounded-range cell that breaks even at proven 16% conversion is **€110 + 50%**. Reinforces: measure confirmation now; re-pricing to €110 is survival, not upside.
 - 2026-06-21 v13: added a **"Scenario ladder (at a glance)"** summary table at the top — actual (20/wk) → baseline (40) → profitable target (60) → scale (100), with leads/day, conversion, profit at €80 and €110, and feasibility per row. Gives the whole ladder in one view above the detailed scenario sections.
 - 2026-06-21 v12: added the **"60/week scenario — the realistic profitable target"** section (between the 40/week baseline and the 100/week scale case). 2 reps signing 60/week (30/rep) at 16% needs **75 fresh leads/day** (1.5× current engine) and is **feasible within ~40/day rep capacity** (~38 worked/day) — the 100/week case wasn't. Outcome: **+€2.2k/mo at €80/70%** (up to +€5.9k at €100), credit line starts repaying. The marginal +25 leads/day over baseline adds ~€2k/mo.
 - 2026-06-21 v11: **reset the operating baseline from 20 (this-week actual) to the 40 signed/week target** — 8/day = 16% lead→signed on fresh AI leads. At 40/week the model is ~break-even at €80 (+€0.2k/mo) and ~+€3.9k/mo at €110; the engine turns right-side up (+€23/signed vs −€9 at 8%). Re-derived headline, funnel, inputs, P&L, unit economics, runway, levers, and actions around the baseline; kept the 20-signed actual visible as the gap-to-close (pure fresh-lead conversion). New top lever: hold fresh-lead conversion ≥16% (off the stale backlog).

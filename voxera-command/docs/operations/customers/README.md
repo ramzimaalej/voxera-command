@@ -30,6 +30,7 @@ See `../templates/customer-pulse-template.md`. Each file has:
 | Customer XY | [customer-xy](./customer-xy.md) | active | unknown | dach | 2026-06-08 | commission (€90 Pflegebox / €95 Hausnotruf) | Replaces both prior payers. Real name TBD. Goes live 2026-06-08. |
 | Kurapacket | [kurapacket](./kurapacket.md) | churned | unknown | dach | [TBD] | commission (€80/confirmed) | Churned 2026-06-06. Pflegebox line moved to Customer XY. |
 | lifeo | [lifeo](./lifeo.md) | churned | unknown | dach | [TBD] | commission (€80/confirmed) | Churned 2026-06-06. Hausnotruf line moved to Customer XY. |
+| DVP | [dvp](./dvp.md) | pre-customer | unknown | dach | [TBD] | commission (€90/confirmed Pflegebox, offered) | Offered 2026-06-24. Would re-activate the orphaned Pflegebox line. Bridge only — Pflegebox sunsets end-2027. |
 
 Update this table whenever a customer is added, churns, or changes plan / MRR / motion.
 
