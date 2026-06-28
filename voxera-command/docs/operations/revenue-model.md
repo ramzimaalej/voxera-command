@@ -1,8 +1,8 @@
 ---
 title: Revenue Model
-version: 16
+version: 17
 status: active
-updated: 2026-06-25
+updated: 2026-06-27
 owner: you
 ---
 
@@ -371,6 +371,46 @@ Since the documented Pflegebox confirmation is **40%** and the rate has never be
 
 **Caveats:** (1) only the **8% stale-backlog conversion loses money** — the "keep reps on fresh leads" discipline still governs; (2) paying on *signed* removes our incentive to police confirmation — if the payer later disputes chronically low-confirming contracts, the protection erodes, so **signing standards must stay honest**; (3) same €1,500-agent / €940-office assumptions as the two-line scenario.
 
+## Fully-costed scenario — €90 both lines, itemised overhead, by headcount
+
+> **What this is.** A self-contained, fully-itemised P&L (added v17) on a **fresh cost stack** — not directly comparable to the sections above, which use $300/day (~€5.2/lead), €1,500/agent and a €3,937 lumped overhead. Here: **both lines €90/confirmed**, lead engine **€300/day in euros (€6/lead)**, sales agent **€850/mo**, and overhead broken out as **office €300 + engineer €500 + manager €1,000 + diverse €300 = €2,100/mo fixed**. Conversion **20%**; agent capacity **50 leads/day** (= one engine's output).
+
+**Inputs:** €90 PB / €90 HN, 70/30 signed mix. Confirmation **PB 40/50/60%**, **HN +5 pts → 45/55/65%**. Engine €300/day → 50 leads (22 working days).
+
+**The unit — one agent (= one engine):** 1,100 leads/mo → **220 signed** (154 PB / 66 HN). Cost = lead-gen **€6,600** + salary **€850** = **€7,450/mo** (lead spend is 89% of it). Each signed carries ~€30 of lead cost, so €90 × confirmation must clear that first — which is why confirmation is decisive.
+
+**Per-agent contribution** (revenue − €7,450):
+
+| PB / HN confirmation | Confirmed/agent | Revenue/agent | **Contribution/agent** |
+|---|---:|---:|---:|
+| 40% / 45% | 91.3 | €8,217 | **+€767** |
+| 50% / 55% | 113.3 | €10,197 | **+€2,747** |
+| 60% / 65% | 135.3 | €12,177 | **+€4,727** |
+
+**Monthly P&L by sales-agent count** (each agent brings one €300/day engine; €2,100 fixed overhead shared):
+
+| PB/HN conf | 1 agent | 2 agents | 3 agents | 4 agents | 5 agents |
+|---|---:|---:|---:|---:|---:|
+| **40% / 45%** | −€1,333 | −€566 | **+€201** | +€968 | +€1,735 |
+| **50% / 55%** | **+€647** | +€3,394 | +€6,141 | +€8,888 | +€11,635 |
+| **60% / 65%** | **+€2,627** | +€7,354 | +€12,081 | +€16,808 | +€21,535 |
+
+*Worked example (50/55%, 2 agents):* revenue €20,394 − leads €13,200 − sales €1,700 − office €300 − engineer €500 − manager €1,000 − diverse €300 = **+€3,394/mo**.
+
+**When you break even:**
+
+| PB / HN confirmation | Break-even headcount | First profit |
+|---|---|---|
+| **40% / 45%** | **3 agents** | +€201/mo |
+| **50% / 55%** | **1 agent** | +€647/mo |
+| **60% / 65%** | **1 agent** | +€2,627/mo |
+
+**How to read it:**
+
+- **Confirmation rate decides everything.** At **40% it's fragile** — each agent nets only +€767, so it takes **3 agents** (~€20k/mo lead spend) to absorb the €2,100 overhead; 1–2 agents lose money. At **50%+ it flips** — profitable from agent 1, each added agent drops **+€2,747** to the bottom line. At **60%**, +€4,727/agent.
+- **Break-even PB confirmation for a single agent ≈ 47%** (covers its €7,450 + the €2,100 overhead); below ~36% an agent can't cover its own lead+salary, so scaling deepens losses. **40% sits in the awkward middle — viable only at 3+ agents.**
+- **Overhead is not the constraint** (€2,100 is absorbed by ~1 agent at 50%+). **Lead spend (€6,600/agent) is** — so conversion (20%) and confirmation, not the office/manager/engineer load, make or break it.
+
 ## Open questions
 
 - **Is the 40/week baseline sustainable on fresh leads?** It assumes **16% conversion** (2× this week's 8%). The team has hit it before on fresh AI output — confirm it's a holdable run-rate, not a good week. This is now the model's load-bearing assumption.
@@ -382,6 +422,7 @@ Since the documented Pflegebox confirmation is **40%** and the rate has never be
 - Credit-line / cash status unchanged since v7 — refresh if the drawn balance moved.
 
 ## Changelog
+- 2026-06-27 v17: added the **"Fully-costed scenario — €90 both lines, itemised overhead, by headcount"** section. Fresh cost stack (not comparable to the sections above): both lines €90, engine €300/day in euros (€6/lead), agent €850/mo at 50 leads/day capacity, overhead itemised (office 300 + engineer 500 + manager 1,000 + diverse 300 = €2,100), 20% conversion, HN confirmation +5 pts over PB. Per-agent contribution +€767 (40/45%) / +€2,747 (50/55%) / +€4,727 (60/65%). **Break-even: 3 agents at 40/45%, 1 agent at 50%+.** Lead spend (€6,600/agent, 89% of agent cost) is the binding driver, not the €2,100 overhead.
 - 2026-06-25 v16: added the **"Per-signed scenario — €50 per signed contract"** section (XY Proposal A). Pays €50/signed regardless of confirmation — **removes the confirmation variable entirely** and shifts Pflegekasse risk to the payer. Break-even is on conversion alone (**13.8%**, below the proven 16%), profitable from agent 1, +€964/agent at 16% conversion / +€2,724 at 20%. Equivalent to **57.5% confirmation** at the €90/€80 blend, so it beats the per-confirmed deals at any realistic (≤50%) confirmation — predictable, paid earlier, product-agnostic (sidesteps the Pflegebox sunset). Caveat: signing standards must stay honest.
 - 2026-06-24 v15: added the **"Two-line agent-based scenario — DVP €90 Pflegebox + lifeo €80 Hausnotruf"** section (conditional / off-thesis — revives Pflegebox to 70% of the book). Models break-even by **sales headcount** at €1,500/agent across a **conversion (16%/20%) × confirmation (40–70%) grid** on the €87 blended price. Key findings: break-even is governed by the **effective yield conv×conf ≥ 7.94%** (break-even confirmation 49.6% at 16% conversion, 39.7% at 20%); **headcount only helps once per-agent contribution is positive** — at 16%×40% every agent loses €1,176 (no viable headcount), while ≥50%/20% or ≥60%/16% is profitable from agent 1 (+€1.6k–8.3k/mo at 2 agents). Consolidates the DVP/blend/headcount thread.
 - 2026-06-24 v14: added the **"Break-even sensitivity — 40% & 50% confirmation"** section. Grounds the confirmation rate in v7's documented per-line figures (Hausnotruf 70% / **Pflegebox 40%**) and the 2026-06-05 snapshot's 40% — never re-measured since the sunset, so 40–50% is the realistic range and 70% the ceiling. Key finding: at 40% confirmation **nothing in reach breaks even** (even €110/60-week is −€946/mo); at 50% only **€110 at baseline** (~€0) or **€100+ at the 60/week target** clears. The single grounded-range cell that breaks even at proven 16% conversion is **€110 + 50%**. Reinforces: measure confirmation now; re-pricing to €110 is survival, not upside.
