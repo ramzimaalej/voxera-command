@@ -1,8 +1,8 @@
 ---
 title: Strategy
-version: 3
+version: 4
 status: active
-updated: 2026-06-18
+updated: 2026-06-27
 owner: you
 ---
 
@@ -16,22 +16,22 @@ When this doc and the architecture docs disagree, this one wins.
 
 ## 1. The Bet, in One Sentence
 
-We are building an **AI-native CRM with AI calling as the core capability, run via two parallel GTM motions: a DACH/Pflegebox motion (founder-led, UWG §7-compliant) and an English-speaking-markets motion (three SMB verticals — real estate, home services, insurance — paid-search-led)**, on a workflow-kind-agnostic platform that serves both without forking.
+We are building an **AI-native CRM with AI calling as the core capability, run via two parallel GTM motions: a DACH care-services motion (founder-led, UWG §7-compliant — Hausnotruf as the durable line, Pflegebox as a sunsetting entry bridge) and an English-speaking-markets motion (three SMB verticals — real estate, home services, insurance — paid-search-led)**, on a workflow-kind-agnostic platform that serves both without forking.
 
-The product is a CRM. The differentiating capability is AI calling. The defensible moat varies per motion: regulated-vertical depth (DACH/Pflegebox) and speed-of-response wedges (English-market verticals). The platform optionality is the OS underneath — same engine, same audit model, same agent roster, per-vertical labels and operators.
+The product is a CRM. The differentiating capability is AI calling. The defensible moat varies per motion: regulated-vertical depth (DACH care services) and speed-of-response wedges (English-market verticals). The platform optionality is the OS underneath — same engine, same audit model, same agent roster, per-vertical labels and operators.
 
-> *Original wedge + workflow-kind-agnostic-platform decision recorded as [ADR-0008: Pflegebox / DACH as v1 wedge on a workflow-kind-agnostic platform](../../decisions/ADR-0008-pflegebox-wedge-on-workflow-agnostic-platform.md). Parallel English-markets motion added per [ADR-0009: English-speaking markets GTM in parallel with the DACH motion](../../decisions/ADR-0009-english-markets-parallel-motion.md).*
+> *Original wedge + workflow-kind-agnostic-platform decision recorded as [ADR-0008: Pflegebox / DACH as v1 wedge on a workflow-kind-agnostic platform](../../decisions/ADR-0008-pflegebox-wedge-on-workflow-agnostic-platform.md). Parallel English-markets motion added per [ADR-0009: English-speaking markets GTM in parallel with the DACH motion](../../decisions/ADR-0009-english-markets-parallel-motion.md). The DACH durable line has since shifted from Pflegebox to Hausnotruf — Pflegebox is now a sunsetting bridge (see §2); this shift likely warrants its own ADR + a deeper iterate-vision pass.*
 
 ---
 
 ## 1a. Two parallel motions
 
-| | **DACH / Pflegebox** | **English-speaking markets** |
+| | **DACH care services** | **English-speaking markets** |
 |---|---|---|
 | Geography | Germany / Austria / Switzerland | US / UK / CA / AU / IE |
 | Language | German (primary) | English |
 | Lead motion | Inbound-then-outbound, UWG §7-compliant; founder-led | Paid search + landing pages; "AI calls the lead in 30 seconds" demo as central conversion |
-| Verticals | Pflegebox (v1), then adjacent DACH care/insurance (Hörgeräte, private health, mobility) | Real estate (Q1), home services (Q2), insurance (Q2+) |
+| Verticals | Hausnotruf (durable v1 line), Pflegebox (sunsetting entry bridge, winds down by end-2027), then adjacent DACH care/insurance (Hörgeräte, private health, mobility) | Real estate (Q1), home services (Q2), insurance (Q2+) |
 | Compliance frame | UWG §7, GDPR Art. 9, Pflegekassen paperwork | TCPA, CMS (Medicare), state insurance + real-estate rules |
 | Wedge | Regulated-vertical depth + German-language voice | Speed of lead response + per-vertical pain |
 | Buyer | CEO + ops manager at 5–30 person SMB | Solo agent (RE), owner-operator (HS), independent agent (Ins) |
@@ -49,7 +49,8 @@ Detailed playbook for the English-markets motion: [`vertical-strategy-english-ma
 ### Vertical and geography
 
 **DACH motion:**
-- **v1 vertical:** Pflegebox (free monthly care supplies in Germany funded by Pflegekassen under § 40 SGB XI). Two paying customers already, commission-based.
+- **v1 durable line:** Hausnotruf (home emergency-call systems — a Pflegehilfsmittel funded by the Pflegekassen under §40 SGB XI). One active paying customer today (**lifeo**, commission-based at €80 per confirmed Hausnotruf contract), plus prospects in negotiation (Customer XY, DVP — unsigned). This is the durable go-forward DACH line.
+- **v1 entry bridge:** Pflegebox (free monthly care supplies in Germany funded by Pflegekassen under § 40 SGB XI). This was the original v1 entry wedge, but the **Pflegebox market is sunsetting — it winds down by end-2027** — and its former payer (Kurapacket) churned 2026-06-13, so the Pflegebox line currently has no active payer. Any Pflegebox revenue is now a time-boxed bridge, not the durable basis for the DACH motion.
 - **v2 verticals (year 2):** Adjacent DACH care/insurance — Hörgeräte (hearing aids), private health insurance, care services, mobility aids.
 
 **English-markets motion** (running in parallel from now, per [ADR-0009](../../decisions/ADR-0009-english-markets-parallel-motion.md)):
@@ -89,7 +90,7 @@ Detailed playbook for the English-markets motion: [`vertical-strategy-english-ma
 
 ### Why DACH first
 
-- Two paying customers already.
+- A live, paying DACH account already (**lifeo**, Hausnotruf, €80/confirmed commission), with further DACH prospects in negotiation (Customer XY, DVP).
 - German-language voice agent tuning gives us a head start on competitors.
 - DACH care market has clear adjacent verticals — Hörgeräte, private insurance, mobility — with similar buyer profiles and paperwork patterns.
 - Lower competitive density vs. English-speaking markets where AI CRM tools are saturated.
@@ -145,7 +146,7 @@ To prevent strategy drift, these are explicit non-competitions:
 
 ## 6. Funding Posture
 
-- **Bootstrapped.** Cash flow from Pflegebox commission revenue funds operations.
+- **Bootstrapped.** Cash flow from DACH commission revenue (today: lifeo's Hausnotruf line) funds operations.
 - **No external capital raised.** This is a structural choice for the next 12 months; revisit if growth exceeds what bootstrapping can fund.
 - **Implication:** every architecture and product decision needs to defend its cost. The OS underneath has to be cheap to preserve, not expensive. We're paying for it in code discipline, not in feature delays.
 
@@ -156,8 +157,8 @@ To prevent strategy drift, these are explicit non-competitions:
 ### 12 months — combined target ≈ $1.7M ARR run-rate
 
 **DACH motion:**
-- Pflegebox customers scaled to operational maturity on the platform; commission revenue covers operating cost.
-- 3–5 additional Pflegebox-shaped customers signed (same vertical, similar buyer profile).
+- Hausnotruf line scaled to operational maturity on the platform; commission revenue covers operating cost. (Today: lifeo live at €80/confirmed; Customer XY / DVP in negotiation.)
+- 3–5 additional DACH-care customers signed (Hausnotruf-shaped or adjacent, similar buyer profile). Any residual Pflegebox revenue treated as a time-boxed bridge ahead of the end-2027 market sunset.
 - Voice calling at production reliability for DE: voicemail handling, calendar booking, number pool management, live observability.
 - DACH compliance posture documented and defensible (UWG §7, GDPR, Pflegekasse paperwork).
 
@@ -169,7 +170,7 @@ To prevent strategy drift, these are explicit non-competitions:
 
 **Platform:**
 - First Critic findings on voice-agent prompts going through Promoter review.
-- Workflow-kind-agnostic claim **proven** — the engine demonstrably serves four distinct verticals (Pflegebox + RE + HS + Ins) without forking. This was an architecture claim in [ADR-0008]; year 1 makes it a demonstrated fact.
+- Workflow-kind-agnostic claim **proven** — the engine demonstrably serves four distinct verticals (Hausnotruf + RE + HS + Ins) without forking. This was an architecture claim in [ADR-0008]; year 1 makes it a demonstrated fact.
 
 ### 24 months
 
@@ -198,10 +199,11 @@ To prevent strategy drift, these are explicit non-competitions:
 | **Voice incumbents (Vapi/Retell) move up-stack into CRM territory** | Our moat is vertical depth and full-lifecycle CRM, not voice runtime. We use Ultravox; if voice gets commoditized further, that benefits us. |
 | **HubSpot/generalists ship AI calling** | They'll do it shallow and generic. Our vertical depth (Pflegekasse paperwork, German compliance) is unreachable for them in any reasonable timeframe. |
 | **DACH regulatory shift restricts AI cold-calling** | We're operating in inbound-then-outbound, not cold-calling, which is the higher-regulatory-risk zone. We track regulations and adjust. |
-| **Bootstrapping limits speed of product development** | Pflegebox revenue is real and growing; we ship what we can fund. We refuse to over-build. |
+| **Pflegebox market sunsets (end-2027), stranding bridge revenue** | Already priced in: Hausnotruf is the durable DACH line, Pflegebox is treated as a time-boxed bridge only. The go-forward model rests on Hausnotruf economics (the live lifeo account), not on Pflegebox. |
+| **Bootstrapping limits speed of product development** | DACH Hausnotruf commission revenue is real; we ship what we can fund. We refuse to over-build. |
 | **OS preservation slows v1** | Architecture is mostly generic for free; rejection criterion for new features is "does this generalize?" The OS bet is a discipline, not a feature. |
-| **We hit Pflegebox PMF and don't expand** | That's an acceptable outcome. A profitable, focused DACH vertical company is a good business. The OS is option value, not obligation. |
-| **Expansion to adjacent vertical fails** | We learn the wedge isn't generalizable as we thought. Decide: deepen Pflegebox, try another adjacent vertical, or rethink the OS bet. |
+| **We hit DACH-care PMF and don't expand** | That's an acceptable outcome. A profitable, focused DACH care-services company is a good business. The OS is option value, not obligation. |
+| **Expansion to adjacent vertical fails** | We learn the wedge isn't generalizable as we thought. Decide: deepen the DACH care line, try another adjacent vertical, or rethink the OS bet. |
 
 ---
 
@@ -214,13 +216,14 @@ To prevent strategy drift, these are explicit non-competitions:
 | Workflow-kind-agnostic | DSL declares `workflow_kind`; v1 ships `linear_funnel` only |
 | Decoupled objects from workflows | Custom objects are workspace-scoped, referenced by workflows |
 | Multiple terminal stages per workflow | Terminal stages declare disposition + reason taxonomy (generalizes lost-reasons) |
-| Pflegebox is the v1 forcing function | Pflegebox example throughout the docs; v2 vertical examples deferred |
+| DACH care (Hausnotruf, with Pflegebox as bridge) is the v1 forcing function | DACH care example throughout the docs; v2 vertical examples deferred |
 | 5-minute setup + Copilot behind the scenes | Context Copilot interview can be shorter for known verticals; templates ship as starting points |
 | Bootstrapped, no v1 budget for nice-to-haves | v1 build order ruthlessly slim; Critic/Promoter/Reporter/sealed-forms/mini-forms/eval-set as v2+ |
 
 The architecture docs preserve the long-term vision; this doc enforces the short-term focus.
 
 ## Changelog
+- 2026-06-27 v4: reconciled stale Pflegebox / "two paying customers" facts with reality — Kurapacket (the Pflegebox payer) churned 2026-06-13 and the Pflegebox market is sunsetting by end-2027, so the durable DACH line is now **Hausnotruf** (live via **lifeo** at €80/confirmed) with Pflegebox reframed as a time-boxed entry bridge. Replaced both "two paying customers already" claims (§2 Wedge, §3 Why DACH first) with the accurate "1 active Hausnotruf payer (lifeo) + prospects in negotiation (XY, DVP)." Updated §1 Bet, the §1a two-motion table, §6 Funding, §7 Milestones, and §8 Risks to read Hausnotruf-as-durable / Pflegebox-as-bridge. Factual-reconciliation pass only — the two-motion structure, English-market sections, and moat thesis are unchanged.
 - 2026-06-18 v3: removed a duplicated '## 2. The Wedge' header.
 - 2026-05-31 v2: added the two-motion structure (DACH + English-speaking markets in parallel) per [ADR-0009](../../decisions/ADR-0009-english-markets-parallel-motion.md). New §1a "Two parallel motions" table. §1 The Bet rewritten to acknowledge both motions. §2 Wedge expanded with the three English-market verticals (real estate Q1, home services Q2, insurance Q2+). §5 "What We Are Not" updated — softened the strict regulated-verticals-only clause; added explicit "no DACH cold-outbound" line. §7 Milestones expanded to include English-market MRR targets ($80K + $40K + $25K = $145K by month 12). Customer profile updated for the dual sales-motion + self-serve trial path. Backlink to ADR-0009 added in §1.
 - 2026-05-31 v1: imported from `/Users/ramzi/Downloads/files-6/strategy-v1.0.md`; frontmatter added (status active), inline "**Status:** v1.0" line removed in favor of frontmatter.
