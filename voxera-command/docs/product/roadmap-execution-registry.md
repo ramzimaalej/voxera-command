@@ -1,6 +1,6 @@
 ---
 title: Roadmap Execution Registry
-version: 1
+version: 2
 status: active
 updated: 2026-06-29
 owner: you
@@ -47,7 +47,7 @@ Sequenced by dependency (the keystone is B1; compliance gate B6 precedes first l
 
 | Order | Bet | Horizon | Depends on | Status | Workflow | Feature folder |
 |---|---|---|---|---|---|---|
-| 1 | **B0** Robust authorization layer | Now | — | `IN-SDLC:VERIFYING` | **CRM-RESUME** → `/verify-feature` → DONE, then **HARVEST** | `features/20260624-robust-authz-layer` |
+| 1 | **B0** Robust authorization layer | Now | — | `DONE` (2026-06-29) | ✅ verified + **harvested 2026-06-30** (LSN-021..025, TD-057/058, ADR-0024 accepted, pattern doc folded) | `features/_archive/20260624-robust-authz-layer` |
 | 2 | **B1** Agent data-model spine (Context + Decisions + cost) | Now | B0 | `NOT-STARTED` | **CRM-BUILD** | TBD |
 | 3 | **B2** Outbox fully wired + agent-event emission | Now | B1, B0, TD-009 | `NOT-STARTED` | **CRM-BUILD** | TBD |
 | 4 | **B3** Brain + fixed agent roster + base | Next | B1 | `NOT-STARTED` | **CRM-BUILD** | TBD |
@@ -62,7 +62,7 @@ Sequenced by dependency (the keystone is B1; compliance gate B6 precedes first l
 | 13 | **B12** Continuous-improvement loop | Later | B5, B7, B8 | `NOT-STARTED` | **CRM-BUILD** | TBD |
 | 14 | **B13** Deep DACH compliance (Pflegekasse + Art. 9) | Later | B6, B11, B0 | `NOT-STARTED` | **CRM-BUILD** | TBD (dead-last) |
 
-**Next ready on this track:** B0 (finish `verify-feature` → DONE). On B0 DONE, B1 unblocks.
+**Next ready on this track:** B0 is **DONE** (verified 2026-06-29) — run **HARVEST** to anti-rot the feature folder. B1's CRM-BUILD is now *dependency-unblocked*, but per [`roadmap-debt-burndown.md`](../../../voxera-crm/engineering-os/roadmap/roadmap-debt-burndown.md) §3 the **P0 hardening slice** (TD-001 migration substrate + TD-056 composition root + TD-047 ADR acceptances + residual IDOR TD-034/035/036 + the enforcement gates) is the stated prerequisite that should land **before B1 opens**. So the true next move is HARVEST → P0 → B1.
 
 ## Track B — Website motion (`voxera-website`)
 
@@ -90,4 +90,5 @@ Sequenced by dependency (the keystone is B1; compliance gate B6 precedes first l
 - Pairs with [`priorities-coach`](../../.claude/skills/priorities-coach/SKILL.md) (what to do next, by strategy) — this registry is *how* to execute it.
 
 ## Changelog
+- 2026-06-29 v2: **B0 → DONE** (verify-feature green: 1054 backend tests pass / 0 fail, gate:ratchet PASS with all four B0 gates floor-0, `schema.graphql` empty diff, all 22 ACs + 14 preconditions verified). Ticked `roadmap.md` B0 checkbox. Next move recomputed: HARVEST B0, then the P0 hardening slice (B1 prerequisite) before B1 opens.
 - 2026-06-29 v1: initial — execution map for roadmap.md v8 (B0–B13 spine + website motion), workflow templates, two-track registry, selection algorithm for the `resume-roadmap` skill.
