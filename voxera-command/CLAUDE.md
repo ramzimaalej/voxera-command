@@ -39,8 +39,9 @@ owner: you
 - Iterate any doc (lightweight): `/babysitter:call --process .a5c/processes/iterate-doc.js#process --inputs '{"docPath":"...","change":"..."}'`
 - Plan only (no edits): `/babysitter:plan ...`
 - Check run health: `/babysitter:doctor`
+- **Execute the product roadmap**: prompt **"resume the roadmap"** → the [`resume-roadmap`](.claude/skills/resume-roadmap/SKILL.md) skill reads [`docs/product/roadmap-execution-registry.md`](docs/product/roadmap-execution-registry.md), picks the next unblocked bet, and invokes its babysitter workflow in the right code repo.
 
-For the full process catalog, see `.a5c/processes/README.md`.
+For the full process catalog, see `.a5c/processes/README.md`. For roadmap execution, see `docs/product/roadmap-execution-registry.md`.
 
 ## Local skills, rules (project-level)
 Under `.claude/`:
