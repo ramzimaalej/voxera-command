@@ -129,7 +129,7 @@ Each post ends with the same CTA block: one line of "here's what answering every
 Every distributed link uses a UTM + the existing root-domain `?ref=` cookie:
 
 ```
-https://usevoxera.com/blog/<slug>?utm_source=<reddit|facebook|fbgroup|nextdoor>
+https://usevoxera.com/en/blog/<slug>/?utm_source=<reddit|facebook|fbgroup|nextdoor>
    &utm_medium=<community|paid>
    &utm_campaign=hs-blog-m1
    &utm_content=<post-slug>

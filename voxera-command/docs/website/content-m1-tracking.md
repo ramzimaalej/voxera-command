@@ -17,7 +17,7 @@ Conversion event = **closed-beta signup** (`VoxeraAnalytics.trackSignup()`, fire
 ## 1. UTM convention (lock this — the only way links get shared)
 
 ```
-https://usevoxera.com/blog/<slug>?utm_source=<community>&utm_medium=<community|paid>&utm_campaign=hs-blog-m1&utm_content=<post-slug>&ref=<community>
+https://usevoxera.com/en/blog/<slug>/?utm_source=<community>&utm_medium=<community|paid>&utm_campaign=hs-blog-m1&utm_content=<post-slug>&ref=<community>
 ```
 
 - `utm_source` — the specific room: `reddit-sweatystartup`, `reddit-hvac`, `fbgroup-cleaning`, `hvactalk`, `nextdoor`, `facebook-ads`…
@@ -39,16 +39,16 @@ https://usevoxera.com/blog/<slug>?utm_source=<community>&utm_medium=<community|p
 
 ```
 reddit-sweatystartup
-https://usevoxera.com/blog/missed-call-cost?utm_source=reddit-sweatystartup&utm_medium=community&utm_campaign=hs-blog-m1&utm_content=missed-call-cost&ref=reddit-sweatystartup
+https://usevoxera.com/en/blog/missed-call-cost/?utm_source=reddit-sweatystartup&utm_medium=community&utm_campaign=hs-blog-m1&utm_content=missed-call-cost&ref=reddit-sweatystartup
 
 reddit-hvac
-https://usevoxera.com/blog/missed-call-cost?utm_source=reddit-hvac&utm_medium=community&utm_campaign=hs-blog-m1&utm_content=missed-call-cost&ref=reddit-hvac
+https://usevoxera.com/en/blog/missed-call-cost/?utm_source=reddit-hvac&utm_medium=community&utm_campaign=hs-blog-m1&utm_content=missed-call-cost&ref=reddit-hvac
 
 fbgroup
-https://usevoxera.com/blog/missed-call-cost?utm_source=fbgroup-trades&utm_medium=community&utm_campaign=hs-blog-m1&utm_content=missed-call-cost&ref=fbgroup-trades
+https://usevoxera.com/en/blog/missed-call-cost/?utm_source=fbgroup-trades&utm_medium=community&utm_campaign=hs-blog-m1&utm_content=missed-call-cost&ref=fbgroup-trades
 
 facebook-ads (only if earned)
-https://usevoxera.com/blog/missed-call-cost?utm_source=facebook-ads&utm_medium=paid&utm_campaign=hs-blog-m1&utm_content=missed-call-cost&ref=facebook-ads
+https://usevoxera.com/en/blog/missed-call-cost/?utm_source=facebook-ads&utm_medium=paid&utm_campaign=hs-blog-m1&utm_content=missed-call-cost&ref=facebook-ads
 ```
 
 > For posts 2–4, swap `missed-call-cost` for the slug above. That's the only change.
