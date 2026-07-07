@@ -1,8 +1,8 @@
 ---
 title: Roadmap Execution Registry
-version: 2
+version: 4
 status: active
-updated: 2026-06-29
+updated: 2026-07-07
 owner: you
 ---
 
@@ -48,9 +48,9 @@ Sequenced by dependency (the keystone is B1; compliance gate B6 precedes first l
 | Order | Bet | Horizon | Depends on | Status | Workflow | Feature folder |
 |---|---|---|---|---|---|---|
 | 1 | **B0** Robust authorization layer | Now | — | `DONE` (2026-06-29) | ✅ verified + **harvested 2026-06-30** (LSN-021..025, TD-057/058, ADR-0024 accepted, pattern doc folded) | `features/_archive/20260624-robust-authz-layer` |
-| 2 | **B1** Agent data-model spine (Context + Decisions + cost) | Now | B0 | `NOT-STARTED` | **CRM-BUILD** | TBD |
-| 3 | **B2** Outbox fully wired + agent-event emission | Now | B1, B0, TD-009 | `NOT-STARTED` | **CRM-BUILD** | TBD |
-| 4 | **B3** Brain + fixed agent roster + base | Next | B1 | `NOT-STARTED` | **CRM-BUILD** | TBD |
+| 2 | **B1** Agent data-model spine (Context + Decisions + cost) | Now | B0 | `DONE` (foundational 2026-07-03; **Context + cost 2026-07-07**) | ✅ full SDLC. Foundational: design-review 5 lenses → 39 TCs → 8 slices → verify DONE; ADR-0028/0029. **TD-086 (slices 4-5) now DONE** (2026-07-07): BusinessContext (AC-5) + AgentActionCost (AC-6) — 7-lens design pass → ~48 TCs → 5 slices test-first (S-A schema/migration → S-E adapters + 5 P15 runtime exceptions; commits 84fe45a7..1ee4db01) → verify DONE (core/agent 381 tests green, gate:drift + gate:ratchet PASS). Un-stubs B3's `BusinessContextPort`/`AgentCostLedgerPort`. **Only AC-7 (inspect chip) still deferred** → B7 (frontend, ADR-0034 Relay). Spawned TD-101/TD-102/OQ-TDD-5 | `voxera-crm/features/20260701-agent-data-model-spine` |
+| 3 | **B2** Outbox fully wired + agent-event emission | Now | B1, B0, TD-009 | `DONE` (2026-07-04) | ✅ verified + **harvested** (Kafka-style consumer groups over a RANGE-partitioned Postgres outbox; ADR-0030/0031/0032, LSN-035..039, pattern doc `outbox-consumer-group-relay.md`). TD-009 emit **taxonomy** settled (ADR-0032 + event catalog); per-context emit wiring = mechanical follow-on | `voxera-crm/features/_archive/20260703-outbox-relay` |
+| 4 | **B3** Brain + fixed agent roster + base | Next | B1 | `IN-SDLC:IMPLEMENTING` (opened 2026-07-05) | **Runtime substrate DONE 2026-07-06** (design-first, adversarially reviewed 2×): Mastra runtime + `AgentRuntimeService` turn loop over the B1 spine, delegating-principal authz (agent ⊆ human, no escape confirmed), Operator role, 3 authz-wrapped tools, TD-100 hardening, wall-clock reaper, **async/BullMQ entrypoint** (the repo's first consumer; propose-then-handoff, never auto-exec). **Grounding + cost adapters now LIVE (TD-086 DONE 2026-07-07)** — the real `BusinessContextPort`/`AgentCostLedgerPort` bind over the B1 Context+cost spine. REMAINING: other 6 roles, OQ-5 approval sink, turn-level LLM retry (TD-101), copilot surface | `voxera-crm/features/_archive/B3-agent-runtime` (substrate harvested; remaining slices open fresh folders inheriting the dossier's preconditions) |
 | 5 | **B4** Typed Workflow DSL + primitives + write-path | Next | B1, B3 | `NOT-STARTED` | **CRM-BUILD** | TBD |
 | 6 | **B6** Compliance gate engine + per-motion frames | Next | B4 | `NOT-STARTED` | **CRM-BUILD** | TBD |
 | 7 | **B5** AI outbound voice operator + scoped tools | Next | B3, B4, B6 | `NOT-STARTED` | **CRM-BUILD** | TBD |
@@ -62,7 +62,7 @@ Sequenced by dependency (the keystone is B1; compliance gate B6 precedes first l
 | 13 | **B12** Continuous-improvement loop | Later | B5, B7, B8 | `NOT-STARTED` | **CRM-BUILD** | TBD |
 | 14 | **B13** Deep DACH compliance (Pflegekasse + Art. 9) | Later | B6, B11, B0 | `NOT-STARTED` | **CRM-BUILD** | TBD (dead-last) |
 
-**Next ready on this track:** B0 is **DONE** (verified 2026-06-29) — run **HARVEST** to anti-rot the feature folder. B1's CRM-BUILD is now *dependency-unblocked*, but per [`roadmap-debt-burndown.md`](../../../voxera-crm/engineering-os/roadmap/roadmap-debt-burndown.md) §3 the **P0 hardening slice** (TD-001 migration substrate + TD-056 composition root + TD-047 ADR acceptances + residual IDOR TD-034/035/036 + the enforcement gates) is the stated prerequisite that should land **before B1 opens**. So the true next move is HARVEST → P0 → B1.
+**Next ready on this track:** the **Now horizon is closed** and **B1 is now fully DONE** (foundational + TD-086 Context+cost; only the AC-7 inspect chip remains, deferred to B7). **B3 is the open bet** — the runtime substrate is done and harvested, and its grounding/cost adapters are now LIVE over the completed B1 spine (TD-086). Remaining B3 slices, in rough order: the **OQ-5 approval sink** (turns async ProposedActions into an actionable human surface), **TD-101** (turn-level LLM retry), then the **remaining 6 roles** as their use-cases open (Configurator/Context-Copilot ride B9, Critic/Promoter ride B12). B4 (workflow DSL) is dependency-unblocked once B3's substrate suffices — but note **TD-081** (no dispatch seam) and **TD-082** (forms-ADR contradiction) block B6/B9 respectively and should be settled before those bets open.
 
 ## Track B — Website motion (`voxera-website`)
 
@@ -90,5 +90,7 @@ Sequenced by dependency (the keystone is B1; compliance gate B6 precedes first l
 - Pairs with [`priorities-coach`](../../.claude/skills/priorities-coach/SKILL.md) (what to do next, by strategy) — this registry is *how* to execute it.
 
 ## Changelog
+- 2026-07-07 v4: **B1 → fully DONE.** TD-086 (slices 4-5: BusinessContext AC-5 + AgentActionCost AC-6) implemented test-first (5 slices S-A schema/migration → S-E adapters + 5 P15 runtime exceptions; commits `84fe45a7`..`1ee4db01`) and verified DONE (evidence-based: core/agent 43 suites / 381 tests green, 0 skipped; `gate:drift` PASS; `gate:ratchet` PASS — agent-context core-import-boundary/ddd-coverage/service-authz/authz-matrix/no-pii all 0; context-isolation 68→67; app-tree at-baseline). Un-stubs B3's `BusinessContextPort`/`AgentCostLedgerPort` — **B3's grounding + cost adapters are now LIVE**. Only AC-7 (inspect chip) still deferred → B7 (frontend, ADR-0034 Relay). Spawned TD-101 (turn-level LLM retry), TD-102 (DecisionRecord unbacked Restrict FKs), OQ-TDD-5 (seeder over-grant, INERT). Ticked roadmap.md B1 (Context+cost). Next ready → B3's remaining slices (OQ-5 approval sink → TD-101 → 6 roles). CRM feature folder awaits `harvest-feature` (then slims + archives).
+- 2026-07-06 v3: **catch-up sync with the CRM repo** (the runs completed without ticking this registry — restored). **B1 → DONE** (2026-07-03, foundational spine: AutonomousAgent/AgentRun/DecisionRecord + outbox provenance, full SDLC, ADR-0028/0029; BusinessContext/AgentActionCost/inspect-chip deferred = TD-086, folder active). **B2 → DONE** (2026-07-04, harvested: consumer-group relay over a RANGE-partitioned outbox, ADR-0030/0031; TD-009 taxonomy settled via ADR-0032, per-context emit wiring mechanical). **B3 → IN-SDLC:IMPLEMENTING** (runtime substrate done 2026-07-06: Mastra + turn loop + delegating-principal authz + TD-100 hardening + reaper + async/BullMQ entrypoint; remaining: 6 roles, TD-086 adapters, OQ-5 approval sink, TD-101). Interleaved non-bet work recorded on the CRM side: P1 security sprint (TD-078/079/080 + ADR-0035 consent), strangler forcing-functions (app-tree + frontend gates, ADR-0033), Relay pivot (ADR-0034, TD-099 slice 1). Ticked roadmap.md B1/B2. Next ready recomputed → B3's remaining slices (TD-086 first).
 - 2026-06-29 v2: **B0 → DONE** (verify-feature green: 1054 backend tests pass / 0 fail, gate:ratchet PASS with all four B0 gates floor-0, `schema.graphql` empty diff, all 22 ACs + 14 preconditions verified). Ticked `roadmap.md` B0 checkbox. Next move recomputed: HARVEST B0, then the P0 hardening slice (B1 prerequisite) before B1 opens.
 - 2026-06-29 v1: initial — execution map for roadmap.md v8 (B0–B13 spine + website motion), workflow templates, two-track registry, selection algorithm for the `resume-roadmap` skill.
