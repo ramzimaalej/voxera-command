@@ -1,8 +1,8 @@
 ---
 title: Gap Analysis — CRM to Full Product
-version: 1
+version: 2
 status: active
-updated: 2026-06-22
+updated: 2026-07-27
 owner: you
 ---
 
@@ -12,7 +12,7 @@ A standalone dossier mapping the delta between what the `voxera-crm` codebase do
 
 ## Executive summary
 
-Voxera today is a **strong, multi-tenant, human-operated B2B CRM with a production human-calling substrate** — a sales-pipeline state machine, a polymorphic Resource/Lead model, a full communication/activity log, a browser softphone + power-dialer + callback stack on Twilio/Telnyx, and an Ultravox transcription seam (30 distinct production/partial capabilities). What it has **zero** of is the layer the whole product thesis rests on: there is **no AI-agent layer at all** — no Business Context substrate, no Decision Records, no Brain/orchestrator, no seven-agent roster, no AI voice operator, no configurator/DSL, no compliance gate engine, no Critic/Promoter loop. That entire layer exists only as ADRs (ADR-0003/0004/0005 — 100% blueprint, 0% code). Mapping the 67-capability / 11-theme target against the current state yields **52 gaps** (8 critical), which RICE prioritization and Shape-Up framing collapse into **13 sequenced bets** — a data-model spine first, the agent runtime and the differentiating AI voice operator next, and the deepest DACH compliance depth deliberately last.
+Voxera today is a **strong, multi-tenant, human-operated B2B CRM with a production human-calling substrate** — a sales-pipeline state machine, a polymorphic Resource/Lead model, a full communication/activity log, a browser softphone + power-dialer + callback stack on Twilio/Telnyx, and an Ultravox transcription seam (30 distinct production/partial capabilities). What it has **zero** of is the layer the whole product thesis rests on: there is **no AI-agent layer at all** — no Business Context substrate, no Decision Records, no Brain/orchestrator, no seven-agent roster, no AI voice operator, no configurator/DSL, no compliance gate engine, no Critic/Promoter loop. That entire layer exists only as ADRs (ADR-0003/0004/0005 — 100% blueprint, 0% code). Mapping the 67-capability / 11-theme target against the current state yields **52 gaps** (8 critical), which RICE prioritization and Shape-Up framing collapse into **12 sequenced bets** — a data-model spine first, the agent runtime and the differentiating AI voice operator next.
 
 ## Target product
 
@@ -209,7 +209,7 @@ GAP-01 Business Context · GAP-02 Decision Record · GAP-04 Workflow/DSL typed m
 
 ## Sequenced bets
 
-The 52 RICE-ranked gaps regroup into **13 Shape-Up bets**, sequenced by dependency first and RICE second, each citing the restructuring phase(s) it builds on so the plan is buildable on today's codebase, not a rewrite. Appetite is the budget (small-batch ≈ 1–2 weeks; big-batch ≈ a 6-week cycle). The **full per-bet detail and the sequenced product roadmap live in [roadmap.md](./roadmap.md)** — this is the betting-table summary.
+The 52 RICE-ranked gaps regroup into **12 Shape-Up bets**, sequenced by dependency first and RICE second, each citing the restructuring phase(s) it builds on so the plan is buildable on today's codebase, not a rewrite. Appetite is the budget (small-batch ≈ 1–2 weeks; big-batch ≈ a 6-week cycle). The **full per-bet detail and the sequenced product roadmap live in [roadmap.md](./roadmap.md)** — this is the betting-table summary.
 
 | Bet | Title | Appetite | Horizon | Gaps closed |
 |-----|-------|----------|---------|-------------|
@@ -225,13 +225,12 @@ The 52 RICE-ranked gaps regroup into **13 Shape-Up bets**, sequenced by dependen
 | **B10** | Hybrid-close handoff (in-call booking, inbound triage, escalation) | big | **Later** | GAP-18, 17, 19, 20, 50 |
 | **B11** | OS object layer + brand expression | big | **Later** | GAP-03, 25, 49 |
 | **B12** | Continuous-improvement loop (Critic → eval → Promoter) | big | **Later** | GAP-38, 39, 40, 41, 45 |
-| **B13** | Deep DACH compliance (Pflegekasse paperwork + special-category data) | big | **Later (last)** | GAP-32, 30 |
 
-**Counts:** 13 bets · Now = 2 · Next = 7 · Later = 4.
+**Counts:** 12 bets · Now = 2 · Next = 7 · Later = 3.
 
-**Net build arc:** *Now:* B1 → B2. *Next:* B3 (runtime) → B4 (DSL) → B6 (compliance gate) → B5 (voice operator, gated by B6 — the gate must front dispatch before the first live AI call) → B7 (trust/observability) → B8 (ops surface) → B9 (configurator/onboarding). *Later:* B10 (hybrid-close) → B11 (OS layer + brand) → B12 (improvement loop) → **B13 (deep DACH compliance, dead last)**.
+> **De-scoped (2026-07-27):** the former **B13 — Deep DACH compliance** bet was removed from the roadmap (owner direction). Its two gaps — **GAP-30** (special-category-data handling, GDPR Art. 9) and **GAP-32** (Pflegekasse paperwork) — remain in the backlog above for the record but are **mapped to no bet**; gap ids are permanent and are not renumbered. The generic per-motion compliance gate engine (**B6**, shipped) already serves both GTM motions — only the DACH-care-specific *depth* is dropped. The broader **DACH GTM motion** ([ADR-0009](../../decisions/ADR-0009-english-markets-parallel-motion.md)) is unaffected.
 
-**B13 deep-DACH-compliance is deliberately last (CEO direction, 2026-06-21).** The Pflegekasse paperwork (GAP-32) and GDPR Art. 9 special-category-data handling (GAP-30) are the deepest DACH vertical moat and genuinely defensible — but they are **secondary** to everything else and are sequenced dead last. Critically, the **generic, per-motion compliance *gate engine*** (calling-hours, DNC, consent, recording-consent) lands much earlier in **B6** and serves *both* GTM motions; only the DACH-care-specific *depth* is deferred. The DACH motion operates today without this depth automated — it is moat-deepening, not table-stakes — so pulling it forward would starve the v1 spine and the differentiator.
+**Net build arc:** *Now:* B1 → B2. *Next:* B3 (runtime) → B4 (DSL) → B6 (compliance gate) → B5 (voice operator, gated by B6 — the gate must front dispatch before the first live AI call) → B7 (trust/observability) → B8 (ops surface) → B9 (configurator/onboarding). *Later:* B10 (hybrid-close) → B11 (OS layer + brand) → B12 (improvement loop).
 
 > *Decision recorded as [ADR-0023: Dispatch-layer compliance gate engine](../../../voxera-crm/decisions/ADR-0023-dispatch-layer-compliance-gate-engine.md).*
 
@@ -246,4 +245,5 @@ The 52 RICE-ranked gaps regroup into **13 Shape-Up bets**, sequenced by dependen
 5. **English-markets self-serve readiness (B9).** B9 enables the <60-min self-serve trial the English-markets motion depends on, but it sits at the *end* of "Next." Does the English motion need a lighter-weight onboarding path before B9, or does the DACH-first sequencing implicitly defer the English motion's GTM proof to next year?
 
 ## Changelog
+- 2026-07-27 v2: **removed the B13 (Deep DACH compliance) bet** (owner direction) — deleted its betting-table row, its net-build-arc mention, and the dedicated "deliberately last" rationale paragraph; bet count **13 → 12** (Later 4 → 3). **GAP-30/GAP-32** stay in the backlog (ids are permanent and cross-referenced elsewhere) but are de-scoped to no bet — recorded in the new de-scope note under the betting table. The broader DACH GTM motion (ADR-0009) is unaffected. Synced with roadmap.md v10 + execution-registry v17.
 - 2026-06-22 v1: initial gap-analysis dossier — assembled from the target-product inventory (67 caps / 11 themes), the current-state audit (30 caps, AI-layer absent), the 52-gap backlog, the RICE ranking, and the 13-bet sequence (B13 deep-DACH-compliance dead last per CEO direction).

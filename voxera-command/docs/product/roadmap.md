@@ -1,12 +1,12 @@
 ---
 title: Product Roadmap
-version: 9
+version: 10
 status: active
-updated: 2026-07-06
+updated: 2026-07-27
 owner: you
 ---
 
-> Two parallel motions per [ADR-0009](../../decisions/ADR-0009-english-markets-parallel-motion.md): **DACH** (founder-led, UWG §7-compliant) and **English-speaking markets** (paid-search-led, three verticals). Both motions ride one product spine — the CRM → full-product evolution bets (B1–B13) below.
+> Two parallel motions per [ADR-0009](../../decisions/ADR-0009-english-markets-parallel-motion.md): **DACH** (founder-led, UWG §7-compliant) and **English-speaking markets** (paid-search-led, three verticals). Both motions ride one product spine — the CRM → full-product evolution bets (B1–B12) below.
 >
 > Full reasoning for the bets — gap inventory, RICE ranking, appetites, dependency sequencing: [gap-analysis dossier](./gap-analysis-crm-to-product.md).
 
@@ -14,7 +14,7 @@ owner: you
 
 This roadmap has a **product spine** and **motion-specific surface work**, and they ride together:
 
-1. **Product-evolution bets (B1–B13)** — the platform/product spine that turns the CRM into the AI-native full product. Sequenced by dependency first, RICE second, framed as Shape-Up *appetite bets* (small-batch ≈ 1–2 weeks of one or two builders; big-batch ≈ one full 6-week cycle for most of the team — appetite is the budget, scope flexes to fit). **Both motions ride this spine** — the same engine, authorization layer, audit model, agent roster, compliance gate, and observability surface serve DACH and English markets without forking.
+1. **Product-evolution bets (B1–B12)** — the platform/product spine that turns the CRM into the AI-native full product. Sequenced by dependency first, RICE second, framed as Shape-Up *appetite bets* (small-batch ≈ 1–2 weeks of one or two builders; big-batch ≈ one full 6-week cycle for most of the team — appetite is the budget, scope flexes to fit). **Both motions ride this spine** — the same engine, authorization layer, audit model, agent roster, compliance gate, and observability surface serve DACH and English markets without forking.
 2. **Motion surface work** — the per-motion landing pages, demo endpoints, and activation tweaks (FEAT-001/002 and their successors) that sit on top of the spine.
 
 Horizons map to [`strategy.md`](../strategy/strategy.md) §7 milestones: **Now** = the next 6-week cycle (down-payment on the 12-month milestone) · **Next** = rest of this year (12-month milestone — both motions provable) · **Later** = 24/36-month (OS-underneath surfacing + the v2+ improvement loop).
@@ -70,8 +70,6 @@ Each bet's implementing **FEAT spec is To-Be-Drafted in the implementing code re
 - [ ] **B10 — Hybrid-close handoff** · *big-batch* · closes GAP-18, GAP-17, GAP-19, GAP-20, GAP-50 · depends on: B5, B7 — in-call calendar booking, inbound triage, AMD/auto-drop cost-discipline, mid-call human take-over, mobile companion · FEAT spec **TBD** in `voxera-crm/features/`
 - [ ] **B11 — OS object layer + brand expression** · *big-batch* · closes GAP-03, GAP-25, GAP-49 · depends on: B4, B9 (rides S5) — workspace-defined custom objects (the OS object layer), number-pool management, and the Voxera v2 design system reskin (ADR-0021); OS option value + brand · FEAT spec **TBD** in `voxera-crm/features/`
 - [ ] **B12 — Continuous-improvement loop** · *big-batch* · closes GAP-38, GAP-39, GAP-40, GAP-41, GAP-45 · depends on: B5, B7, B8 — Critic → eval-set → Promoter loop improving voice-agent prompts from real call data + Reporter agent; strategy marks this v2+, do not start until B5's calling loop is in production · FEAT spec **TBD** in `voxera-crm/features/`
-- [ ] **B13 — Deep DACH compliance (Pflegekasse paperwork + special-category data)** · *big-batch* · **sequenced dead last / secondary (CEO direction, 2026-06-21)** · closes GAP-32, GAP-30 · depends on: B6, B11, B0 (reuses B0 column masking for special-category fields rather than rebuilding it) (rides S8) — Pflegekasse paperwork integration + GDPR Art. 9 special-category-data handling; the deepest DACH moat. Deliberately deferred to the very end: the generic per-motion gate engine already lands in B6 and serves both motions; this is only the DACH-care-specific *depth* on top, not table-stakes · FEAT spec **TBD** in `voxera-crm/features/`
-
 ### Motion surface work
 
 - [ ] TCPA cornerstone resource page (website) — credibility asset for the insurance vertical (per `vertical-strategy-english-markets.md` §4.5)
@@ -80,9 +78,10 @@ Each bet's implementing **FEAT spec is To-Be-Drafted in the implementing code re
 - [ ] Adjacent DACH vertical (Hörgeräte or private health insurance) — year-2 milestone per [`strategy.md`](../strategy/strategy.md) §7
 - [ ] Multi-language voice agents — EN as first-class alongside DE — year-2 milestone (the EN voice profile queued in spine bet B5)
 
-> Check the box when the implementing run is merged. Each spine bet (B1–B13) and motion item maps to a FEAT spec; the spec lives in the **implementing code repo** (spine bets in `voxera-crm/features/`, website surface work in `voxera-website/features/`), referenced here by bet/FEAT id per [ADR-0014](../../decisions/ADR-0014-split-engineering-os-from-confidential-command-repo.md). If a line has no FEAT id yet, draft the spec in that code repo before starting work — this confidential roadmap never authors FEAT specs itself.
+> Check the box when the implementing run is merged. Each spine bet (B1–B12) and motion item maps to a FEAT spec; the spec lives in the **implementing code repo** (spine bets in `voxera-crm/features/`, website surface work in `voxera-website/features/`), referenced here by bet/FEAT id per [ADR-0014](../../decisions/ADR-0014-split-engineering-os-from-confidential-command-repo.md). If a line has no FEAT id yet, draft the spec in that code repo before starting work — this confidential roadmap never authors FEAT specs itself.
 
 ## Changelog
+- 2026-07-27 v10: **removed B13 — Deep DACH compliance (Pflegekasse paperwork + special-category data)** from the spine (owner direction). Deleted the Later-horizon bet and updated the spine range `B1–B13` → `B1–B12`. The broader **DACH GTM motion** ([ADR-0009](../../decisions/ADR-0009-english-markets-parallel-motion.md)) is unaffected; the underlying gaps GAP-30/GAP-32 stay in the [gap-analysis](./gap-analysis-crm-to-product.md) backlog but are de-scoped to no bet. Prior changelog entries that reference B13 (v4/v5) are left as historical record. Synced with the execution registry v17.
 - 2026-07-06 v9: **ticked B1 DONE (2026-07-03, foundational — Context/cost halves deferred as TD-086) and B2 DONE (2026-07-04, harvested)**; annotated **B3 in-progress** (runtime substrate done + harvested: Mastra brain, delegating-principal authz, async entrypoint; roster/context/cost/approval-sink remaining). Catch-up sync with the CRM repo alongside registry v3 — the Now horizon is closed; B3 is the open bet.
 - 2026-06-22 v8: resolved B0's technical-"how" pointer from "ADR TBD" to the drafted [ADR-0024](../../../voxera-crm/decisions/ADR-0024-unified-authorization-field-masking-elevation-audit.md) (proposed) in the CRM repo — unified app-layer authorization (field masking, request-scoped elevation, authorization-audit table, one classification + one gate).
 - 2026-06-22 v7: promoted the no-leak rule to a **shared invariant owned by B0** — "no PII, special-category data, or credentials written in the clear to any audit/event surface" — applying uniformly to the B0 authz-audit table, B1 Decision Records, and B2 outbox payloads, enforced by one gate; noted on B1 that Decision Records reference sensitive data by id and store rationale only.
