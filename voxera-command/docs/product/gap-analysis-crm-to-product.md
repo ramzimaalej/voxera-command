@@ -1,8 +1,8 @@
 ---
 title: Gap Analysis — CRM to Full Product
-version: 2
+version: 3
 status: active
-updated: 2026-07-27
+updated: 2026-08-11
 owner: you
 ---
 
@@ -163,6 +163,8 @@ What the live code actually does, mapped against the same 11 themes. Maturity: `
 | GAP-49 | Voxera v2 design system (per ADR-0021) | med | low | No phase; reskin/extend existing Mantine. ADR-0021 lives in voxera-command. |
 | GAP-50 | Mobile companion (live-call overview + drill-in/take-over) | med | low | No phase; net-new (lean v2). |
 | GAP-51 | Per-lead causal audit timeline (event ← causing Decision Record) | med | low | No phase; composes existing events + GAP-02 via GAP-46 primitive. |
+| GAP-53 | Human power-dialer motion rebuilt on the spine (list/campaign dial through the gated dispatch chokepoint) | med | med | **Post-v1 addition (not in the original RICE-52).** Modernizes the Theme-4 human-calling substrate: every dial via CallDispatchService (ADR-0037) → B6 compliance gate → B11 number-pool + B5 recording/transcription + B4 disposition write-back; retires legacy `app/campaign/power-dialer`. Roadmap bet B13-S1. |
+| GAP-54 | AI-assist copilot on the human dialer + warm-transfer from the AI operator | med | med | **Post-v1 addition (not in the original RICE-52).** Live transcript + next-best-action + auto-disposition (reads B7) and AI-operator → human-queue warm-transfer (deepens B10). Roadmap bet B13-S2. |
 
 ### Critical gaps (8) — high moat-impact AND blocking
 
@@ -245,5 +247,6 @@ The 52 RICE-ranked gaps regroup into **12 Shape-Up bets**, sequenced by dependen
 5. **English-markets self-serve readiness (B9).** B9 enables the <60-min self-serve trial the English-markets motion depends on, but it sits at the *end* of "Next." Does the English motion need a lighter-weight onboarding path before B9, or does the DACH-first sequencing implicitly defer the English motion's GTM proof to next year?
 
 ## Changelog
+- 2026-08-11 v3: **added GAP-53 + GAP-54** as **post-v1 additions** (explicitly NOT part of the original RICE-52 — no theme-count / RICE-ranking re-scoring), backing the new roadmap bet **B13 (Power dialer)**. GAP-53 = the human power-dialer motion rebuilt on the spine (list/campaign dial through the gated dispatch chokepoint — CallDispatchService/ADR-0037 → B6 gate → B11 number-pool + B5 recording/transcription + B4 disposition write-back, retiring the legacy `app/campaign/power-dialer`); GAP-54 = the AI-assist copilot + AI-operator→human warm-transfer. These modernize the **Theme-4 human-calling substrate** (always production, left un-migrated by the Relay FE redesign) rather than closing a v1 spine gap. Synced with roadmap.md v11 + execution-registry v18.
 - 2026-07-27 v2: **removed the B13 (Deep DACH compliance) bet** (owner direction) — deleted its betting-table row, its net-build-arc mention, and the dedicated "deliberately last" rationale paragraph; bet count **13 → 12** (Later 4 → 3). **GAP-30/GAP-32** stay in the backlog (ids are permanent and cross-referenced elsewhere) but are de-scoped to no bet — recorded in the new de-scope note under the betting table. The broader DACH GTM motion (ADR-0009) is unaffected. Synced with roadmap.md v10 + execution-registry v17.
 - 2026-06-22 v1: initial gap-analysis dossier — assembled from the target-product inventory (67 caps / 11 themes), the current-state audit (30 caps, AI-layer absent), the 52-gap backlog, the RICE ranking, and the 13-bet sequence (B13 deep-DACH-compliance dead last per CEO direction).
