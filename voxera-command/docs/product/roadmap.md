@@ -1,8 +1,8 @@
 ---
 title: Product Roadmap
-version: 12
+version: 13
 status: active
-updated: 2026-09-28
+updated: 2026-09-30
 owner: you
 ---
 
@@ -34,8 +34,8 @@ Each bet's implementing **FEAT spec is To-Be-Drafted in the implementing code re
 ### Motion surface work
 
 **English-markets motion** — [playbook](../strategy/vertical-strategy-english-markets.md):
-- [ ] **FEAT-001** — Translate vertical landing-page specs to Astro — foundational; blocks every vertical page below · spec: `voxera-website/features/FEAT-001-vertical-landing-templates-astro/spec.md`
-- [ ] **FEAT-002** — Build /real-estate landing page — depends on FEAT-001 · spec: `voxera-website/features/FEAT-002-real-estate-landing-page/spec.md`
+- [x] **FEAT-001** — Translate vertical landing-page specs to Astro — foundational; blocks every vertical page below · spec: `voxera-website/features/FEAT-001-vertical-landing-templates-astro/spec.md` ✅ **DONE 2026-09-29** (registry v38).
+- [x] **FEAT-002** — Build /real-estate landing page — depends on FEAT-001 · spec: `voxera-website/features/FEAT-002-real-estate-landing-page/spec.md` ✅ **DONE 2026-09-29** (registry v38).
 
 **DACH motion**:
 - [ ] Continuing on the existing motion — no new specs open right now
@@ -57,7 +57,7 @@ Each bet's implementing **FEAT spec is To-Be-Drafted in the implementing code re
 ### Motion surface work
 
 **English-markets motion**:
-- [ ] `/home-services` landing page with sub-vertical chips (website) — after FEAT-002 ships; FEAT to be drafted in `voxera-website/features/`
+- [x] `/home-services` landing page with sub-vertical chips (website) — after FEAT-002 ships; FEAT to be drafted in `voxera-website/features/` ✅ **DONE 2026-09-29** (registry v39; the `?trade=` sub-vertical variant mechanism shipped as one page).
 - [ ] `/insurance` landing page (website) — Q2; depends on TCPA-compliance backend work (rides spine bet B6) + IMO partnership conversations
 - [ ] Backend integration for the "Get called by the AI now" demo endpoint (crm) — converts the FEAT-001 Pages Function stub into a real outbound-call trigger; depends on spine bets B5 (voice operator) + B6 (compliance gate)
 
@@ -70,7 +70,7 @@ Each bet's implementing **FEAT spec is To-Be-Drafted in the implementing code re
 - [x] **B10 — Hybrid-close handoff** · ✅ **DONE — SDLC-verified + harvested 2026-07-31** (`voxera-crm/features/_archive/20260730-hybrid-close-handoff`). *big-batch* · closes GAP-18, GAP-17, GAP-19, GAP-20, GAP-50 · depends on: B5, B7 — in-call calendar booking, inbound triage, AMD/auto-drop cost-discipline, mid-call human take-over, mobile companion · FEAT spec **TBD** in `voxera-crm/features/`
 - [x] **B11 — OS object layer + brand expression** · ✅ **DONE — SDLC-verified + harvested 2026-07-31** (`voxera-crm/features/_archive/20260728-os-object-layer` + `20260729-number-pool-management` + `20260729-vertical-onboarding-presets`). *big-batch* · closes GAP-03, GAP-25, GAP-49 · depends on: B4, B9 (rides S5) — workspace-defined custom objects (the OS object layer), number-pool management, and the Voxera v2 design system reskin (ADR-0021); OS option value + brand · FEAT spec **TBD** in `voxera-crm/features/`
 - [x] **B12 — Continuous-improvement loop** · ✅ **DONE — SDLC-verified + harvested 2026-07-31** (`voxera-crm/features/_archive/20260730-continuous-improvement-loop`). *big-batch* · closes GAP-38, GAP-39, GAP-40, GAP-41, GAP-45 · depends on: B5, B7, B8 — Critic → eval-set → Promoter loop improving voice-agent prompts from real call data + Reporter agent; strategy marks this v2+, do not start until B5's calling loop is in production · FEAT spec **TBD** in `voxera-crm/features/`
-- [ ] **B13 — Power dialer (human motion + AI-assist layer)** · *big-batch* · closes GAP-53, GAP-54 · depends on: B4 ✓, B5 ✓, B6 ✓, B7 ✓, B10 ✓, B11 ✓ · 🔨 **IN PROGRESS** (`voxera-crm/features/20260811-power-dialer-motion`, `status.json` = `IMPLEMENTING`) — the backend dial motion, warm transfer ([ADR-0046]/[ADR-0048]/[ADR-0049]) and the Relay dialer workspace have shipped, and the legacy `components/Communication/PowerDialer` tree is already deleted. This bet was ADDED on the `roadmap/adr-0022-b13-annotation` branch and never reached main — the row is carried here so main is the single source of truth. (Not to be confused with the FORMER B13 "Deep DACH compliance", removed in registry v17.)
+- [x] **B13 — Power dialer (human motion + AI-assist layer)** · *big-batch* · closes GAP-53, GAP-54 · depends on: B4 ✓, B5 ✓, B6 ✓, B7 ✓, B10 ✓, B11 ✓ · ✅ **DONE 2026-09-30** (verify-feature PASS; `voxera-crm/features/20260811-power-dialer-motion`, `status.json` = `DONE`) — the backend dial motion, warm transfer ([ADR-0046]/[ADR-0048]/[ADR-0049]) and the Relay dialer workspace have shipped, and the legacy `components/Communication/PowerDialer` tree is already deleted. This bet was ADDED on the `roadmap/adr-0022-b13-annotation` branch and never reached main — the row is carried here so main is the single source of truth. (Not to be confused with the FORMER B13 "Deep DACH compliance", removed in registry v17.)
 ### Frontend — the "Grounded Object Graph" redesign (Track C)
 
 > Opened by a `ux-research-council` run (unanimous 3-round consensus, every seat ≥92) and executed as 18
@@ -90,7 +90,7 @@ Each bet's implementing **FEAT spec is To-Be-Drafted in the implementing code re
 - [ ] **FE #15/#16/#17 — the live surfaces** · ⏸ **DESIGNED-BUT-DARK BY INTENT, not unbuilt**: the live-call
       board, mid-call take-over and the object-scoped free-form ask all ship today as one honest
       `LiveCallsUnavailable` surface. Unblocked only by `graphql-ws` (OQ-12) + the proposed `requestAgentTask`.
-- [ ] **FE residue — the trust LENS is not yet generalized** · the redesign delivered the shared SHELL to all
+- [x] **FE residue — the trust LENS is not yet generalized** · the redesign delivered the shared SHELL to all ✅ **DONE 2026-09-28** (registry v37 — TD-127(a), TD-128(c), TD-130 all closed).
       five object workspaces but the LENS to one (EntityDetail): `AuthorizationChip` renders in a single
       place, `ProposalCard` in one other. Tracked as `voxera-crm` TD-128/129/130. Partly blocked on absent
       backend fields (no per-object `aiWorked`/`scopedApprovalsCount`; compliance is Lead-only, TD-127).
@@ -106,6 +106,7 @@ Each bet's implementing **FEAT spec is To-Be-Drafted in the implementing code re
 > Check the box when the implementing run is merged. Each spine bet (B1–B12) and motion item maps to a FEAT spec; the spec lives in the **implementing code repo** (spine bets in `voxera-crm/features/`, website surface work in `voxera-website/features/`), referenced here by bet/FEAT id per [ADR-0014](../../decisions/ADR-0014-split-engineering-os-from-confidential-command-repo.md). If a line has no FEAT id yet, draft the spec in that code repo before starting work — this confidential roadmap never authors FEAT specs itself.
 
 ## Changelog
+- 2026-09-30 v13: **B13 ticked — the CRM product spine B0–B13 is COMPLETE.** `verify-feature` returned PASS on the power dialer with the whole gate green (backend:lint 0, backend:test 493 suites / 3830 tests, frontend:test 228 files / 1459 tests, gate:ratchet + gate:drift PASS); 12 of 13 ACs carry direct passing evidence and all 11 dossier preconditions hold. Two residues recorded rather than absorbed: AC-9's `TC-AUDIT-CHAIN` was never implemented (every link of the correlationId audit chain is asserted alone, nothing joins them → CRM **TD-141**), and the 80 coverage target was not measured because `backend:test` runs without `--coverage`. The verify pass also found `backend:lint` red with one of its three errors introduced by B13's own retirement commit; fixed before advancing. Also **reconciled four stale checkboxes** whose registry rows already read DONE — FEAT-001 + FEAT-002 (v38), `/home-services` (v39) and the FE residue (v37) — because an unticked box that the registry calls done makes the next `resume-roadmap` mis-derive state. The nine boxes still open are the genuinely open ones: blocked (`/insurance`, the demo endpoint), dark by intent (FE #15/#16/#17) or Later.
 - 2026-09-23 v11: **reconciled this doc with the code, which had run six weeks ahead of it.** (a) TICKED **B5, B7, B8, B9, B10, B11, B12** — all seven were already `DONE` in the execution registry (v33, 2026-07-31) and each carries a `features/_archive/**/outcome.md` reading `Status: DONE (SDLC-verified)`; only THIS doc still showed them open, so the two canonical artifacts disagreed with each other. (b) ADDED **B13 — Power dialer**, which existed only on the unmerged `roadmap/adr-0022-b13-annotation` branch and so was absent from main entirely; its real status is IN PROGRESS. (c) ADDED the **"Grounded Object Graph" frontend track (Track C)** — 18 handoffs of shipped UI that appeared NOWHERE in this roadmap, including the honest record that #15/#16/#17 are designed-but-DARK by intent and that the trust LENS is generalized to one object family of five (crm TD-128/129/130). Nothing was marked done that source did not confirm; B3 stays IN PROGRESS because its own registry row still names 'the other 6 roles' as remaining.
 - 2026-07-27 v10: **removed B13 — Deep DACH compliance (Pflegekasse paperwork + special-category data)** from the spine (owner direction). Deleted the Later-horizon bet and updated the spine range `B1–B13` → `B1–B12`. The broader **DACH GTM motion** ([ADR-0009](../../decisions/ADR-0009-english-markets-parallel-motion.md)) is unaffected; the underlying gaps GAP-30/GAP-32 stay in the [gap-analysis](./gap-analysis-crm-to-product.md) backlog but are de-scoped to no bet. Prior changelog entries that reference B13 (v4/v5) are left as historical record. Synced with the execution registry v17.
 - 2026-07-06 v9: **ticked B1 DONE (2026-07-03, foundational — Context/cost halves deferred as TD-086) and B2 DONE (2026-07-04, harvested)**; annotated **B3 in-progress** (runtime substrate done + harvested: Mastra brain, delegating-principal authz, async entrypoint; roster/context/cost/approval-sink remaining). Catch-up sync with the CRM repo alongside registry v3 — the Now horizon is closed; B3 is the open bet.
