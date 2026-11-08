@@ -21,7 +21,8 @@ owner: you
 
 1. **Follow the blueprint in full.** Every concept in it is a requirement below.
 2. **The whole platform is event-sourced**, with the event store in **Postgres** (ADR-0080, ADR-0081). Same day:
-   **every change to data** is an event, for audit and traceability (ADR-0085).
+   **every change to data** is an event, for audit and traceability (ADR-0085); deleted accounts are wiped nightly
+   with a confirmation to the owner (ADR-0086). All of ADR-0080..0086 are accepted.
 3. **Voice strategy follows the blueprint:** onboarding is asynchronous and multimodal by default; Copilot Live
    (built, DONE 2026-11-08, unreleased) becomes an optional mode and moves toward day-to-day use (ADR-0083).
 
@@ -108,6 +109,7 @@ Ids in brackets are the blueprint ids; each row names the bet that delivers it.
 | R7.1 | **Every change to data** is recorded as an event and state is derived from events (Postgres store); nothing — code, job, webhook, console or migration — can change a table without an event. | BP-ES-1..5 | GAP-81, GAP-82 |
 | R7.1a | Every change records who made it, on whose behalf, under which permission, why, and from which knowledge; history is tamper-evident. | BP-ES-6/7 | GAP-81 |
 | R7.2 | Personal data in events is erasable (crypto-shredding). | BP-ES-3 | GAP-81 |
+| R7.2a | When an account is deleted it closes at once, a nightly job wipes all of its data, and the owner receives a confirmation of what was removed and what remains elsewhere (backups up to 30 days, invoices at Stripe). | BP-ES-8 | GAP-81 |
 | R7.3 | Versioned prompts; prompt evaluation and regression testing. | BP-NFR-02/11 | GAP-70 |
 | R7.4 | Multi-model AI with cost-aware routing. | BP-NFR-08/12 | GAP-83 |
 | R7.5 | Enterprise availability, auditability, explainability, tenant isolation, human approval, end-to-end observability. | BP-NFR-01/05/06/09/10/13 | GAP-81, GAP-68 |

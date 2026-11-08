@@ -88,7 +88,7 @@ Sequenced by dependency (the keystone is B1; compliance gate B6 precedes first l
 
 ## Track D — AI-native refactor program (`voxera-crm`)
 
-Opened 2026-11-08 from the owner's AI-Native CRM Refactoring Blueprint v1.0. Bet text in [`roadmap.md`](./roadmap.md), requirements R1–R7 in [`ai-native-platform-requirements.md`](./ai-native-platform-requirements.md), gaps GAP-55..84 in the [gap analysis](./gap-analysis-crm-to-product.md). The CRM plan sequences the slices; each slice group is one feature folder through the full SDLC. ADR-0080..0084 are `proposed` and are accepted in ES-0 / KP-0 before code.
+Opened 2026-11-08 from the owner's AI-Native CRM Refactoring Blueprint v1.0. Bet text in [`roadmap.md`](./roadmap.md), requirements R1–R7 in [`ai-native-platform-requirements.md`](./ai-native-platform-requirements.md), gaps GAP-55..84 in the [gap analysis](./gap-analysis-crm-to-product.md). The CRM plan sequences the slices; each slice group is one feature folder through the full SDLC. ADR-0080..0086 were accepted by the owner on 2026-11-08 (0085: audit envelope + tamper evidence; 0086: nightly wipe of deleted accounts).
 
 | Order | Bet | Horizon | Depends on | Status | Workflow | Feature folder |
 |---|---|---|---|---|---|---|
@@ -103,7 +103,7 @@ Opened 2026-11-08 from the owner's AI-Native CRM Refactoring Blueprint v1.0. Bet
 | 9 | **B22** Customer-facing agents | Later | B19, B21 | `NOT-STARTED` | **CRM-BUILD** per slice group (full SDLC, design-first) | plan `voxera-crm/engineering-os/roadmap/ai-native-refactor-plan.md` slices AG-5..AG-11 |
 | 10 | **B23** Continuous evolution | Later | B16, B21 | `NOT-STARTED` | **CRM-BUILD** per slice group (full SDLC, design-first) | plan `voxera-crm/engineering-os/roadmap/ai-native-refactor-plan.md` slices CE-1..CE-4 |
 
-**Next ready on this track:** **B14 slice ES-0** — accept ADR-0080/0081, then design-review the event store (`cd voxera-crm` → `/new-feature` for "event-sourcing foundation", then the SDLC). B16 KP-0 (the domain catalog design review) can run in parallel as design-only work.
+**Next ready on this track:** **B14 slice ES-0** — design-review the event store (`cd voxera-crm` → `/new-feature` for "event-sourcing foundation", then the SDLC). B16 KP-0 (the domain catalog design review) can run in parallel as design-only work.
 
 ## Track B — Website motion (`voxera-website`)
 
