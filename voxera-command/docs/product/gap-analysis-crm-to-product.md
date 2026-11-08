@@ -1,8 +1,8 @@
 ---
 title: Gap Analysis — CRM to Full Product
-version: 2
+version: 3
 status: active
-updated: 2026-07-27
+updated: 2026-11-08
 owner: you
 ---
 
@@ -236,6 +236,58 @@ The 52 RICE-ranked gaps regroup into **12 Shape-Up bets**, sequenced by dependen
 
 > *Decision recorded as [ADR-0022: Evolve the CRM into the AI product via strangler-fig sequencing](../../decisions/ADR-0022-strangler-fig-crm-to-ai-product.md).*
 
+## Blueprint v1.0 gaps and bets (2026-11-08)
+
+The owner's **AI-Native CRM Refactoring Blueprint v1.0** (ids in [`voxera-crm/engineering-os/architecture/ai-native-refactoring-blueprint-v1.0.md`](../../../voxera-crm/engineering-os/architecture/ai-native-refactoring-blueprint-v1.0.md)) was mapped against the code on `rm/agentic` by four read-only surveys. The result is 30 new gaps, grouped into ten bets B14–B23 ([roadmap](./roadmap.md), [requirements](./ai-native-platform-requirements.md)). Sequenced by dependency only — RICE does not apply, because the owner ruled the whole blueprint in scope.
+
+| Gap | What is missing | Bet | Blueprint |
+|---|---|---|---|
+| GAP-55 | CBKM: typed, evidenced facts with confidence across all blueprint domains; published immutable versions; nothing reads raw conversation | B16 | BP-K, BP-FR-01/02/03/06/11 |
+| GAP-56 | Per-fact knowledge lifecycle Extracted→Inferred→Reviewed→Validated→Approved→Published→Consumed | B16 | BP-L |
+| GAP-57 | Per-answer review pipeline (intent, extraction, completeness, specificity, readiness, consistency, dependencies, confidence, approval) with targeted follow-ups | B16 | BP-R, BP-FR-04/08 |
+| GAP-58 | Automatic contradiction detection between facts | B16 | BP-FR-05 |
+| GAP-59 | Dependency analysis and gap analyzer | B16 | BP-V-5, BP-C-6 |
+| GAP-60 | Coverage by per-domain confidence threshold, shown continuously | B16 | BP-COV, BP-FR-07 |
+| GAP-61 | Copilot as single-purpose stages (orchestrator, planner, extraction, domain expert, review, consistency, gaps, confidence, recommender, builder) | B16 | BP-M |
+| GAP-62 | Async multimodal inputs: voice messages, documents, website, CRM/email imports, meeting transcripts; pause/resume | B17 | BP-UX, BP-VS-1/2 |
+| GAP-63 | Interview modes: Guided, Business Discovery, Collaborative Design | B17 | BP-IM |
+| GAP-64 | CRM generators for relationships, views, dashboards and permissions (objects/pipelines exist) | B18 | BP-G-1 |
+| GAP-65 | Automation generators: routing, assignment, notifications, triggers | B18 | BP-G-2 |
+| GAP-66 | Knowledge artifact generators: FAQs, playbooks, prompt context, documentation | B18 | BP-G-4 |
+| GAP-67 | Deterministic generation with same-input-same-output evals | B18 | BP-NFR-04 |
+| GAP-68 | Lineage on every applied artifact (why, which answers, which rules, which agents depend on it) | B18 | BP-P-4, BP-FR-11, BP-SC-9 |
+| GAP-69 | Readiness report before activation and a provisioning gate on missing critical knowledge | B18 | BP-V-9, BP-FR-12 |
+| GAP-70 | AgentSpec generated from knowledge with readiness scores and per-spec evals | B19 | BP-AG, BP-FR-10 |
+| GAP-71 | Integration Capability Registry with six states; knowledge independent of integrations | B20 | BP-I |
+| GAP-72 | Provider abstractions; business logic free of provider names | B20 | BP-RM-3, BP-SC-6 |
+| GAP-73 | Integration authentication framework (OAuth, refresh, revocation) | B20 | BP-RM-3 |
+| GAP-74 | Provider-neutral normalized inbound events | B20 | BP-RM-3 |
+| GAP-75 | Unified interaction model and one agent-readable history; notes & timeline | B21 | BP-UI, BP-RM-4 |
+| GAP-76 | Email channel (send, receive, threads) as interactions | B21 | BP-RM-4 |
+| GAP-77 | Calendar & meetings channel with sync and transcripts | B21 | BP-RM-4 |
+| GAP-78 | SMS channel persisted, inbound and outbound | B21 | BP-RM-4 |
+| GAP-79 | Customer-facing agents: qualification, email, support, meeting assistant, renewal, SMS (calling exists) | B22 | BP-RM-5, BP-G-3 |
+| GAP-80 | Activity-driven knowledge proposals and re-interview | B23 | BP-P-5, BP-C-11 |
+| GAP-81 | Event-sourcing foundation: Postgres event store, projectors, crypto-shredding, relay re-point, gates | B14 | BP-ES, ADR-0080/0081 |
+| GAP-82 | Every bounded context event-sourced (six waves) | B15 | BP-ES-1 |
+| GAP-83 | Multi-model routing with cost tiers per stage/agent | B16 | BP-NFR-08/12 |
+| GAP-84 | Prompt-to-artifact paths (Brain dispatch, targeted workflow edits) re-routed through knowledge | B18 | BP-P-2, BP-A-1 |
+
+| Bet | Title | Appetite | Horizon | Gaps closed |
+|---|---|---|---|---|
+| **B14** | Event-sourcing foundation | big | **Now** | GAP-81 |
+| **B15** | Event-source every context | big ×6 | **Next** | GAP-82 |
+| **B16** | Knowledge platform (CBKM) | big | **Now** | GAP-55..61, 83 |
+| **B17** | Async multimodal interview | big | **Next** | GAP-62, 63 |
+| **B18** | Workspace generation from approved knowledge | big | **Next** | GAP-64..69, 84 |
+| **B19** | Agent specs + readiness | big | **Next** | GAP-70 |
+| **B20** | Integration foundation | big | **Next** | GAP-71..74 |
+| **B21** | Unified interactions + channels | big | **Later** | GAP-75..78 |
+| **B22** | Customer-facing agents | big | **Later** | GAP-79 |
+| **B23** | Continuous evolution | small | **Later** | GAP-80 |
+
+**Arc:** B14 → B16 → (B15 waves in parallel) → B17 + B18 → B19 + B20 → B21 → B22 → B23. Critical path: event store → CBKM publication → generators → readiness → agent specs.
+
 ## Open questions
 
 1. **Business Context versioning depth (B1).** B1 deliberately ships "one editable version + history," not a full temporal store. Is that sufficient for the audit/trust posture the vision promises, or will regulated customers expect point-in-time reconstruction of "what Context did the agent read on date X" sooner than v2?
@@ -245,5 +297,6 @@ The 52 RICE-ranked gaps regroup into **12 Shape-Up bets**, sequenced by dependen
 5. **English-markets self-serve readiness (B9).** B9 enables the <60-min self-serve trial the English-markets motion depends on, but it sits at the *end* of "Next." Does the English motion need a lighter-weight onboarding path before B9, or does the DACH-first sequencing implicitly defer the English motion's GTM proof to next year?
 
 ## Changelog
+- 2026-11-08 v3: **added the Blueprint v1.0 gaps (GAP-55..84) and bets B14–B23** from the owner's AI-Native CRM Refactoring Blueprint, with the owner rulings of the same day (whole-platform event sourcing on Postgres; async multimodal onboarding). Earlier GAP-01..54 and bets B0–B13 are unchanged.
 - 2026-07-27 v2: **removed the B13 (Deep DACH compliance) bet** (owner direction) — deleted its betting-table row, its net-build-arc mention, and the dedicated "deliberately last" rationale paragraph; bet count **13 → 12** (Later 4 → 3). **GAP-30/GAP-32** stay in the backlog (ids are permanent and cross-referenced elsewhere) but are de-scoped to no bet — recorded in the new de-scope note under the betting table. The broader DACH GTM motion (ADR-0009) is unaffected. Synced with roadmap.md v10 + execution-registry v17.
 - 2026-06-22 v1: initial gap-analysis dossier — assembled from the target-product inventory (67 caps / 11 themes), the current-state audit (30 caps, AI-layer absent), the 52-gap backlog, the RICE ranking, and the 13-bet sequence (B13 deep-DACH-compliance dead last per CEO direction).

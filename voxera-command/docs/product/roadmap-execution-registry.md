@@ -1,6 +1,6 @@
 ---
 title: Roadmap Execution Registry
-version: 44
+version: 45
 status: active
 updated: 2026-11-08
 owner: you
@@ -86,6 +86,25 @@ Sequenced by dependency (the keystone is B1; compliance gate B6 precedes first l
 
 **Next ready on this track:** none — Track C is COMPLETE (2026-10-02). Remaining are pre-production owner checks (voxera-crm TD-151, TD-154, TD-155, TD-156, from demo parity TD-162, TD-164, TD-169..TD-172, and from Copilot Live TD-196) and the project-end merge of `rm/agentic`. GAP-40 (prompt rollout) is now BUILT but ships OFF: its enablement defaults off and live voice accounts cannot roll out until a production-model eval exists (owner rulings 2026-10-11).
 
+## Track D — AI-native refactor program (`voxera-crm`)
+
+Opened 2026-11-08 from the owner's AI-Native CRM Refactoring Blueprint v1.0. Bet text in [`roadmap.md`](./roadmap.md), requirements R1–R7 in [`ai-native-platform-requirements.md`](./ai-native-platform-requirements.md), gaps GAP-55..84 in the [gap analysis](./gap-analysis-crm-to-product.md). The CRM plan sequences the slices; each slice group is one feature folder through the full SDLC. ADR-0080..0084 are `proposed` and are accepted in ES-0 / KP-0 before code.
+
+| Order | Bet | Horizon | Depends on | Status | Workflow | Feature folder |
+|---|---|---|---|---|---|---|
+| 1 | **B14** Event-sourcing foundation | Now | — | `NOT-STARTED` | **CRM-BUILD** per slice group (full SDLC, design-first) | plan `voxera-crm/engineering-os/roadmap/ai-native-refactor-plan.md` slices ES-0..ES-4 |
+| 2 | **B16** Knowledge platform (CBKM) | Now | B14 | `NOT-STARTED` | **CRM-BUILD** per slice group (full SDLC, design-first) | plan `voxera-crm/engineering-os/roadmap/ai-native-refactor-plan.md` slices KP-0..KP-8 |
+| 3 | **B15** Event-source every context (6 waves) | Next | B14 | `NOT-STARTED` | **CRM-BUILD** per slice group (full SDLC, design-first) | plan `voxera-crm/engineering-os/roadmap/ai-native-refactor-plan.md` slices §5.3 waves 1–6, ES-9 |
+| 4 | **B17** Async multimodal interview | Next | B16 | `NOT-STARTED` | **CRM-BUILD** per slice group (full SDLC, design-first) | plan `voxera-crm/engineering-os/roadmap/ai-native-refactor-plan.md` slices IX-1..IX-6 |
+| 5 | **B18** Workspace generation from approved knowledge | Next | B16 | `NOT-STARTED` | **CRM-BUILD** per slice group (full SDLC, design-first) | plan `voxera-crm/engineering-os/roadmap/ai-native-refactor-plan.md` slices WG-1..WG-9 |
+| 6 | **B19** Agent specs + readiness | Next | B16, B18 | `NOT-STARTED` | **CRM-BUILD** per slice group (full SDLC, design-first) | plan `voxera-crm/engineering-os/roadmap/ai-native-refactor-plan.md` slices AG-1..AG-4 |
+| 7 | **B20** Integration foundation | Next | B14 | `NOT-STARTED` | **CRM-BUILD** per slice group (full SDLC, design-first) | plan `voxera-crm/engineering-os/roadmap/ai-native-refactor-plan.md` slices IN-0..IN-6 |
+| 8 | **B21** Unified interactions + channels | Later | B20, B15 (activity wave) | `NOT-STARTED` | **CRM-BUILD** per slice group (full SDLC, design-first) | plan `voxera-crm/engineering-os/roadmap/ai-native-refactor-plan.md` slices UI-1..UI-6 |
+| 9 | **B22** Customer-facing agents | Later | B19, B21 | `NOT-STARTED` | **CRM-BUILD** per slice group (full SDLC, design-first) | plan `voxera-crm/engineering-os/roadmap/ai-native-refactor-plan.md` slices AG-5..AG-11 |
+| 10 | **B23** Continuous evolution | Later | B16, B21 | `NOT-STARTED` | **CRM-BUILD** per slice group (full SDLC, design-first) | plan `voxera-crm/engineering-os/roadmap/ai-native-refactor-plan.md` slices CE-1..CE-4 |
+
+**Next ready on this track:** **B14 slice ES-0** — accept ADR-0080/0081, then design-review the event store (`cd voxera-crm` → `/new-feature` for "event-sourcing foundation", then the SDLC). B16 KP-0 (the domain catalog design review) can run in parallel as design-only work.
+
 ## Track B — Website motion (`voxera-website`)
 
 | Order | Item | Horizon | Depends on | Status | Workflow | Spec |
@@ -112,6 +131,7 @@ Sequenced by dependency (the keystone is B1; compliance gate B6 precedes first l
 - Pairs with [`priorities-coach`](../../.claude/skills/priorities-coach/SKILL.md) (what to do next, by strategy) — this registry is *how* to execute it.
 
 ## Changelog
+- 2026-11-08 v45: **opened Track D — the AI-native refactor program (B14–B23)** from the owner's Refactoring Blueprint v1.0, with three owner rulings: follow the blueprint in full, event-source the whole platform on Postgres (voxera-crm ADR-0080/0081), and async multimodal onboarding with Copilot Live optional (ADR-0083). New `ai-native-platform-requirements.md`; roadmap v14; gap analysis v3 (GAP-55..84). voxera-crm carries the blueprint with stable ids and the implementation plan. Next ready: B14 ES-0.
 - 2026-11-08 v44: **Copilot Live voice DONE + harvested (Track C row 9, new).** voxera-crm `20261023-copilot-live-voice` moves the Context Copilot interview onto Gemini Live (voice + typed turns in one session, text fallback, AI-credits metering) through the full design-first SDLC ([ADR-0078]; ADR-0079 stays proposed). The first verify sent it back for a usage double count, missing telemetry, a missing orphan sweep and the S5 eval harness; all fixed or owner-ruled, and the second verify passed with the full suites green. DONE is not released: the owner release checklist (TD-196, REL-02..REL-12) gates production, including the DPIA and both companion features reaching DONE. Merge of `rm/agentic` remains the project-end step.
 - 2026-10-15 v43: **Demo parity DONE + harvested (Track C row 8, new).** Five voxera-crm features rebuilt the surfaces the owner's demo shows, because no earlier spec had cited the demo and the shipped UI had drifted from it (voxera-crm LSN-098): the Decision Record drawer, the lead audit timeline, Today + Improvements, onboarding, and live call / mobile / Brain at work. All five went through design-first SDLC + adversarial verify; the owner ruled the open findings on 2026-10-15 and marked them DONE. Decisions ADR-0059..0068 and the ADR-0054 addendum accepted. **GAP-40 is now built** (eval-gated, guarded prompt rollout with a concurrent control and auto-rollback) but ships OFF, and live voice accounts are blocked from rollout until a production-model eval exists, so the strategy gate still holds in production. A program-wide defect surfaced on the way: the server's GraphQL limits rejected 21 of the app's own screens; calibrated + guarded in CI (ADR-0068). Pre-release owner items: DPIA before any live guard (TD-162), the onboarding affected-accounts list (TD-164), live-model evals (TD-169), DE copy (TD-170), manual browser checks (TD-171), the full CI run (TD-172). Merge of `rm/agentic` remains the project-end step.
 - 2026-10-02 v42: **Track C COMPLETE — the owner ordered "enable everything except the website" and every dark CRM surface is built** on `voxera-crm` `rm/agentic` (~130 commits, pushed): live-call surfaces + transcription + take-over (row 4), ask-this-record + thinking stream, responsive mobile, saved views (row 6, new), inbound calling (row 7, new); ADR-0054..0058. Shipped defects fixed along the way: PII in GraphQL traces (TD-147) and secrets in request logs (TD-149), a missing CASL check on the live-call subscription, Super Admin 500s on five list queries (TD-153), the voice operator claiming "noted" on unsaved proposals (TD-148). Owner rulings: GAP-40 stays off; Twilio for STT. Pre-prod owner checks remain.

@@ -1,8 +1,8 @@
 ---
 title: Product Roadmap
-version: 13
+version: 14
 status: active
-updated: 2026-09-30
+updated: 2026-11-08
 owner: you
 ---
 
@@ -20,6 +20,31 @@ This roadmap has a **product spine** and **motion-specific surface work**, and t
 Horizons map to [`strategy.md`](../strategy/strategy.md) §7 milestones: **Now** = the next 6-week cycle (down-payment on the 12-month milestone) · **Next** = rest of this year (12-month milestone — both motions provable) · **Later** = 24/36-month (OS-underneath surfacing + the v2+ improvement loop).
 
 Each bet's implementing **FEAT spec is To-Be-Drafted in the implementing code repo** (`voxera-crm/features/`) per [ADR-0014](../../decisions/ADR-0014-split-engineering-os-from-confidential-command-repo.md) — this roadmap references the work by bet id and future intent only; it does **not** author FEAT specs.
+
+## The AI-native refactor program (B14–B23) — current focus
+
+*Opened 2026-11-08 from the owner's **AI-Native CRM Refactoring Blueprint v1.0**. The B0–B13 spine is complete; this program re-founds the platform as "a business knowledge platform that happens to generate a CRM". Requirements: [`ai-native-platform-requirements.md`](./ai-native-platform-requirements.md) (R1–R7). Blueprint with stable ids: [`voxera-crm/engineering-os/architecture/ai-native-refactoring-blueprint-v1.0.md`](../../../voxera-crm/engineering-os/architecture/ai-native-refactoring-blueprint-v1.0.md). Engineering plan: [`voxera-crm/engineering-os/roadmap/ai-native-refactor-plan.md`](../../../voxera-crm/engineering-os/roadmap/ai-native-refactor-plan.md). Owner rulings: follow the blueprint in full; **event-source the whole platform on Postgres** ([ADR-0080](../../../voxera-crm/decisions/ADR-0080-whole-platform-event-sourcing-on-postgres.md), [ADR-0081](../../../voxera-crm/decisions/ADR-0081-crypto-shredding-for-personal-data-in-the-event-store.md)); **async multimodal onboarding, Copilot Live optional** ([ADR-0083](../../../voxera-crm/decisions/ADR-0083-asynchronous-multimodal-onboarding-live-voice-optional.md)). Speed is not a hard constraint.*
+
+### Now
+
+- [ ] **B14 — Event-sourcing foundation** · *big-batch* · closes GAP-81 · depends on: — · the Postgres event store (per-stream optimistic concurrency, append-only, partitioned), aggregate + projector kit (inline projections into today's tables so reads and CASL don't move), crypto-shredding for personal data, the outbox relay re-pointed at the store, and the `direct-write` / `event-catalog` / `event-pii` gates · plan slices ES-0..ES-4
+- [ ] **B16 — Knowledge platform (CBKM)** · *big-batch* · closes GAP-55, GAP-56, GAP-57, GAP-58, GAP-59, GAP-60, GAP-61, GAP-83 · depends on: B14 · blueprint phase 1: the `knowledge` context born event-sourced — typed, evidenced facts with confidence and the Extracted→…→Consumed lifecycle, published immutable knowledge versions, the per-answer review pipeline (contradictions, dependencies, confidence), planner + orchestrator, domain expert + recommender, coverage by confidence threshold, and the Business Context sections migrated into it ([ADR-0082](../../../voxera-crm/decisions/ADR-0082-canonical-business-knowledge-model.md)) · plan slices KP-0..KP-8
+
+### Next
+
+- [ ] **B15 — Event-source every context** · *big-batch ×6 waves* · closes GAP-82 · depends on: B14 · notes/views/objects/campaign/compliance → pipeline/contact/resource → iam/activity → communication → agent → billing, one wave at a time with a genesis import; Stripe stays the billing system of record; ends by retiring direct outbox writes · plan §5.3, ES-9
+- [ ] **B17 — Async multimodal interview** · *big-batch* · closes GAP-62, GAP-63 · depends on: B16 · recorded voice messages, documents, website ingestion, CRM/email imports, meeting transcripts as evidence; Guided / Business Discovery / Collaborative Design modes; Copilot Live repositioned as optional · plan slices IX-1..IX-6
+- [ ] **B18 — Workspace generation from approved knowledge** · *big-batch* · closes GAP-64, GAP-65, GAP-66, GAP-67, GAP-68, GAP-69, GAP-84 · depends on: B16 · blueprint phase 2: deterministic generators (objects, fields, relationships, pipelines, views, dashboards, permissions; workflows, routing, assignment, notifications, triggers; FAQs, playbooks, prompt context, docs), full lineage on every artifact, readiness report, provisioning gate, and the prompt-to-artifact paths re-routed through knowledge · plan slices WG-1..WG-9
+- [ ] **B19 — Agent specs + readiness** · *big-batch* · closes GAP-70 · depends on: B16, B18 · every agent generated from knowledge as an AgentSpec (required knowledge, prompts, workflows, integrations, permissions, readiness threshold), readiness scores gating enablement, per-spec evals ([ADR-0084](../../../voxera-crm/decisions/ADR-0084-agent-specs-generated-from-knowledge.md)) · plan slices AG-1..AG-4
+- [ ] **B20 — Integration foundation** · *big-batch* · closes GAP-71, GAP-72, GAP-73, GAP-74 · depends on: B14 · blueprint phase 3: capability registry with the six states, provider abstractions (Twilio leaks out of core), OAuth connection framework, provider-neutral inbound events · plan slices IN-0..IN-6
+
+### Later
+
+- [ ] **B21 — Unified interactions + channels** · *big-batch* · closes GAP-75, GAP-76, GAP-77, GAP-78 · depends on: B20, B15 (activity wave) · blueprint phase 4 in order: notes & timeline, email, calendar & meetings, phone, SMS — one Interaction model and one history every agent reads · plan slices UI-1..UI-6
+- [ ] **B22 — Customer-facing agents** · *big-batch* · closes GAP-79 · depends on: B19, B21 · blueprint phase 5: calling (on specs), qualification, email, support, meeting assistant, renewal, SMS · plan slices AG-5..AG-11
+- [ ] **B23 — Continuous evolution** · *small-batch* · closes GAP-80 · depends on: B16, B21 · activity signals become proposed knowledge that goes through the same review and approval; a new published version yields a regeneration proposal, never a silent change · plan slices CE-1..CE-4
+
+> **Copilot Live** (voxera-crm `20261023-copilot-live-voice`, DONE 2026-11-08, unreleased) is kept as an optional mode under B17; its release checklist (voxera-crm TD-196) is de-prioritised, not dropped.
 
 ## Now
 
@@ -106,6 +131,7 @@ Each bet's implementing **FEAT spec is To-Be-Drafted in the implementing code re
 > Check the box when the implementing run is merged. Each spine bet (B1–B12) and motion item maps to a FEAT spec; the spec lives in the **implementing code repo** (spine bets in `voxera-crm/features/`, website surface work in `voxera-website/features/`), referenced here by bet/FEAT id per [ADR-0014](../../decisions/ADR-0014-split-engineering-os-from-confidential-command-repo.md). If a line has no FEAT id yet, draft the spec in that code repo before starting work — this confidential roadmap never authors FEAT specs itself.
 
 ## Changelog
+- 2026-11-08 v14: **opened the AI-native refactor program (B14–B23)** from the owner's Refactoring Blueprint v1.0 — the platform becomes a business knowledge platform that generates the CRM. Owner rulings: follow the blueprint in full, event-source the whole platform on Postgres, async multimodal onboarding with Copilot Live optional. New requirements doc `ai-native-platform-requirements.md`; GAP-55..84 added to the gap analysis; ADR-0080..0084 proposed in voxera-crm.
 - 2026-09-30 v13: **B13 ticked — the CRM product spine B0–B13 is COMPLETE.** `verify-feature` returned PASS on the power dialer with the whole gate green (backend:lint 0, backend:test 493 suites / 3830 tests, frontend:test 228 files / 1459 tests, gate:ratchet + gate:drift PASS); 12 of 13 ACs carry direct passing evidence and all 11 dossier preconditions hold. Two residues recorded rather than absorbed: AC-9's `TC-AUDIT-CHAIN` was never implemented (every link of the correlationId audit chain is asserted alone, nothing joins them → CRM **TD-141**), and the 80 coverage target was not measured because `backend:test` runs without `--coverage`. The verify pass also found `backend:lint` red with one of its three errors introduced by B13's own retirement commit; fixed before advancing. Also **reconciled four stale checkboxes** whose registry rows already read DONE — FEAT-001 + FEAT-002 (v38), `/home-services` (v39) and the FE residue (v37) — because an unticked box that the registry calls done makes the next `resume-roadmap` mis-derive state. The nine boxes still open are the genuinely open ones: blocked (`/insurance`, the demo endpoint), dark by intent (FE #15/#16/#17) or Later.
 - 2026-09-23 v11: **reconciled this doc with the code, which had run six weeks ahead of it.** (a) TICKED **B5, B7, B8, B9, B10, B11, B12** — all seven were already `DONE` in the execution registry (v33, 2026-07-31) and each carries a `features/_archive/**/outcome.md` reading `Status: DONE (SDLC-verified)`; only THIS doc still showed them open, so the two canonical artifacts disagreed with each other. (b) ADDED **B13 — Power dialer**, which existed only on the unmerged `roadmap/adr-0022-b13-annotation` branch and so was absent from main entirely; its real status is IN PROGRESS. (c) ADDED the **"Grounded Object Graph" frontend track (Track C)** — 18 handoffs of shipped UI that appeared NOWHERE in this roadmap, including the honest record that #15/#16/#17 are designed-but-DARK by intent and that the trust LENS is generalized to one object family of five (crm TD-128/129/130). Nothing was marked done that source did not confirm; B3 stays IN PROGRESS because its own registry row still names 'the other 6 roles' as remaining.
 - 2026-07-27 v10: **removed B13 — Deep DACH compliance (Pflegekasse paperwork + special-category data)** from the spine (owner direction). Deleted the Later-horizon bet and updated the spine range `B1–B13` → `B1–B12`. The broader **DACH GTM motion** ([ADR-0009](../../decisions/ADR-0009-english-markets-parallel-motion.md)) is unaffected; the underlying gaps GAP-30/GAP-32 stay in the [gap-analysis](./gap-analysis-crm-to-product.md) backlog but are de-scoped to no bet. Prior changelog entries that reference B13 (v4/v5) are left as historical record. Synced with the execution registry v17.
