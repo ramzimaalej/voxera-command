@@ -103,7 +103,7 @@ Opened 2026-11-08 from the owner's AI-Native CRM Refactoring Blueprint v1.0. Bet
 | 9 | **B22** Customer-facing agents | Later | B19, B21 | `NOT-STARTED` | **CRM-BUILD** per slice group (full SDLC, design-first) | plan `voxera-crm/engineering-os/roadmap/ai-native-refactor-plan.md` slices AG-5..AG-11 |
 | 10 | **B23** Continuous evolution | Later | B16, B21 | `NOT-STARTED` | **CRM-BUILD** per slice group (full SDLC, design-first) | plan `voxera-crm/engineering-os/roadmap/ai-native-refactor-plan.md` slices CE-1..CE-4 |
 
-**Next ready on this track:** **B14 slice ES-0** — design-review the event store (`cd voxera-crm` → `/new-feature` for "event-sourcing foundation", then the SDLC). B16 KP-0 (the domain catalog design review) can run in parallel as design-only work.
+**Next ready on this track:** **B14 slice ES-0** (then ES-1 → ES-2 → **ES-8 live record views, leads first**, per the owner 2026-11-08) — design-review the event store (`cd voxera-crm` → `/new-feature` for "event-sourcing foundation", then the SDLC). B16 KP-0 (the domain catalog design review) can run in parallel as design-only work.
 
 ## Track B — Website motion (`voxera-website`)
 
